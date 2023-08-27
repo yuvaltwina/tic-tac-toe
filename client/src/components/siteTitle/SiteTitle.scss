@@ -1,0 +1,13 @@
+.site-title {
+  color: var(--primary-color);
+  font-size: 7rem;
+  font-style: normal;
+  font-weight: bold;
+  line-height: normal;
+  -webkit-text-stroke-width: 4px;
+  -webkit-text-stroke-color: white;
+  font-family: 'Holtwood One SC';
+}
+.site-title span {
+  color: var(--third-color);
+}

@@ -1,0 +1,22 @@
+.main-button {
+  font-size: larger;
+  font-weight: bold;
+  padding: 30px 40px;
+  background: linear-gradient(
+    90deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  border: 3px solid white;
+  border-radius: 15px;
+  width: 100%;
+  box-shadow: 0px 0px 40px 0px #ff00b8;
+  cursor: pointer;
+}
+
+.main-button:hover {
+  background: white;
+  color: var(--forth-color);
+  border: 3px solid var(--forth-color);
+  box-shadow: 0px 0px 40px 0px var(--forth-color);
+}

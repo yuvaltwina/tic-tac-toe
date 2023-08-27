@@ -1,6 +1,10 @@
 #root {
-  max-width: 1280px;
+  max-width: 2000px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  --primary-color: #150067;
+  --secondary-color: #ff00b8;
+  --third-color: #ffc700;
+  --forth-color: #7f1eba;
 }

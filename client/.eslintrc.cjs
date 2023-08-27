@@ -29,5 +29,9 @@ module.exports = {
     project: 'client/tsconfig.json',
   },
   plugins: ['@typescript-eslint', 'react'],
-  rules: { '@typescript-eslint/comma-dangle': 'off' },
+  rules: {
+    '@typescript-eslint/comma-dangle': 'off',
+    'linebreak-style': 'off',
+    'react/jsx-props-no-spreading': 'off',
+  },
 };
