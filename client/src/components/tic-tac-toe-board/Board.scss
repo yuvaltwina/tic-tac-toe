@@ -1,0 +1,25 @@
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 500px;
+  margin: 0 auto;
+  border-radius: 2.0625rem;
+  border: 5px solid #fff;
+  background: var(--fifth-color);
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1/1;
+  margin: 1rem;
+  border-radius: 1.25rem;
+  background: var(--forth-color);
+  border: none;
+  cursor: pointer;
+  &:hover {
+    outline: 4px solid white;
+    transition: all 0.1s;
+  }
+}

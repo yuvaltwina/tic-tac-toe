@@ -26,7 +26,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: 'client/tsconfig.json',
   },
   plugins: ['@typescript-eslint', 'react'],
   rules: {
@@ -34,5 +34,6 @@ module.exports = {
     'linebreak-style': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
+    'object-curly-newline': 'off',
   },
 };

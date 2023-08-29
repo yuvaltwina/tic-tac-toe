@@ -6,8 +6,11 @@ import BracketPage from './pages/bracket/BracketPage';
 import MainPage from './pages/Main/MainPage';
 import NotFound from './pages/Not-found/NotFound';
 import routesData from './utils/data';
+import LinkPage from './pages/Link/LinkPage';
+import ComputerMatch from './pages/computer-match/ComputerMatch';
 
-const { mainPage, bracketPage } = routesData;
+const { mainPage, bracketPage, linkPage, computer } = routesData;
+
 const routes: RouteObject[] = [
   {
     path: mainPage,
@@ -23,6 +26,14 @@ const routes: RouteObject[] = [
           {
             path: bracketPage,
             element: <BracketPage />,
+          },
+          {
+            path: linkPage,
+            element: <LinkPage />,
+          },
+          {
+            path: computer,
+            element: <ComputerMatch />,
           },
           { path: '*', element: <NotFound /> },
         ],
