@@ -33,5 +33,6 @@ module.exports = {
     '@typescript-eslint/comma-dangle': 'off',
     'linebreak-style': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'react/require-default-props': 'off',
   },
 };

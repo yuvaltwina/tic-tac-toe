@@ -1,0 +1,124 @@
+@import 'styles';
+
+.bracket-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+}
+
+.bracket-data-container {
+  width: 100%;
+  max-width: 1000px;
+  place-items: center;
+  display: grid;
+  padding: 2rem;
+  border-radius: 15px;
+  background: linear-gradient(
+    90deg,
+    rgba(21, 0, 103, 0.4) 0%,
+    rgba(255, 0, 184, 0.4) 100%
+  );
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12.8px);
+  -webkit-backdrop-filter: blur(12.8px);
+}
+
+.bracket-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+}
+
+.bracket-icon {
+  position: absolute;
+  width: 150px;
+  top: 3%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.bracket-header {
+  font-size: 2rem;
+  padding: 10px 0px;
+  border-radius: 10px;
+  text-transform: capitalize;
+  .player {
+    background-color: var(--third-color);
+    color: white;
+  }
+  .points {
+    background-color: white;
+    color: var(--forth-color);
+  }
+}
+
+.users-data {
+  border-bottom: 1px solid white;
+  padding: 1rem 0;
+  font-size: 2rem;
+}
+
+.user {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+  min-width: 50%;
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+.score-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 50%;
+}
+
+.circle {
+  background-color: white;
+  border-radius: 100%;
+  aspect-ratio: 1/1;
+  height: 100%;
+}
+
+@media (max-width: #{$tablet-width}) {
+  .bracket-data-container {
+    padding: 1rem;
+  }
+  .bracket-header {
+    font-size: 1.5rem;
+    padding: 7px 0px;
+  }
+  .bracket-icon {
+    width: 100px;
+  }
+  .bracket-row {
+    gap: 70px;
+  }
+  .users-data {
+    font-size: 1.5rem;
+  }
+}
+@media (max-width: #{$phone-width}) {
+  .bracket-header {
+    font-size: 1.2rem;
+  }
+  .bracket-icon {
+    width: 70px;
+  }
+  .bracket-row {
+    gap: 50px;
+  }
+  .users-data {
+    font-size: 1rem;
+  }
+}

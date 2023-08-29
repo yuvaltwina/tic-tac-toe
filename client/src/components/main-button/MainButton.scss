@@ -1,3 +1,5 @@
+@import 'styles';
+
 .main-button {
   font-size: larger;
   font-weight: bold;
@@ -10,7 +12,7 @@
   border: 3px solid white;
   border-radius: 15px;
   width: 100%;
-  box-shadow: 0px 0px 40px 0px #ff00b8;
+  box-shadow: 0px 0px 40px 0px var(--secondary-color);
   cursor: pointer;
 }
 
@@ -19,4 +21,22 @@
   color: var(--forth-color);
   border: 3px solid var(--forth-color);
   box-shadow: 0px 0px 40px 0px var(--forth-color);
+}
+@media (max-width: #{$desktop-width}) {
+  .main-button {
+    font-size: larger;
+    padding: 25px 35px;
+  }
+}
+@media (max-width: #{$tablet-width}) {
+  .main-button {
+    font-size: large;
+    padding: 20px 30px;
+  }
+}
+@media (max-width: #{$phone-width}) {
+  .main-button {
+    font-size: 1rem;
+    padding: 20px 30px;
+  }
 }

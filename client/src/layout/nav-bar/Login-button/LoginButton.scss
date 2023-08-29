@@ -1,0 +1,19 @@
+@import 'styles';
+
+.login-button-container {
+  background-color: white;
+  color: var(--forth-color);
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 0.5rem 2rem;
+  border-radius: 5px;
+  box-shadow: 0px 0px 40px 0px var(--secondary-color);
+  border: none;
+  cursor: pointer;
+}
+@media (max-width: #{$phone-width}) {
+  .login-button-container {
+    font-size: 0.7rem;
+    padding: 0.5rem 1rem;
+  }
+}

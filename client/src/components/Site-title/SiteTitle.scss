@@ -1,0 +1,41 @@
+@import 'styles';
+
+.site-title {
+  color: var(--primary-color);
+  font-size: 4rem;
+  font-style: normal;
+  font-weight: bold;
+  line-height: normal;
+  -webkit-text-stroke-width: 4px;
+  -webkit-text-stroke-color: white;
+  font-family: 'Holtwood One SC';
+  span {
+    color: var(--third-color);
+  }
+}
+.sub-title {
+  margin-top: -2rem;
+}
+@media (max-width: #{$desktop-width}) {
+  .site-title {
+    font-size: 3rem;
+  }
+}
+@media (max-width: #{$tablet-width}) {
+  .site-title {
+    font-size: 2rem;
+    -webkit-text-stroke: 2px white;
+  }
+  .sub-title {
+    margin-top: -1rem;
+  }
+}
+@media (max-width: #{$phone-width}) {
+  .site-title {
+    font-size: 1.5rem;
+    -webkit-text-stroke: 2px white;
+  }
+  .sub-title {
+    margin-top: 0;
+  }
+}

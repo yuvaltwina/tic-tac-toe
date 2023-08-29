@@ -1,7 +1,7 @@
 import React from 'react';
-import MainButton from '../../components/main-button/MainButton';
-import SiteTitle from '../../components/siteTitle/SiteTitle';
-import './index.scss';
+import MainButton from '../../components/Main-button/MainButton';
+import SiteTitle from '../../components/Site-title/SiteTitle';
+import './MainPage.scss';
 
 function MainPage() {
   return (
