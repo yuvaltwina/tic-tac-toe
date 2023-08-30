@@ -9,11 +9,12 @@ import LoginButton from './Login-button/LoginButton';
 import './NavBar.scss';
 import ReturnButton from './return-button/ReturnButton';
 
-const { bracketPage, mainPage, linkPage } = routesData;
+const { bracketPage, mainPage, linkPage, computer } = routesData;
 const leftButton = {
   [mainPage]: { element: <LeaderBoardButton />, toRoute: bracketPage },
   [bracketPage]: { element: <ReturnButton />, toRoute: mainPage },
   [linkPage]: { element: <ReturnButton />, toRoute: mainPage },
+  [computer]: { element: <ReturnButton />, toRoute: mainPage },
 };
 
 function NavBar() {

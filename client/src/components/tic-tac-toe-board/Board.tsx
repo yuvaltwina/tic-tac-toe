@@ -5,11 +5,12 @@ import CircleSvg from './components/CircleSvg';
 import XSvg from './components/XSvg';
 import './Board.scss';
 import WinningLineSvg from './components/WinningLineSvg';
+import TieSvg from './components/TieSvg';
 
 interface BoardProps {
   board: BoardValues[];
   onClick: (index: number) => void;
-  gameOver: { isOver: boolean; winningPattern: number[] };
+  gameOver: { isOver: boolean; winningPattern: number[]; isTie: boolean };
 }
 
 type CurrentElement = {
@@ -17,7 +18,7 @@ type CurrentElement = {
 };
 
 function Board({ board, onClick, gameOver }: BoardProps) {
-  const { isOver, winningPattern } = gameOver;
+  const { isOver, winningPattern, isTie } = gameOver;
 
   const currentElement: CurrentElement = {
     O: <CircleSvg />,
@@ -27,7 +28,8 @@ function Board({ board, onClick, gameOver }: BoardProps) {
 
   return (
     <div className={`board ${isOver && 'board-inactive'}`}>
-      {isOver && <WinningLineSvg winningPattern={winningPattern} />}
+      {isOver && !isTie && <WinningLineSvg winningPattern={winningPattern} />}
+      {isOver && isTie && <TieSvg />}
       {board.map((value, index) => {
         const isCellActive = value === '' && !isOver;
 

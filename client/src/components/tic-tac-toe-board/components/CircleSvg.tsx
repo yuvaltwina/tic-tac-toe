@@ -3,7 +3,7 @@ import './CircleSvg.scss';
 
 function CircleSvg() {
   return (
-    <svg className="circle" viewBox="0 0 100 100">
+    <svg className="circle-svg" viewBox="0 0 100 100">
       <defs>
         <filter id="shadow">
           <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="#ffc700" />

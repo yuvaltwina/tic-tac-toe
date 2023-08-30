@@ -2,7 +2,7 @@ export const routesData = {
   mainPage: '/',
   bracketPage: '/brackets',
   linkPage: '/linkPage',
-  computer: '/computer',
+  computer: '/offline',
   online: '/search-online',
 };
 
