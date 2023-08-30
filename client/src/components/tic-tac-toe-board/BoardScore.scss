@@ -1,0 +1,37 @@
+@import 'styles';
+
+.computer-match-score {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.computer-match-score-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  width: fit-content;
+  gap: 1rem;
+  span {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: #{$tablet-width}) {
+  .computer-match-score-container {
+    font-size: 0.8rem;
+    span {
+      font-size: 1.4rem;
+    }
+  }
+}
+@media (max-width: #{$phone-width}) {
+  .computer-match-score-container {
+    font-size: 0.6rem;
+    gap: 0.7rem;
+    span {
+      font-size: 1rem;
+    }
+  }
+}

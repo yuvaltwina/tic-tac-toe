@@ -1,14 +1,15 @@
 /* eslint consistent-return: 0 */
 import React, { useState, useCallback, useRef } from 'react';
 import Board from '../../components/tic-tac-toe-board/Board';
+import BoardScore from '../../components/tic-tac-toe-board/BoardScore';
+import ResetButton from '../../components/tic-tac-toe-board/ResetButton';
 import BoardValues from '../../types/BoardValues';
 import { WIN_CONDITIONS } from '../../utils/data';
-import './ComputerMath.scss';
+import './ComputerMatch.scss';
 
 const defaultSquares = Array(9).fill('');
 function ComputerMatch() {
   const actionCounter = useRef(0);
-
   const [board, setBoard] = useState<BoardValues[]>(defaultSquares);
   const [xPlaying, setXPlaying] = useState(true);
   const [gameOver, setGameOver] = useState({
@@ -72,16 +73,23 @@ function ComputerMatch() {
     [xPlaying, board, checkWinner]
   );
 
+  const resetBoard = () => {
+    setGameOver({
+      isOver: false,
+      winningPattern: [0, 0, 0],
+      isTie: false,
+    });
+    actionCounter.current = 0;
+    setBoard(defaultSquares);
+  };
+
   return (
     <div className="computer-match-container">
-      <div className="computer-match-turn">Its your opponent turn</div>
-      <Board board={board} onClick={handleBoxClick} gameOver={gameOver} />
-      <div
-        className={`computer-match-turn ${
-          true && 'computer-match-turn-active'
-        }`}
-      >
-        Its your turn
+      <div className="computer-match-board-container">
+        <BoardScore {...scores} />
+        <Board board={board} onClick={handleBoxClick} gameOver={gameOver} />
+
+        <ResetButton onClick={() => resetBoard()} />
       </div>
     </div>
   );
