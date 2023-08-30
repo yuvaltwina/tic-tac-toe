@@ -1,21 +1,47 @@
 /* eslint react/no-array-index-key: 0 */
-import React, { useState } from 'react';
+import React from 'react';
+import BoardValues from '../../types/BoardValues';
+import CircleSvg from './components/CircleSvg';
+import XSvg from './components/XSvg';
 import './Board.scss';
-import CircleSvg from './CircleSvg';
-import XSvg from './XSvg';
+import WinningLineSvg from './components/WinningLineSvg';
 
-const defaultSquares = Array(9).fill('');
+interface BoardProps {
+  board: BoardValues[];
+  onClick: (index: number) => void;
+  gameOver: { isOver: boolean; winningPattern: number[] };
+}
 
-function Board() {
-  const [board, setBoard] = useState(defaultSquares);
+type CurrentElement = {
+  [key in BoardValues]: key extends '' ? null : JSX.Element;
+};
+
+function Board({ board, onClick, gameOver }: BoardProps) {
+  const { isOver, winningPattern } = gameOver;
+
+  const currentElement: CurrentElement = {
+    O: <CircleSvg />,
+    X: <XSvg />,
+    '': null,
+  };
 
   return (
-    <div className="board">
-      {board.map((element, index) => (
-        <button type="button" key={index} className="cell">
-          {index % 2 ? <CircleSvg /> : <XSvg />}
-        </button>
-      ))}
+    <div className={`board ${isOver && 'board-inactive'}`}>
+      {isOver && <WinningLineSvg winningPattern={winningPattern} />}
+      {board.map((value, index) => {
+        const isCellActive = value === '' && !isOver;
+
+        return (
+          <button
+            type="button"
+            key={index}
+            className={`cell ${isCellActive && 'cell-active'}`}
+            onClick={() => isCellActive && onClick(index)}
+          >
+            {currentElement[value]}
+          </button>
+        );
+      })}
     </div>
   );
 }

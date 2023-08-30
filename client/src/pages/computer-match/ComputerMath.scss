@@ -1,5 +1,26 @@
+@import 'styles';
+
 .computer-match-container {
+  gap: 2rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
   flex-grow: 1;
+}
+.computer-match-turn {
+  color: var(--fifth-color);
+  font-size: 1.2rem;
+  padding: 0.5rem 2rem;
+  font-weight: 700;
+  border-radius: 100px;
+  background: var(--third-color);
+}
+.computer-match-turn-active {
+  color: white;
+  background: linear-gradient(
+    90deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  box-shadow: 0px 0px 40px 0px var(--secondary-color);
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router';
 import MainButton from '../../components/Main-button/MainButton';
 import SiteTitle from '../../components/Site-title/SiteTitle';
-import routesData from '../../utils/data';
+import { routesData } from '../../utils/data';
 import './MainPage.scss';
 
 function MainPage() {
