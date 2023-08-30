@@ -1,27 +1,24 @@
-// type QueryResult = RowDataPacket[] | ResultSetHeader[];
-// export const getSongs = async () => {
-//   const [rows] = await pool.query<QueryResult>('SELECT * FROM songs');
-//   return rows;
-// };
-// export const getSong = async (id: number) => {
-//   const [rows] = await pool.query<QueryResult>(
-//     'SELECT * FROM songs WHERE id = ?',
-//     [id]
-//   );
-//   return rows[0];
-// };
-// export const createSong = async (
-//   name: string,
-//   length: number,
-//   album_id: number
-// ) => {
-//   const [result] = (await pool.query(
-//     `INSERT INTO songs (name,length,album_id)
-//     VALUES(?,?,?)`,
-//     [name, length, album_id]
-//   )) as any;
-//   const createdSong = await getSong(result?.insertId);
-//   console.log(createdSong);
-//   return createdSong;
-// };
-// need to handle errors
+import { type RowDataPacket } from 'mysql2';
+import pool from './connect';
+
+export async function checkConnection() {
+  const connection = await pool.getConnection();
+  console.log('Connected to the database');
+  connection.release();
+}
+
+export const insertUser = async (
+  username: string,
+  encryptedPassword: string
+) => {
+  const insertQuery =
+    'INSERT INTO users (username, encrypted_password) VALUES (?, ?)';
+  await pool.execute(insertQuery, [username, encryptedPassword]);
+};
+export const checkIfUserExist = async (username: string) => {
+  const selectQuery = 'SELECT * FROM users WHERE username = ?';
+  const [user] = (await pool.execute(selectQuery, [
+    username,
+  ])) as RowDataPacket[];
+  return user[0];
+};

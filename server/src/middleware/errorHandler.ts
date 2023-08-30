@@ -10,7 +10,6 @@ export const errorHandler = (
   const status = error.status ?? 500;
   const message = error.message ?? 'Internal server error';
   return response.status(status).json({
-    status,
     message,
   });
 };

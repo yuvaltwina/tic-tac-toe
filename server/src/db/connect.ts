@@ -16,7 +16,8 @@ const pool = mysql
     database: MYSQL_DATABASE,
   })
   .promise();
-
+// למה צריך ליצור את הטבלאות כל פעם מחדש
+// איפה כל התוכן של הטבלאות נשמר
 async function createTables() {
   try {
     // Create the 'users' table

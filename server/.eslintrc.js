@@ -24,5 +24,8 @@ module.exports = {
     'import/no-unresolved': 'off',
     '@typescript-eslint/no-floating-promises': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 'off',
+    '@typescript-eslint/no-misused-promises': 'off',
+    '@typescript-eslint/indent': 'off',
   },
 };
