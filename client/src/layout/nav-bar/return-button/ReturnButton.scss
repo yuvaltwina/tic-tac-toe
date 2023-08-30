@@ -1,0 +1,10 @@
+@import 'styles';
+
+.nav-bar-return-icon {
+  font-size: 3rem;
+}
+@media (max-width: #{$phone-width}) {
+  .nav-bar-return-icon {
+    font-size: 2rem;
+  }
+}

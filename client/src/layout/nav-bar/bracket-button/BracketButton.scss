@@ -2,8 +2,7 @@
 
 .bracket-button {
   background-color: white;
-  height: 100px;
-  width: 100px;
+  height: 100%;
   border-radius: 100%;
   padding: 15px;
   display: flex;
@@ -17,17 +16,8 @@
   width: 100%;
 }
 
-@media (max-width: #{$tablet-width}) {
-  .bracket-button {
-    height: 70px;
-    width: 70px;
-    padding: 10px;
-  }
-}
 @media (max-width: #{$phone-width}) {
   .bracket-button {
-    height: 50px;
-    width: 50px;
     padding: 10px;
   }
 }

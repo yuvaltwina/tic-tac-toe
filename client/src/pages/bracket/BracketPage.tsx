@@ -24,10 +24,9 @@ function BracketPage() {
         {DUMMY_DATA.map(({ name, score }) => (
           <div key={name} className="bracket-row users-data">
             <div className="user">
-              <div className="circle"> </div>
+              <div className="user-profile"> </div>
               <p>{name}</p>
             </div>
-
             <div className="score-container">
               <div className="score">
                 <p>{score}</p>

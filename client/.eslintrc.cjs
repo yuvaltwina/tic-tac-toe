@@ -34,5 +34,9 @@ module.exports = {
     'linebreak-style': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
+    'object-curly-newline': 'off',
+    '@typescript-eslint/no-shadow': 'off',
+    'no-plusplus': 'off',
+    'operator-linebreak': 'off',
   },
 };

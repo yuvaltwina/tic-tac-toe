@@ -1,0 +1,16 @@
+@import 'styles';
+
+.computer-match-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+}
+.computer-match-board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 700px;
+}
