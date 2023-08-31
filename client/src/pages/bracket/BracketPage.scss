@@ -48,12 +48,12 @@
   border-radius: 10px;
   text-transform: capitalize;
   .player {
-    background-color: var(--third-color);
+    background-color: $third-color;
     color: white;
   }
   .points {
     background-color: white;
-    color: var(--forth-color);
+    color: $forth-color;
   }
 }
 

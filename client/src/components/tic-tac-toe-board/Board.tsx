@@ -11,13 +11,14 @@ interface BoardProps {
   board: BoardValues[];
   onClick: (index: number) => void;
   gameOver: { isOver: boolean; winningPattern: number[]; isTie: boolean };
+  isCellsActive?: boolean;
 }
 
 type CurrentElement = {
   [key in BoardValues]: key extends '' ? null : JSX.Element;
 };
 
-function Board({ board, onClick, gameOver }: BoardProps) {
+function Board({ board, onClick, gameOver, isCellsActive }: BoardProps) {
   const { isOver, winningPattern, isTie } = gameOver;
 
   const currentElement: CurrentElement = {
@@ -31,7 +32,7 @@ function Board({ board, onClick, gameOver }: BoardProps) {
       {isOver && !isTie && <WinningLineSvg winningPattern={winningPattern} />}
       {isOver && isTie && <TieSvg />}
       {board.map((value, index) => {
-        const isCellActive = value === '' && !isOver;
+        const isCellActive = value === '' && !isOver && isCellsActive;
 
         return (
           <button

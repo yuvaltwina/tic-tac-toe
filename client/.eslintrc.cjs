@@ -38,5 +38,7 @@ module.exports = {
     '@typescript-eslint/no-shadow': 'off',
     'no-plusplus': 'off',
     'operator-linebreak': 'off',
+    'implicit-arrow-linebreak': 'off',
+    'react/jsx-curly-newline': 'off',
   },
 };

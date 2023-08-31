@@ -1,7 +1,7 @@
 @import 'styles';
 
 .site-title {
-  color: var(--primary-color);
+  color: $primary-color;
   font-size: 4rem;
   font-style: normal;
   font-weight: bold;
@@ -10,7 +10,7 @@
   -webkit-text-stroke-color: white;
   font-family: 'Holtwood One SC';
   span {
-    color: var(--third-color);
+    color: $third-color;
   }
 }
 .sub-title {

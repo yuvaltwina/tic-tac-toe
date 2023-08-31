@@ -1,3 +1,5 @@
+@import 'styles';
+
 .board {
   position: relative;
   display: grid;
@@ -5,7 +7,7 @@
   width: 100%;
   border-radius: 2rem;
   border: 5px solid #fff;
-  background: var(--fifth-color);
+  background: $fifth-color;
   overflow: hidden;
 }
 
@@ -33,7 +35,7 @@
   aspect-ratio: 1/1;
   margin: 9%;
   border-radius: 1.25rem;
-  background: var(--forth-color);
+  background: $forth-color;
   border: none;
 }
 .cell-active {
