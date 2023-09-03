@@ -2,26 +2,23 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import Board from '../../components/tic-tac-toe-board/Board';
 import BoardScore from '../../components/tic-tac-toe-board/BoardScore';
+import computerBestIndex from '../../components/tic-tac-toe-board/functions/computerTurn';
 import ResetButton from '../../components/tic-tac-toe-board/ResetButton';
-import BoardValues from '../../types/BoardValues';
+import {
+  BoardValues,
+  BoardValuesEnum,
+  WinningPattern,
+} from '../../types/BoardValues';
 import { WIN_CONDITIONS } from '../../utils/data';
 import './ComputerMatch.scss';
 
-function randomEmptyIndex(arr: string[]) {
-  const emptyIndices = arr.reduce((indices, val, index) => {
-    if (val === '') {
-      indices.push(index);
-    }
-    return indices;
-  }, []);
+type GameOver = {
+  isOver: boolean;
+  winningPattern: WinningPattern;
+  isTie: boolean;
+};
 
-  if (emptyIndices.length > 0) {
-    const randomIndex =
-      emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-    return randomIndex;
-  }
-  return null;
-}
+const { XSign, OSign, emptySign } = BoardValuesEnum;
 
 const startingScores = { xScore: 0, oScore: 0, tie: 0 };
 
@@ -35,7 +32,8 @@ const checkWinner = (board: BoardValues[]) => {
   }
   return { winner: undefined, winPattern: undefined };
 };
-const defaultSquares = new Array(9).fill('');
+
+const defaultSquares = new Array(9).fill(emptySign);
 
 function ComputerMatch() {
   const actionCounter = useRef(0);
@@ -45,7 +43,7 @@ function ComputerMatch() {
   const [xPlaying, setXPlaying] = useState(true);
 
   const [board, setBoard] = useState<BoardValues[]>(defaultSquares);
-  const [gameOver, setGameOver] = useState({
+  const [gameOver, setGameOver] = useState<GameOver>({
     isOver: false,
     winningPattern: [0, 0, 0],
     isTie: false,
@@ -58,7 +56,7 @@ function ComputerMatch() {
   });
 
   const setWinPattern = useCallback(
-    (pattern: number[] | undefined) => {
+    (pattern: WinningPattern | undefined) => {
       if (pattern) {
         setGameOver((prev) => ({
           ...prev,
@@ -79,10 +77,10 @@ function ComputerMatch() {
   const updateGameScore = useCallback(
     (winner: BoardValues | undefined) => {
       if (winner) {
-        if (winner === 'O') {
+        if (winner === OSign) {
           setScores((prev) => ({ ...prev, oScore: prev.oScore + 1 }));
         }
-        if (winner === 'X') {
+        if (winner === XSign) {
           setScores((prev) => ({ ...prev, xScore: prev.xScore + 1 }));
         }
       } else if (isTieAvailable) {
@@ -99,7 +97,7 @@ function ComputerMatch() {
       // update the board
       const updateBoard = board.map((value, boardIndex) => {
         if (boardIndex === cellIndex) {
-          return xPlaying === true ? 'X' : 'O';
+          return xPlaying === true ? XSign : OSign;
         }
         return value;
       });
@@ -160,7 +158,7 @@ function ComputerMatch() {
       !gameOver.isTie;
 
     if (isComputerTurnValid) {
-      const randomCell = randomEmptyIndex(board)!;
+      const randomCell = computerBestIndex(board)!;
       handleCellClick(randomCell);
     }
   }, [

@@ -1,4 +1,5 @@
 import React from 'react';
+import { WinningPattern } from '../../../types/BoardValues';
 import './WinningLineSvg.scss';
 
 const winningsLine = [
@@ -37,7 +38,7 @@ const winningsLine = [
   },
 ];
 
-const findWinningLine = (pattern: number[]) => {
+const findWinningLine = (pattern: WinningPattern) => {
   const { winningLine } =
     winningsLine.find(({ winningRow }) => {
       if (JSON.stringify(winningRow) === JSON.stringify(pattern)) {
@@ -49,7 +50,7 @@ const findWinningLine = (pattern: number[]) => {
 };
 
 interface WinningLineSvgProps {
-  winningPattern: number[];
+  winningPattern: WinningPattern;
 }
 
 function WinningLineSvg({ winningPattern }: WinningLineSvgProps) {

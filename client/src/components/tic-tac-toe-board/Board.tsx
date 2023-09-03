@@ -1,6 +1,10 @@
 /* eslint react/no-array-index-key: 0 */
 import React from 'react';
-import BoardValues from '../../types/BoardValues';
+import {
+  BoardValues,
+  BoardValuesEnum,
+  WinningPattern,
+} from '../../types/BoardValues';
 import CircleSvg from './components/CircleSvg';
 import XSvg from './components/XSvg';
 import './Board.scss';
@@ -10,21 +14,23 @@ import TieSvg from './components/TieSvg';
 interface BoardProps {
   board: BoardValues[];
   onClick: (index: number) => void;
-  gameOver: { isOver: boolean; winningPattern: number[]; isTie: boolean };
+  gameOver: {
+    isOver: boolean;
+    winningPattern: WinningPattern;
+    isTie: boolean;
+  };
   isCellsActive?: boolean;
 }
 
-type CurrentElement = {
-  [key in BoardValues]: key extends '' ? null : JSX.Element;
-};
+const { XSign, OSign, emptySign } = BoardValuesEnum;
 
 function Board({ board, onClick, gameOver, isCellsActive }: BoardProps) {
   const { isOver, winningPattern, isTie } = gameOver;
 
-  const currentElement: CurrentElement = {
-    O: <CircleSvg />,
-    X: <XSvg />,
-    '': null,
+  const currentElement = {
+    [OSign]: <CircleSvg />,
+    [XSign]: <XSvg />,
+    [emptySign]: null,
   };
 
   return (
@@ -32,7 +38,7 @@ function Board({ board, onClick, gameOver, isCellsActive }: BoardProps) {
       {isOver && !isTie && <WinningLineSvg winningPattern={winningPattern} />}
       {isOver && isTie && <TieSvg />}
       {board.map((value, index) => {
-        const isCellActive = value === '' && !isOver && isCellsActive;
+        const isCellActive = value === emptySign && !isOver && isCellsActive;
 
         return (
           <button

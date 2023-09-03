@@ -1,3 +1,5 @@
+import { WinningPattern } from '../types/BoardValues';
+
 export const routesData = {
   mainPage: '/',
   bracketPage: '/brackets',
@@ -6,7 +8,7 @@ export const routesData = {
   online: '/search-online',
 };
 
-export const WIN_CONDITIONS = [
+export const WIN_CONDITIONS: WinningPattern[] = [
   [0, 1, 2],
   [3, 4, 5],
   [6, 7, 8],
