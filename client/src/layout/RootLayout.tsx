@@ -10,8 +10,8 @@ function RootLayout() {
       <AppWrapper>
         <NavBar />
         <Outlet />
-        <Toaster />
       </AppWrapper>
+      <Toaster />
       <ScrollRestoration />
     </>
   );
