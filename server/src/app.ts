@@ -10,11 +10,12 @@ import { checkConnection } from './db/database';
 import MainRouter from './routes/MainRoute';
 
 dotenv.config();
+const { WEBSITE_URL } = process.env;
 const PORT = process.env.PORT ?? 3000;
 const app = express();
 app.use(
   cors({
-    origin: 'WEBSITE_URL',
+    origin: WEBSITE_URL,
     credentials: true,
   })
 );
