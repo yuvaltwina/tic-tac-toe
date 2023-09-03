@@ -2,15 +2,11 @@
 
 .board-reset-button {
   padding: 1rem 3rem;
-  background: linear-gradient(
-    90deg,
-    var(--primary-color),
-    var(--secondary-color)
-  );
+  background: linear-gradient(90deg, $primary-color, $secondary-color);
   border: none;
   border-radius: 50px;
   font-size: 2rem;
-  box-shadow: 0px 0px 40px 0px var(--secondary-color);
+  box-shadow: 0px 0px 40px 0px $secondary-color;
   cursor: pointer;
 }
 @media (max-width: #{$tablet-width}) {
