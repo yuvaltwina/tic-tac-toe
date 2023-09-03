@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css2?family=Holtwood+One+SC&display=swap);
+
 #root {
   display: flex;
   flex-direction: column;
@@ -15,3 +17,10 @@
 $phone-width: 460px;
 $tablet-width: 768px;
 $desktop-width: 1024px;
+
+$primary-color: #150067;
+$secondary-color: #ff00b8;
+$third-color: #ffc700;
+$forth-color: #7f1eba;
+$fifth-color: #4c0c73;
+$main-font: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

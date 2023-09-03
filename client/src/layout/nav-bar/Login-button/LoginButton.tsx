@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './LoginButton.scss';
+import AuthModal from '../../../components/authModals/AuthModal';
 
 function LoginButton() {
+  const [isAuthModal, setIsAuthModal] = useState(false);
+  const openAuthModal = () => setIsAuthModal(true);
   return (
-    <button type="button" className="login-button-container">
-      Login
-    </button>
+    <>
+      <AuthModal isAuthModal={isAuthModal} setIsAuthModal={setIsAuthModal} />
+      <button
+        type="button"
+        className="login-button-container"
+        onClick={openAuthModal}
+      >
+        Login
+      </button>
+    </>
   );
 }
 

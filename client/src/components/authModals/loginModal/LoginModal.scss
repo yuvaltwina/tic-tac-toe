@@ -1,0 +1,22 @@
+@import '../AuthModal.scss';
+@import '../../../../styles';
+.login-modal {
+  @include modalContantContainer;
+}
+
+.login-form {
+  @include form;
+}
+
+.login-title {
+  @include title;
+}
+
+.login-to-register-button {
+  @include pageLinkButton;
+}
+.login-unauthorized {
+  color: red;
+  margin-inline: auto;
+  margin-bottom: -1rem;
+}

@@ -1,0 +1,62 @@
+@import '../../../styles';
+.auth-modal-container {
+  backdrop-filter: blur(3px);
+  background-color: rgba(255, 255, 255, 0.116);
+}
+.auth-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 90vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: clamp(18.8rem, 79vw, 40rem);
+  border-radius: 35px;
+  background: linear-gradient(
+    90deg,
+    rgba(#af00cc, 0.8) 0%,
+    rgba(#1e0073, 0.8) 100%
+  );
+  box-shadow: 0px 0px 50px 0px #d58fffb2;
+  border: 2px solid #b234ff;
+  gap: 1rem;
+  padding: 3.5rem 1rem;
+}
+@mixin form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+@mixin title {
+  font-weight: bold;
+  color: #ffc700;
+  font-size: 2.8rem;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: white;
+  border: 1px solid transparent;
+  font-family: 'Holtwood One SC';
+  border-radius: 100px;
+  letter-spacing: 1px;
+}
+@mixin pageLinkButton {
+  background-color: transparent;
+  border: none;
+  color: #ffdb58;
+  cursor: pointer;
+  &:hover {
+    color: white;
+  }
+}
+@mixin modalContantContainer {
+  width: 85%;
+  font-family: $main-font;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}

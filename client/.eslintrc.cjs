@@ -38,5 +38,8 @@ module.exports = {
     '@typescript-eslint/no-shadow': 'off',
     'no-plusplus': 'off',
     'operator-linebreak': 'off',
+    '@typescript-eslint/indent': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-use-before-define': 'off',
   },
 };

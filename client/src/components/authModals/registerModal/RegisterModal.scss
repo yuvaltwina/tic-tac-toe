@@ -1,0 +1,17 @@
+@import '../AuthModal.scss';
+@import '../../../../styles';
+.register-modal {
+  @include modalContantContainer;
+}
+
+.register-form {
+  @include form;
+}
+
+.register-title {
+  @include title;
+}
+
+.register-to-login-button {
+  @include pageLinkButton;
+}
