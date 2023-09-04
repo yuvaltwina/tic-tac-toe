@@ -5,7 +5,12 @@ import {
   StandardTextFieldProps,
 } from '@mui/material/TextField';
 
-export type TinputProps =
+export type InputProps =
   | FilledTextFieldProps
   | OutlinedTextFieldProps
   | StandardTextFieldProps;
+
+export type Navigate = {
+  toRegisterPage: () => void;
+  toLoginPage: () => void;
+};

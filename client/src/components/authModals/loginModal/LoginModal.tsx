@@ -1,41 +1,34 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
 import InputField from '../components/inputField/InputField';
 import './LoginModal.scss';
-import { TinputProps } from '../../../types/types';
+import { Navigate, InputProps } from '../../../types/types';
 import SubmitButton from '../components/submitButton/SubmitButton';
-import {
-  MODAL_NEVIGATION_OPTIONS,
-  SERVER_FAILED_ERROR,
-} from '../../../utils/data';
+import { SERVER_FAILED_ERROR } from '../../../utils/data';
 import { loginValidationSchema } from '../../../utils/validation/userValidation';
+import { checkLoginDetails } from '../../../utils/apiService/axiosRequets';
 
-const TITLE_TEXT = 'LOGIN';
 const CHANGE_PAGE_TEXT = 'Dont have an account?';
 const UNAUTHORIZED_TEXT = 'Wrong Username or Password';
-const { VITE_SERVER_URL } = import.meta.env;
-const SERVER_LOGIN_URL = `${VITE_SERVER_URL}/user/login`;
-const { REGISTER } = MODAL_NEVIGATION_OPTIONS;
-interface IinitialValue {
+
+interface InitialValue {
   username: string;
   password: string;
 }
-const initialValues: IinitialValue = {
+const initialValues = {
   username: '',
   password: '',
 };
-type Tprops = {
-  setModalPage: React.Dispatch<React.SetStateAction<string>>;
+type Props = {
+  navigate: Navigate;
   closeModal: () => void;
 };
-function LoginModal({ setModalPage, closeModal }: Tprops) {
+function LoginModal({ navigate, closeModal }: Props) {
   const [isAuthorized, setIsAuthorized] = useState(true);
+
   function errorHandler(error: any) {
-    const errorMessage = error?.response?.data?.message
-      ? error.response.data.message
-      : '';
+    const errorMessage = error?.response?.data?.message || '';
     if (errorMessage === 'unauthorized') {
       setIsAuthorized(false);
     } else {
@@ -43,26 +36,6 @@ function LoginModal({ setModalPage, closeModal }: Tprops) {
     }
   }
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema: loginValidationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      if (formik.isValid && formik.dirty) {
-        setIsAuthorized(true);
-        const { username, password } = values;
-        try {
-          await axios.post(SERVER_LOGIN_URL, {
-            username,
-            password,
-          });
-          resetForm();
-          closeModal();
-        } catch (error: any) {
-          errorHandler(error);
-        }
-      }
-    },
-  });
   const {
     handleBlur,
     handleChange,
@@ -71,30 +44,49 @@ function LoginModal({ setModalPage, closeModal }: Tprops) {
     errors,
     handleSubmit,
     isSubmitting,
-  } = formik;
+    isValid,
+    dirty,
+  } = useFormik({
+    initialValues,
+    validationSchema: loginValidationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      if (isValid && dirty) {
+        setIsAuthorized(true);
+        const { username, password } = values;
+        try {
+          await checkLoginDetails(username, password);
+          resetForm();
+          closeModal();
+        } catch (error: any) {
+          errorHandler(error);
+        }
+      }
+    },
+  });
 
   const inputPropsGenerator = (
-    id: keyof IinitialValue
-  ): TinputProps & { id: string } => {
+    id: keyof InitialValue
+  ): InputProps & { id: string } => {
     const uppercaseId = id[0].toUpperCase() + id.slice(1);
     const inputProps = {
       id,
       type: id,
+      autoComplete: 'on',
+      required: true,
       placeholder: `Enter your ${uppercaseId}`,
       onBlur: handleBlur,
       value: values[id],
       onChange: handleChange,
       error: !!(touched[id] && errors[id]),
-      autoComplete: 'on',
-      required: true,
     };
     return inputProps;
   };
+
   const displayInputFields = Object.keys(initialValues).map((id) => (
     <InputField
       key={id}
-      inputProps={inputPropsGenerator(id as keyof IinitialValue)}
-      errorMessage={errors[id as keyof IinitialValue]}
+      inputProps={inputPropsGenerator(id as keyof InitialValue)}
+      errorMessage={errors[id as keyof InitialValue]}
     />
   ));
   const displayUnauthorizedError = !isAuthorized ? (
@@ -103,14 +95,13 @@ function LoginModal({ setModalPage, closeModal }: Tprops) {
 
   return (
     <div className="login-modal">
-      <h1 className="login-title">{TITLE_TEXT}</h1>
       <form onSubmit={handleSubmit} className="login-form">
         {displayInputFields}
         {displayUnauthorizedError}
         <SubmitButton isSubmitting={isSubmitting} />
       </form>
       <button
-        onClick={() => setModalPage(REGISTER)}
+        onClick={navigate.toRegisterPage}
         type="button"
         className="login-to-register-button"
       >

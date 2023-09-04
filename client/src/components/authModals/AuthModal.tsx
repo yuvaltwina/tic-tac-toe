@@ -6,39 +6,46 @@ import RegisterModal from './registerModal/RegisterModal';
 import LoginModal from './loginModal/LoginModal';
 
 const { LOGIN, REGISTER } = MODAL_NEVIGATION_OPTIONS;
-type Tprops = {
+type Props = {
   isAuthModal: boolean;
   setIsAuthModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function AuthModal({ isAuthModal, setIsAuthModal }: Tprops) {
+function AuthModal({ isAuthModal, setIsAuthModal }: Props) {
   const [modalPage, setModalPage] = useState(LOGIN);
-
-  const navigate = {
-    toRegisterPage: () => setModalPage(REGISTER),
-    toLoginPage: () => setModalPage(LOGIN),
-  };
 
   const closeModal = () => {
     setIsAuthModal(false);
     navigate.toLoginPage();
   };
-  const displayPage = () => {
-    if (modalPage === REGISTER) {
-      return (
-        <RegisterModal setModalPage={setModalPage} closeModal={closeModal} />
-      );
-    }
-    return <LoginModal setModalPage={setModalPage} closeModal={closeModal} />;
+  const navigate = {
+    toRegisterPage: () => setModalPage(REGISTER),
+    toLoginPage: () => setModalPage(LOGIN),
+  };
+  const displayModalPage = {
+    [LOGIN]: {
+      pageToRender: <LoginModal navigate={navigate} closeModal={closeModal} />,
+      title: 'LOGIN',
+    },
+    [REGISTER]: {
+      pageToRender: (
+        <RegisterModal navigate={navigate} closeModal={closeModal} />
+      ),
+      title: 'REGISTER',
+    },
   };
 
+  const { pageToRender, title } = displayModalPage[modalPage];
   return (
     <Modal
       open={isAuthModal}
       onClose={closeModal}
       className="auth-modal-container"
     >
-      <div className="auth-modal">{displayPage()}</div>
+      <div className="auth-modal">
+        <h1 className="modal-title">{title}</h1>
+        {pageToRender}
+      </div>
     </Modal>
   );
 }

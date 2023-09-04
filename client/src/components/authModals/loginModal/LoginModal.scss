@@ -8,10 +8,6 @@
   @include form;
 }
 
-.login-title {
-  @include title;
-}
-
 .login-to-register-button {
   @include pageLinkButton;
 }
