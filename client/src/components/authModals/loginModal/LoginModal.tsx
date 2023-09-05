@@ -1,118 +1,130 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef, useImperativeHandle } from 'react';
 import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import InputField from '../components/inputField/InputField';
-import './LoginModal.scss';
-import { Navigate, InputProps } from '../../../types/types';
-import SubmitButton from '../components/submitButton/SubmitButton';
-import { SERVER_FAILED_ERROR } from '../../../utils/data';
 import { loginValidationSchema } from '../../../utils/validation/userValidation';
 import { checkLoginDetails } from '../../../utils/apiService/axiosRequets';
 import { login } from '../../../utils/reduxState/user';
+import ErrorHandler from '../../../utils/ErrorHandler';
 
-interface InitialValue {
-  username: string;
-  password: string;
-}
-type Props = {
-  navigate: Navigate;
+import './LoginModal.scss';
+
+type LoginModalProps = {
   closeModal: () => void;
+  setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const CHANGE_PAGE_TEXT = 'Dont have an account?';
-const UNAUTHORIZED_TEXT = 'Wrong Username or Password';
+type InitialValues = typeof initialValues;
+
+type TextFieldArray = {
+  id: keyof InitialValues;
+  placeHolder: string;
+  type: string;
+  label: string;
+}[];
+
 const initialValues = {
   username: '',
   password: '',
 };
+const textFieldArray: TextFieldArray = [
+  { id: 'username', placeHolder: 'username', type: 'text', label: 'username' },
+  {
+    id: 'password',
+    placeHolder: 'password',
+    type: 'password',
+    label: 'username',
+  },
+];
 
-function LoginModal({ navigate, closeModal }: Props) {
+const UNAUTHORIZED_TEXT = 'Wrong Username or Password';
+
+function LoginModal(
+  { closeModal, setIsSubmitting }: LoginModalProps,
+  ref: any
+) {
   const [isAuthorized, setIsAuthorized] = useState(true);
   const dispatch = useDispatch();
 
-  function errorHandler(error: any) {
-    const errorMessage = error?.response?.data?.message || '';
-    if (errorMessage === 'unauthorized') {
-      setIsAuthorized(false);
-    } else {
-      toast.error(SERVER_FAILED_ERROR);
+  const submitHandler = async (
+    values: InitialValues,
+    resetForm: () => void
+  ) => {
+    setIsSubmitting(true);
+
+    const { username, password } = values;
+    setIsAuthorized(true);
+    try {
+      const { formattedUsername, loginToken } = await checkLoginDetails(
+        username,
+        password
+      );
+      resetForm();
+      dispatch(login({ formattedUsername, loginToken }));
+      closeModal();
+    } catch (error) {
+      const errorMessage = ErrorHandler(error);
+      if (errorMessage === 'unauthorized') {
+        setIsAuthorized(false);
+      } else {
+        toast.error(errorMessage);
+      }
     }
-  }
+    setIsSubmitting(false);
+  };
 
   const {
     handleBlur,
+    submitForm,
     handleChange,
     touched,
     values,
     errors,
     handleSubmit,
-    isSubmitting,
   } = useFormik({
     initialValues,
     validationSchema: loginValidationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      setIsAuthorized(true);
-      const { username, password } = values;
-      try {
-        const { formatedUsername, loginToken } = await checkLoginDetails(
-          username,
-          password
-        );
-        resetForm();
-        dispatch(login({ formatedUsername, loginToken }));
-        closeModal();
-      } catch (error: any) {
-        errorHandler(error);
-      }
+    onSubmit: (values, { resetForm }) => {
+      submitHandler(values, resetForm);
     },
   });
 
-  const inputPropsGenerator = (
-    id: keyof InitialValue
-  ): InputProps & { id: string } => {
-    const uppercaseId = id[0].toUpperCase() + id.slice(1);
-    const inputProps = {
-      id,
-      type: id,
-      autoComplete: 'on',
-      required: true,
-      placeholder: `Enter your ${uppercaseId}`,
-      onBlur: handleBlur,
-      value: values[id],
-      onChange: handleChange,
-      error: !!(touched[id] && errors[id]),
-    };
-    return inputProps;
-  };
+  useImperativeHandle(ref, () => ({
+    submitForm,
+  }));
 
-  const displayInputFields = Object.keys(initialValues).map((id) => (
-    <InputField
-      key={id}
-      inputProps={inputPropsGenerator(id as keyof InitialValue)}
-      errorMessage={errors[id as keyof InitialValue]}
-    />
-  ));
-  const displayUnauthorizedError = !isAuthorized ? (
+  const displayInputFields = textFieldArray.map(
+    ({ id, label, type, placeHolder }) => (
+      <InputField
+        key={id}
+        id={id}
+        variant="filled"
+        label={label}
+        type={type}
+        required
+        placeholder={placeHolder}
+        onBlur={handleBlur}
+        value={values[id]}
+        onChange={handleChange}
+        error={touched[id] && Boolean(errors[id])}
+        helperText={touched[id] && errors[id]}
+      />
+    )
+  );
+
+  const displayUnauthorizedError = !isAuthorized && (
     <p className="login-unauthorized">{UNAUTHORIZED_TEXT}</p>
-  ) : null;
+  );
 
   return (
     <div className="login-modal">
-      <form onSubmit={handleSubmit} className="login-form">
+      <form ref={ref} onSubmit={handleSubmit} className="login-form">
         {displayInputFields}
         {displayUnauthorizedError}
-        <SubmitButton isSubmitting={isSubmitting} />
       </form>
-      <button
-        onClick={navigate.toRegisterPage}
-        type="button"
-        className="login-to-register-button"
-      >
-        {CHANGE_PAGE_TEXT}
-      </button>
     </div>
   );
 }
 
-export default LoginModal;
+export default forwardRef(LoginModal);

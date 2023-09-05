@@ -16,17 +16,17 @@ const USER_FOUND_MESSAGE = 'user exists';
 
 export const createUser: RequestHandler = async (req, res, next) => {
   const { username, password } = req.body;
-  const formatedUsername = formattingUsername(username);
+  const formattedUsername = formattingUsername(username);
   const encryptedPassword = await encryptingPassword(password);
-  await insertUser(formatedUsername, encryptedPassword);
+  await insertUser(formattedUsername, encryptedPassword);
   res.status(201).json(serverResponse('new user created'));
 };
 
 // האם צריך לבדוק את המידע שאני מקבל מהיוזר בנוסף לדטהבייס?
 export const login: RequestHandler = async (req, res, next) => {
   const { username, password } = req.body;
-  const formatedUsername = formattingUsername(username);
-  const existingUser = await checkIfUserExist(formatedUsername);
+  const formattedUsername = formattingUsername(username);
+  const existingUser = await checkIfUserExist(formattedUsername);
   if (!existingUser) {
     throw new CustomError(401, BAD_LOGIN_MESSAGE);
   }
@@ -37,11 +37,11 @@ export const login: RequestHandler = async (req, res, next) => {
   if (!isPasswordMatch) {
     throw new CustomError(401, BAD_LOGIN_MESSAGE);
   }
-  const loginToken = generateloginToken(formatedUsername);
+  const loginToken = generateloginToken(formattedUsername);
   res.status(200).json(
     serverResponse(USER_FOUND_MESSAGE, {
       loginToken,
-      formatedUsername,
+      formattedUsername,
     })
   );
 };

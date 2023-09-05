@@ -1,9 +1,12 @@
+/* eslint-disable no-param-reassign */
+
 import { createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
-/* eslint-disable no-param-reassign */
+
 type ReduxUserState = { username: string; isLoggedIn: boolean };
+
 type ReduxLoginAction = {
-  payload: { formatedUsername: string; loginToken: string };
+  payload: { formattedUsername: string; loginToken: string };
 };
 
 const getInitialUsername = () => {
@@ -25,11 +28,12 @@ const initialState = {
 };
 
 const loginHandler = (state: ReduxUserState, action: ReduxLoginAction) => {
-  const { formatedUsername, loginToken } = action.payload;
+  const { formattedUsername, loginToken } = action.payload;
   state.isLoggedIn = true;
-  state.username = formatedUsername;
+  state.username = formattedUsername;
   Cookies.set('login', loginToken, { expires: 7 });
 };
+
 const logoutHandler = (state: ReduxUserState) => {
   state.isLoggedIn = false;
   state.username = '';

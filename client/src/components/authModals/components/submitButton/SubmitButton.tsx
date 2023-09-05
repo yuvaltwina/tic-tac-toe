@@ -1,11 +1,16 @@
 import React from 'react';
 import './SubmitButton.scss';
 
-type Tprop = { isSubmitting: boolean };
+type SubmitButtonProp = { isSubmitting: boolean; onClick: () => void };
 
-function SubmitButton({ isSubmitting }: Tprop) {
+function SubmitButton({ isSubmitting, onClick }: SubmitButtonProp) {
   return (
-    <button type="submit" disabled={isSubmitting} className="modal-submit">
+    <button
+      onClick={onClick}
+      type="submit"
+      disabled={isSubmitting}
+      className="modal-submit"
+    >
       SUBMIT
     </button>
   );
