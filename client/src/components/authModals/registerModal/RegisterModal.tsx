@@ -13,6 +13,7 @@ const CREATED_USER_TEXT = 'User Created Sucssesfully';
 type RegisterModalProps = {
   closeModal: () => void;
   setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
+  formId: string;
 };
 type InitialValues = typeof initialValues;
 
@@ -37,7 +38,11 @@ const textFieldArray: TextFieldArray = [
     label: 'username',
   },
 ];
-function RegisterModal({ closeModal, setIsSubmitting }: RegisterModalProps) {
+function RegisterModal({
+  closeModal,
+  setIsSubmitting,
+  formId,
+}: RegisterModalProps) {
   const submitHandler = async (
     values: InitialValues,
     resetForm: () => void
@@ -87,7 +92,7 @@ function RegisterModal({ closeModal, setIsSubmitting }: RegisterModalProps) {
 
   return (
     <div className="register-modal">
-      <form id="authForm" onSubmit={handleSubmit} className="register-form">
+      <form id={formId} onSubmit={handleSubmit} className="register-form">
         {displayInputFields}
       </form>
     </div>

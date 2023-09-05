@@ -16,7 +16,7 @@ type AuthModalProps = {
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
+const FORM_ID = 'authForm';
 function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
   const [modalPage, setModalPage] = useState(LOGIN);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,7 +34,11 @@ function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
   const displayModalPage = {
     [LOGIN]: {
       pageToRender: (
-        <LoginModal closeModal={closeModal} setIsSubmitting={setIsSubmitting} />
+        <LoginModal
+          formId={FORM_ID}
+          closeModal={closeModal}
+          setIsSubmitting={setIsSubmitting}
+        />
       ),
       title: 'LOGIN',
       footer: {
@@ -48,6 +52,7 @@ function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
     [REGISTER]: {
       pageToRender: (
         <RegisterModal
+          formId={FORM_ID}
           closeModal={closeModal}
           setIsSubmitting={setIsSubmitting}
         />
@@ -78,7 +83,7 @@ function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
       <div className="auth-modal">
         <h1 className="modal-title">{title}</h1>
         {pageToRender}
-        <SubmitButton isSubmitting={isSubmitting} />
+        <SubmitButton isSubmitting={isSubmitting} formId={FORM_ID} />
 
         <footer>
           <p>{paragraph}</p>

@@ -13,6 +13,7 @@ import './LoginModal.scss';
 type LoginModalProps = {
   closeModal: () => void;
   setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
+  formId: string;
 };
 
 type InitialValues = typeof initialValues;
@@ -40,7 +41,7 @@ const textFieldArray: TextFieldArray = [
 
 const UNAUTHORIZED_TEXT = 'Wrong Username or Password';
 
-function LoginModal({ closeModal, setIsSubmitting }: LoginModalProps) {
+function LoginModal({ closeModal, setIsSubmitting, formId }: LoginModalProps) {
   const [isAuthorized, setIsAuthorized] = useState(true);
   const dispatch = useDispatch();
 
@@ -105,7 +106,7 @@ function LoginModal({ closeModal, setIsSubmitting }: LoginModalProps) {
 
   return (
     <div className="login-modal">
-      <form id="authForm" onSubmit={handleSubmit} className="login-form">
+      <form id={formId} onSubmit={handleSubmit} className="login-form">
         {displayInputFields}
         {displayUnauthorizedError}
       </form>
