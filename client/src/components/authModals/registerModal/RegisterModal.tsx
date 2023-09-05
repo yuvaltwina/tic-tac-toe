@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
 import InputField from '../components/inputField/InputField';
@@ -10,7 +10,7 @@ import ErrorHandler from '../../../utils/ErrorHandler';
 const CREATING_USER_TEXT = 'Creating User';
 const CREATED_USER_TEXT = 'User Created Sucssesfully';
 
-type Props = {
+type RegisterModalProps = {
   closeModal: () => void;
   setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -37,7 +37,7 @@ const textFieldArray: TextFieldArray = [
     label: 'username',
   },
 ];
-function RegisterModal({ closeModal, setIsSubmitting }: Props, ref: any) {
+function RegisterModal({ closeModal, setIsSubmitting }: RegisterModalProps) {
   const submitHandler = async (
     values: InitialValues,
     resetForm: () => void
@@ -59,23 +59,12 @@ function RegisterModal({ closeModal, setIsSubmitting }: Props, ref: any) {
     setIsSubmitting(false);
   };
 
-  const {
-    handleBlur,
-    submitForm,
-    handleChange,
-    touched,
-    values,
-    errors,
-    handleSubmit,
-  } = useFormik({
-    initialValues,
-    validationSchema: registerValidationSchema,
-    onSubmit: (values, { resetForm }) => submitHandler(values, resetForm),
-  });
-
-  useImperativeHandle(ref, () => ({
-    submitForm,
-  }));
+  const { handleBlur, handleChange, touched, values, errors, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema: registerValidationSchema,
+      onSubmit: (values, { resetForm }) => submitHandler(values, resetForm),
+    });
 
   const displayInputFields = textFieldArray.map(
     ({ id, label, type, placeHolder }) => (
@@ -98,11 +87,11 @@ function RegisterModal({ closeModal, setIsSubmitting }: Props, ref: any) {
 
   return (
     <div className="register-modal">
-      <form ref={ref} onSubmit={handleSubmit} className="register-form">
+      <form id="authForm" onSubmit={handleSubmit} className="register-form">
         {displayInputFields}
       </form>
     </div>
   );
 }
 
-export default forwardRef(RegisterModal);
+export default RegisterModal;

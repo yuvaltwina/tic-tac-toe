@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
@@ -40,10 +40,7 @@ const textFieldArray: TextFieldArray = [
 
 const UNAUTHORIZED_TEXT = 'Wrong Username or Password';
 
-function LoginModal(
-  { closeModal, setIsSubmitting }: LoginModalProps,
-  ref: any
-) {
+function LoginModal({ closeModal, setIsSubmitting }: LoginModalProps) {
   const [isAuthorized, setIsAuthorized] = useState(true);
   const dispatch = useDispatch();
 
@@ -74,25 +71,14 @@ function LoginModal(
     setIsSubmitting(false);
   };
 
-  const {
-    handleBlur,
-    submitForm,
-    handleChange,
-    touched,
-    values,
-    errors,
-    handleSubmit,
-  } = useFormik({
-    initialValues,
-    validationSchema: loginValidationSchema,
-    onSubmit: (values, { resetForm }) => {
-      submitHandler(values, resetForm);
-    },
-  });
-
-  useImperativeHandle(ref, () => ({
-    submitForm,
-  }));
+  const { handleBlur, handleChange, touched, values, errors, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema: loginValidationSchema,
+      onSubmit: (values, { resetForm }) => {
+        submitHandler(values, resetForm);
+      },
+    });
 
   const displayInputFields = textFieldArray.map(
     ({ id, label, type, placeHolder }) => (
@@ -119,7 +105,7 @@ function LoginModal(
 
   return (
     <div className="login-modal">
-      <form ref={ref} onSubmit={handleSubmit} className="login-form">
+      <form id="authForm" onSubmit={handleSubmit} className="login-form">
         {displayInputFields}
         {displayUnauthorizedError}
       </form>
@@ -127,4 +113,4 @@ function LoginModal(
   );
 }
 
-export default forwardRef(LoginModal);
+export default LoginModal;

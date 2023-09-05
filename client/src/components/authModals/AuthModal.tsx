@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import './AuthModal.scss';
 import Modal from '@mui/material/Modal';
 import RegisterModal from './registerModal/RegisterModal';
@@ -20,13 +20,6 @@ type AuthModalProps = {
 function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
   const [modalPage, setModalPage] = useState(LOGIN);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const childFormRef: any = useRef(null);
-
-  const handleChildFormSubmit = () => {
-    if (childFormRef.current) {
-      childFormRef.current.submitForm();
-    }
-  };
 
   const navigate = {
     toRegisterPage: () => setModalPage(REGISTER),
@@ -41,11 +34,7 @@ function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
   const displayModalPage = {
     [LOGIN]: {
       pageToRender: (
-        <LoginModal
-          ref={childFormRef}
-          closeModal={closeModal}
-          setIsSubmitting={setIsSubmitting}
-        />
+        <LoginModal closeModal={closeModal} setIsSubmitting={setIsSubmitting} />
       ),
       title: 'LOGIN',
       footer: {
@@ -59,7 +48,6 @@ function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
     [REGISTER]: {
       pageToRender: (
         <RegisterModal
-          ref={childFormRef}
           closeModal={closeModal}
           setIsSubmitting={setIsSubmitting}
         />
@@ -90,10 +78,7 @@ function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
       <div className="auth-modal">
         <h1 className="modal-title">{title}</h1>
         {pageToRender}
-        <SubmitButton
-          isSubmitting={isSubmitting}
-          onClick={handleChildFormSubmit}
-        />
+        <SubmitButton isSubmitting={isSubmitting} />
 
         <footer>
           <p>{paragraph}</p>
