@@ -3,7 +3,6 @@ import './AuthModal.scss';
 import Modal from '@mui/material/Modal';
 import RegisterModal from './registerModal/RegisterModal';
 import LoginModal from './loginModal/LoginModal';
-import SubmitButton from './components/submitButton/SubmitButton';
 
 export const MODAL_NEVIGATION_OPTIONS = {
   REGISTER: 'register',
@@ -16,10 +15,9 @@ type AuthModalProps = {
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-const FORM_ID = 'authForm';
+
 function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
   const [modalPage, setModalPage] = useState(LOGIN);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = {
     toRegisterPage: () => setModalPage(REGISTER),
@@ -33,13 +31,7 @@ function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
 
   const displayModalPage = {
     [LOGIN]: {
-      pageToRender: (
-        <LoginModal
-          formId={FORM_ID}
-          closeModal={closeModal}
-          setIsSubmitting={setIsSubmitting}
-        />
-      ),
+      pageToRender: <LoginModal closeModal={closeModal} />,
       title: 'LOGIN',
       footer: {
         paragraph: 'Dont have an account?',
@@ -50,13 +42,7 @@ function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
       },
     },
     [REGISTER]: {
-      pageToRender: (
-        <RegisterModal
-          formId={FORM_ID}
-          closeModal={closeModal}
-          setIsSubmitting={setIsSubmitting}
-        />
-      ),
+      pageToRender: <RegisterModal closeModal={closeModal} />,
       title: 'REGISTER',
       footer: {
         paragraph: 'Dont have an account?',
@@ -83,7 +69,6 @@ function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
       <div className="auth-modal">
         <h1 className="modal-title">{title}</h1>
         {pageToRender}
-        <SubmitButton isSubmitting={isSubmitting} formId={FORM_ID} />
 
         <footer>
           <p>{paragraph}</p>

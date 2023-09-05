@@ -6,14 +6,13 @@ import './RegisterModal.scss';
 import { registerValidationSchema } from '../../../utils/validation/userValidation';
 import { createUser } from '../../../utils/apiService/axiosRequets';
 import ErrorHandler from '../../../utils/ErrorHandler';
+import SubmitButton from '../components/submitButton/SubmitButton';
 
 const CREATING_USER_TEXT = 'Creating User';
 const CREATED_USER_TEXT = 'User Created Sucssesfully';
 
 type RegisterModalProps = {
   closeModal: () => void;
-  setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
-  formId: string;
 };
 type InitialValues = typeof initialValues;
 
@@ -38,16 +37,11 @@ const textFieldArray: TextFieldArray = [
     label: 'username',
   },
 ];
-function RegisterModal({
-  closeModal,
-  setIsSubmitting,
-  formId,
-}: RegisterModalProps) {
+function RegisterModal({ closeModal }: RegisterModalProps) {
   const submitHandler = async (
     values: InitialValues,
     resetForm: () => void
   ) => {
-    setIsSubmitting(true);
     const { username, password } = values;
     const loadingToastId = toast.loading(CREATING_USER_TEXT);
     try {
@@ -61,15 +55,21 @@ function RegisterModal({
         id: loadingToastId,
       });
     }
-    setIsSubmitting(false);
   };
 
-  const { handleBlur, handleChange, touched, values, errors, handleSubmit } =
-    useFormik({
-      initialValues,
-      validationSchema: registerValidationSchema,
-      onSubmit: (values, { resetForm }) => submitHandler(values, resetForm),
-    });
+  const {
+    handleBlur,
+    handleChange,
+    touched,
+    values,
+    errors,
+    handleSubmit,
+    isSubmitting,
+  } = useFormik({
+    initialValues,
+    validationSchema: registerValidationSchema,
+    onSubmit: (values, { resetForm }) => submitHandler(values, resetForm),
+  });
 
   const displayInputFields = textFieldArray.map(
     ({ id, label, type, placeHolder }) => (
@@ -92,8 +92,9 @@ function RegisterModal({
 
   return (
     <div className="register-modal">
-      <form id={formId} onSubmit={handleSubmit} className="register-form">
+      <form onSubmit={handleSubmit} className="register-form">
         {displayInputFields}
+        <SubmitButton isSubmitting={isSubmitting} />
       </form>
     </div>
   );

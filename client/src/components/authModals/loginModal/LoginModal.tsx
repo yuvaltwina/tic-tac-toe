@@ -9,11 +9,10 @@ import { login } from '../../../utils/reduxState/user';
 import ErrorHandler from '../../../utils/ErrorHandler';
 
 import './LoginModal.scss';
+import SubmitButton from '../components/submitButton/SubmitButton';
 
 type LoginModalProps = {
   closeModal: () => void;
-  setIsSubmitting: React.Dispatch<React.SetStateAction<boolean>>;
-  formId: string;
 };
 
 type InitialValues = typeof initialValues;
@@ -41,7 +40,7 @@ const textFieldArray: TextFieldArray = [
 
 const UNAUTHORIZED_TEXT = 'Wrong Username or Password';
 
-function LoginModal({ closeModal, setIsSubmitting, formId }: LoginModalProps) {
+function LoginModal({ closeModal }: LoginModalProps) {
   const [isAuthorized, setIsAuthorized] = useState(true);
   const dispatch = useDispatch();
 
@@ -49,10 +48,8 @@ function LoginModal({ closeModal, setIsSubmitting, formId }: LoginModalProps) {
     values: InitialValues,
     resetForm: () => void
   ) => {
-    setIsSubmitting(true);
-
     const { username, password } = values;
-    setIsAuthorized(true);
+
     try {
       const { formattedUsername, loginToken } = await checkLoginDetails(
         username,
@@ -69,17 +66,23 @@ function LoginModal({ closeModal, setIsSubmitting, formId }: LoginModalProps) {
         toast.error(errorMessage);
       }
     }
-    setIsSubmitting(false);
   };
 
-  const { handleBlur, handleChange, touched, values, errors, handleSubmit } =
-    useFormik({
-      initialValues,
-      validationSchema: loginValidationSchema,
-      onSubmit: (values, { resetForm }) => {
-        submitHandler(values, resetForm);
-      },
-    });
+  const {
+    handleBlur,
+    handleChange,
+    touched,
+    values,
+    errors,
+    handleSubmit,
+    isSubmitting,
+  } = useFormik({
+    initialValues,
+    validationSchema: loginValidationSchema,
+    onSubmit: (values, { resetForm }) => {
+      submitHandler(values, resetForm);
+    },
+  });
 
   const displayInputFields = textFieldArray.map(
     ({ id, label, type, placeHolder }) => (
@@ -106,9 +109,10 @@ function LoginModal({ closeModal, setIsSubmitting, formId }: LoginModalProps) {
 
   return (
     <div className="login-modal">
-      <form id={formId} onSubmit={handleSubmit} className="login-form">
+      <form onSubmit={handleSubmit} className="login-form">
         {displayInputFields}
         {displayUnauthorizedError}
+        <SubmitButton isSubmitting={isSubmitting} />
       </form>
     </div>
   );
