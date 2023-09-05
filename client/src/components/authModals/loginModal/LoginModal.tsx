@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
 import InputField from '../components/inputField/InputField';
 import './LoginModal.scss';
 import { Navigate, InputProps } from '../../../types/types';
@@ -8,24 +9,27 @@ import SubmitButton from '../components/submitButton/SubmitButton';
 import { SERVER_FAILED_ERROR } from '../../../utils/data';
 import { loginValidationSchema } from '../../../utils/validation/userValidation';
 import { checkLoginDetails } from '../../../utils/apiService/axiosRequets';
-
-const CHANGE_PAGE_TEXT = 'Dont have an account?';
-const UNAUTHORIZED_TEXT = 'Wrong Username or Password';
+import { login } from '../../../utils/reduxState/user';
 
 interface InitialValue {
   username: string;
   password: string;
 }
-const initialValues = {
-  username: '',
-  password: '',
-};
 type Props = {
   navigate: Navigate;
   closeModal: () => void;
 };
+
+const CHANGE_PAGE_TEXT = 'Dont have an account?';
+const UNAUTHORIZED_TEXT = 'Wrong Username or Password';
+const initialValues = {
+  username: '',
+  password: '',
+};
+
 function LoginModal({ navigate, closeModal }: Props) {
   const [isAuthorized, setIsAuthorized] = useState(true);
+  const dispatch = useDispatch();
 
   function errorHandler(error: any) {
     const errorMessage = error?.response?.data?.message || '';
@@ -44,22 +48,22 @@ function LoginModal({ navigate, closeModal }: Props) {
     errors,
     handleSubmit,
     isSubmitting,
-    isValid,
-    dirty,
   } = useFormik({
     initialValues,
     validationSchema: loginValidationSchema,
     onSubmit: async (values, { resetForm }) => {
-      if (isValid && dirty) {
-        setIsAuthorized(true);
-        const { username, password } = values;
-        try {
-          await checkLoginDetails(username, password);
-          resetForm();
-          closeModal();
-        } catch (error: any) {
-          errorHandler(error);
-        }
+      setIsAuthorized(true);
+      const { username, password } = values;
+      try {
+        const { formatedUsername, loginToken } = await checkLoginDetails(
+          username,
+          password
+        );
+        resetForm();
+        dispatch(login({ formatedUsername, loginToken }));
+        closeModal();
+      } catch (error: any) {
+        errorHandler(error);
       }
     },
   });

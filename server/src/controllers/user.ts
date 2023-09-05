@@ -38,9 +38,12 @@ export const login: RequestHandler = async (req, res, next) => {
     throw new CustomError(401, BAD_LOGIN_MESSAGE);
   }
   const loginToken = generateloginToken(formatedUsername);
-  res
-    .status(200)
-    .json(serverResponse(USER_FOUND_MESSAGE, { loginToken, formatedUsername }));
+  res.status(200).json(
+    serverResponse(USER_FOUND_MESSAGE, {
+      loginToken,
+      formatedUsername,
+    })
+  );
 };
 
 export const checkUserCookie: RequestHandler = async (req, res, next) => {
@@ -50,8 +53,7 @@ export const checkUserCookie: RequestHandler = async (req, res, next) => {
   }
   const username = decodeLoginCookieToken(token);
   if (!username) {
-    next(new CustomError(401, 'unauthorized'));
-    return;
+    throw new CustomError(401, BAD_LOGIN_MESSAGE);
   }
   res.status(200).json(serverResponse(USER_FOUND_MESSAGE, username));
 };

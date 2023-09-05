@@ -51,23 +51,19 @@ function RegisterModal({ navigate, closeModal }: Props) {
     errors,
     handleSubmit,
     isSubmitting,
-    isValid,
-    dirty,
   } = useFormik({
     initialValues,
     validationSchema: registerValidationSchema,
     onSubmit: async (values, { resetForm }) => {
-      if (isValid && dirty) {
-        const { username, password } = values;
-        const loadingToastId = toast.loading(CREATING_USER_TEXT);
-        try {
-          await createUser(username, password);
-          toast.success(CREATED_USER_TEXT, { id: loadingToastId });
-          closeModal();
-          resetForm();
-        } catch (error: any) {
-          errorHandler(loadingToastId, error);
-        }
+      const { username, password } = values;
+      const loadingToastId = toast.loading(CREATING_USER_TEXT);
+      try {
+        await createUser(username, password);
+        toast.success(CREATED_USER_TEXT, { id: loadingToastId });
+        closeModal();
+        resetForm();
+      } catch (error: any) {
+        errorHandler(loadingToastId, error);
       }
     },
   });

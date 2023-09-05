@@ -12,5 +12,5 @@ export const checkLoginDetails = async (username: string, password: string) => {
     username,
     password,
   });
-  return serverResponse;
+  return serverResponse.data.payload;
 };

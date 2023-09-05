@@ -14,3 +14,9 @@ export type Navigate = {
   toRegisterPage: () => void;
   toLoginPage: () => void;
 };
+export interface UserState {
+  user: {
+    username: string;
+    isLoggedIn: boolean;
+  };
+}
