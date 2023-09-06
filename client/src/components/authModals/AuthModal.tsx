@@ -45,7 +45,7 @@ function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
       pageToRender: <RegisterModal closeModal={closeModal} />,
       title: 'REGISTER',
       footer: {
-        paragraph: 'Dont have an account?',
+        paragraph: 'Already have an account?',
         link: { text: 'Sign in', navigateFunction: () => setModalPage(LOGIN) },
       },
     },
