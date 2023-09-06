@@ -18,9 +18,3 @@ export const WIN_CONDITIONS: WinningPattern[] = [
   [0, 4, 8],
   [2, 4, 6],
 ];
-export const MODAL_NEVIGATION_OPTIONS = {
-  REGISTER: 'register',
-  LOGIN: 'login',
-};
-export const SERVER_FAILED_ERROR =
-  'Something went wrong please try again later';

@@ -3,45 +3,59 @@ import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
 import InputField from '../components/inputField/InputField';
 import './RegisterModal.scss';
-import { Navigate, InputProps } from '../../../types/types';
-import SubmitButton from '../components/submitButton/SubmitButton';
-import { SERVER_FAILED_ERROR } from '../../../utils/data';
 import { registerValidationSchema } from '../../../utils/validation/userValidation';
 import { createUser } from '../../../utils/apiService/axiosRequets';
+import ErrorHandler from '../../../utils/ErrorHandler';
+import SubmitButton from '../components/submitButton/SubmitButton';
 
-const CHANGE_PAGE_TEXT = 'Already got an account?';
 const CREATING_USER_TEXT = 'Creating User';
 const CREATED_USER_TEXT = 'User Created Sucssesfully';
-const DUPLICATE_USERNAME_TEXT = 'Username Already Taken';
 
-interface FormInitialValue {
-  username: string;
-  password: string;
-}
-const initialValues: FormInitialValue = {
+type RegisterModalProps = {
+  closeModal: () => void;
+};
+type InitialValues = typeof initialValues;
+
+type TextFieldArray = {
+  id: keyof InitialValues;
+  placeHolder: string;
+  type: string;
+  label: string;
+}[];
+
+const initialValues = {
   username: '',
   password: '',
 };
-type Props = {
-  navigate: Navigate;
-  closeModal: () => void;
-};
 
-function RegisterModal({ navigate, closeModal }: Props) {
-  function errorHandler(loadingToastId: string, error: any) {
-    const errorMessage = error?.response?.data?.message
-      ? error.response.data.message
-      : '';
-    if (errorMessage.startsWith('Duplicate entry')) {
-      toast.error(DUPLICATE_USERNAME_TEXT, {
-        id: loadingToastId,
-      });
-    } else {
-      toast.error(SERVER_FAILED_ERROR, {
+const textFieldArray: TextFieldArray = [
+  { id: 'username', placeHolder: 'username', type: 'text', label: 'username' },
+  {
+    id: 'password',
+    placeHolder: 'password',
+    type: 'password',
+    label: 'username',
+  },
+];
+function RegisterModal({ closeModal }: RegisterModalProps) {
+  const submitHandler = async (
+    values: InitialValues,
+    resetForm: () => void
+  ) => {
+    const { username, password } = values;
+    const loadingToastId = toast.loading(CREATING_USER_TEXT);
+    try {
+      await createUser(username, password);
+      toast.success(CREATED_USER_TEXT, { id: loadingToastId });
+      closeModal();
+      resetForm();
+    } catch (error) {
+      const errorMessage = ErrorHandler(error);
+      toast.error(errorMessage, {
         id: loadingToastId,
       });
     }
-  }
+  };
 
   const {
     handleBlur,
@@ -54,45 +68,27 @@ function RegisterModal({ navigate, closeModal }: Props) {
   } = useFormik({
     initialValues,
     validationSchema: registerValidationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      const { username, password } = values;
-      const loadingToastId = toast.loading(CREATING_USER_TEXT);
-      try {
-        await createUser(username, password);
-        toast.success(CREATED_USER_TEXT, { id: loadingToastId });
-        closeModal();
-        resetForm();
-      } catch (error: any) {
-        errorHandler(loadingToastId, error);
-      }
-    },
+    onSubmit: (values, { resetForm }) => submitHandler(values, resetForm),
   });
 
-  const inputPropsGenerator = (
-    id: keyof FormInitialValue
-  ): InputProps & { id: string } => {
-    const uppercaseId = id[0].toUpperCase() + id.slice(1);
-    const inputProps = {
-      id,
-      type: id,
-      placeholder: `Enter your ${uppercaseId}`,
-      onBlur: handleBlur,
-      value: values[id],
-      onChange: handleChange,
-      error: !!(touched[id] && errors[id]),
-      autoComplete: 'on',
-      required: true,
-    };
-    return inputProps;
-  };
-
-  const displayInputFields = Object.keys(initialValues).map((id) => (
-    <InputField
-      key={id}
-      inputProps={inputPropsGenerator(id as keyof FormInitialValue)}
-      errorMessage={errors[id as keyof FormInitialValue]}
-    />
-  ));
+  const displayInputFields = textFieldArray.map(
+    ({ id, label, type, placeHolder }) => (
+      <InputField
+        key={id}
+        id={id}
+        variant="filled"
+        label={label}
+        type={type}
+        required
+        placeholder={placeHolder}
+        onBlur={handleBlur}
+        value={values[id]}
+        onChange={handleChange}
+        error={touched[id] && Boolean(errors[id])}
+        helperText={touched[id] && errors[id]}
+      />
+    )
+  );
 
   return (
     <div className="register-modal">
@@ -100,13 +96,6 @@ function RegisterModal({ navigate, closeModal }: Props) {
         {displayInputFields}
         <SubmitButton isSubmitting={isSubmitting} />
       </form>
-      <button
-        onClick={navigate.toLoginPage}
-        type="button"
-        className="register-to-login-button"
-      >
-        {CHANGE_PAGE_TEXT}
-      </button>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 @import '../AuthModal.scss';
 @import '../../../../styles';
 .login-modal {
-  @include modalContantContainer;
+  @include modalContentContainer;
 }
 
 .login-form {

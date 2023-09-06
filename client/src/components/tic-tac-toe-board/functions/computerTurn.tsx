@@ -3,7 +3,7 @@ import { BoardValuesEnum } from '../../../types/BoardValues';
 const { emptySign } = BoardValuesEnum;
 
 function computerBestIndex(arr: string[]) {
-  const emptyIndices = arr.reduce((indices, val, index) => {
+  const emptyIndices = arr.reduce((indices: number[], val, index) => {
     if (val === emptySign) {
       indices.push(index);
     }
