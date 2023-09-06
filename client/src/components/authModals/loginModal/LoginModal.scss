@@ -8,9 +8,6 @@
   @include form;
 }
 
-.login-to-register-button {
-  @include pageLinkButton;
-}
 .login-unauthorized {
   color: red;
   margin-inline: auto;

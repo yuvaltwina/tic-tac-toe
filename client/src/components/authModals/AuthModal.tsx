@@ -70,12 +70,12 @@ function AuthModal({ isModalOpen, setIsModalOpen }: AuthModalProps) {
         <h1 className="modal-title">{title}</h1>
         {pageToRender}
 
-        <footer>
+        <footer className="auth-modal-footer">
           <p>{paragraph}</p>
           <button
             onClick={navigateFunction}
             type="button"
-            className="register-to-login-button"
+            className="change-page-button"
           >
             {NavigateText}
           </button>

@@ -20,7 +20,6 @@ type TextFieldArray = {
   id: keyof InitialValues;
   placeHolder: string;
   type: string;
-  label: string;
 }[];
 
 const initialValues = {
@@ -29,14 +28,18 @@ const initialValues = {
 };
 
 const textFieldArray: TextFieldArray = [
-  { id: 'username', placeHolder: 'username', type: 'text', label: 'username' },
+  {
+    id: 'username',
+    placeHolder: 'Enter Your Username',
+    type: 'text',
+  },
   {
     id: 'password',
-    placeHolder: 'password',
+    placeHolder: 'Enter Your Password',
     type: 'password',
-    label: 'username',
   },
 ];
+
 function RegisterModal({ closeModal }: RegisterModalProps) {
   const submitHandler = async (
     values: InitialValues,
@@ -68,27 +71,27 @@ function RegisterModal({ closeModal }: RegisterModalProps) {
   } = useFormik({
     initialValues,
     validationSchema: registerValidationSchema,
-    onSubmit: (values, { resetForm }) => submitHandler(values, resetForm),
+    onSubmit: async (values, { resetForm }) => {
+      await submitHandler(values, resetForm);
+    },
   });
 
-  const displayInputFields = textFieldArray.map(
-    ({ id, label, type, placeHolder }) => (
-      <InputField
-        key={id}
-        id={id}
-        variant="filled"
-        label={label}
-        type={type}
-        required
-        placeholder={placeHolder}
-        onBlur={handleBlur}
-        value={values[id]}
-        onChange={handleChange}
-        error={touched[id] && Boolean(errors[id])}
-        helperText={touched[id] && errors[id]}
-      />
-    )
-  );
+  const displayInputFields = textFieldArray.map(({ id, type, placeHolder }) => (
+    <InputField
+      key={id}
+      errorMessage={errors[id]}
+      inputProps={{
+        id,
+        type,
+        required: true,
+        placeholder: placeHolder,
+        onBlur: handleBlur,
+        value: values[id],
+        onChange: handleChange,
+        error: touched[id] && Boolean(errors[id]),
+      }}
+    />
+  ));
 
   return (
     <div className="register-modal">

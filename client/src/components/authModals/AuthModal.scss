@@ -37,14 +37,7 @@
   border-radius: 100px;
   letter-spacing: 1px;
 }
-@mixin form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-}
-
-@mixin pageLinkButton {
+.change-page-button {
   background-color: transparent;
   border: none;
   color: #ffdb58;
@@ -53,6 +46,19 @@
     color: white;
   }
 }
+.auth-modal-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+@mixin form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
 @mixin modalContentContainer {
   width: 85%;
   font-family: $main-font;

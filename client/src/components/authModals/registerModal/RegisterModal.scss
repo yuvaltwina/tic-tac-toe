@@ -7,7 +7,3 @@
 .register-form {
   @include form;
 }
-
-.register-to-login-button {
-  @include pageLinkButton;
-}
