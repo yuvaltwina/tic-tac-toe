@@ -20,11 +20,13 @@ type TextFieldArray = {
   id: keyof InitialValues;
   placeHolder: string;
   type: string;
+  label: string;
 }[];
 
 const initialValues = {
   username: '',
   password: '',
+  confirmPassword: '',
 };
 
 const textFieldArray: TextFieldArray = [
@@ -32,11 +34,19 @@ const textFieldArray: TextFieldArray = [
     id: 'username',
     placeHolder: 'Enter Your Username',
     type: 'text',
+    label: 'Username',
   },
   {
     id: 'password',
     placeHolder: 'Enter Your Password',
     type: 'password',
+    label: 'Password',
+  },
+  {
+    id: 'confirmPassword',
+    placeHolder: 'Enter Your Password',
+    type: 'password',
+    label: 'Confirm Password',
   },
 ];
 
@@ -76,22 +86,25 @@ function RegisterModal({ closeModal }: RegisterModalProps) {
     },
   });
 
-  const displayInputFields = textFieldArray.map(({ id, type, placeHolder }) => (
-    <InputField
-      key={id}
-      errorMessage={errors[id]}
-      inputProps={{
-        id,
-        type,
-        required: true,
-        placeholder: placeHolder,
-        onBlur: handleBlur,
-        value: values[id],
-        onChange: handleChange,
-        error: touched[id] && Boolean(errors[id]),
-      }}
-    />
-  ));
+  const displayInputFields = textFieldArray.map(
+    ({ id, type, placeHolder, label }) => (
+      <InputField
+        key={id}
+        label={label}
+        errorMessage={errors[id]}
+        inputProps={{
+          id,
+          type,
+          required: true,
+          placeholder: placeHolder,
+          onBlur: handleBlur,
+          value: values[id],
+          onChange: handleChange,
+          error: touched[id] && Boolean(errors[id]),
+        }}
+      />
+    )
+  );
 
   return (
     <div className="register-modal">

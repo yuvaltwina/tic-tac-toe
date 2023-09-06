@@ -19,10 +19,14 @@ export const registerValidationSchema = yup.object().shape({
     .string()
 
     .required('Password is required')
-    .min(6, 'Username should have at least 6 characters.')
-    .max(30, 'Name should not exceed 30 characters.')
+    .min(6, 'Password should have at least 6 characters.')
+    .max(30, 'Password should not exceed 30 characters.')
     .matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]/,
       'Password  should include both uppercase and lowercase letters and at least one digit'
     ),
+  confirmPassword: yup
+    .string()
+    .required('Confirm Password is required')
+    .oneOf([yup.ref('password'), ''], 'Passwords not match'),
 });

@@ -16,8 +16,9 @@ type InputProps =
 interface InputFieldProps {
   errorMessage: string | undefined;
   inputProps: InputProps;
+  label: string;
 }
-function InputField({ inputProps, errorMessage }: InputFieldProps) {
+function InputField({ inputProps, errorMessage, label }: InputFieldProps) {
   const isError = !!errorMessage;
   const displayError = isError && inputProps.error && (
     <FormHelperText error={isError} className="modal-input-error">
@@ -28,7 +29,7 @@ function InputField({ inputProps, errorMessage }: InputFieldProps) {
 
   return (
     <div className="modal-input-container">
-      <h3 className="modal-input-label">{inputProps.id}</h3>
+      <h3 className="modal-input-label">{label}</h3>
       <TextField autoComplete="on" {...inputProps} className="modal-input" />
       {displayError}
     </div>

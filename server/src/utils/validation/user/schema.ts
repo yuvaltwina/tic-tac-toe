@@ -1,20 +1,24 @@
 import Joi from 'joi';
 
 const usernameCheck = Joi.string()
-  .pattern(/^[a-zA-Z][a-zA-Z0-9]{3,11}$/)
   .required()
+  .min(3)
+  .max(11)
+  .pattern(/^[a-zA-Z][a-zA-Z0-9]*$/)
   .messages({
+    'string.min': 'Password should be at least 3 characters',
+    'string.max': 'Password should not exceed 11 characters',
     'string.base': 'Username should be a string',
     'string.empty': 'Username is required',
     'string.pattern.base':
-      'Username should start with a letter and contain only letters and numbers (3-11 characters)',
+      'Username should start with a letter and contain only letters and numbers',
     'any.required': 'Username is required',
   });
 const passwordCheck = Joi.string()
+  .required()
   .min(6)
   .max(30)
   .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]/)
-  .required()
   .messages({
     'string.base': 'Password should be a string',
     'string.empty': 'Password is required',
