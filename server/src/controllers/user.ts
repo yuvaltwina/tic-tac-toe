@@ -28,14 +28,16 @@ export const login: RequestHandler = async (req, res, next) => {
   const formatedUsername = formattingUsername(username);
   const existingUser = await checkIfUserExist(formatedUsername);
   if (!existingUser) {
-    throw new CustomError(401, BAD_LOGIN_MESSAGE);
+    next(new CustomError(401, BAD_LOGIN_MESSAGE));
+    return;
   }
   const isPasswordMatch = await bcrypt.compare(
     password,
     existingUser.encrypted_password
   );
   if (!isPasswordMatch) {
-    throw new CustomError(401, BAD_LOGIN_MESSAGE);
+    next(new CustomError(401, BAD_LOGIN_MESSAGE));
+    return;
   }
   const loginToken = generateloginToken(formatedUsername);
   res.status(200).json(
@@ -49,11 +51,13 @@ export const login: RequestHandler = async (req, res, next) => {
 export const checkUserCookie: RequestHandler = async (req, res, next) => {
   const token = req.headers?.authorization?.split(' ')[1];
   if (!token) {
-    throw new CustomError(401, 'token missing');
+    next(new CustomError(401, 'token missing'));
+    return;
   }
   const username = decodeLoginCookieToken(token);
   if (!username) {
-    throw new CustomError(401, BAD_LOGIN_MESSAGE);
+    next(new CustomError(401, BAD_LOGIN_MESSAGE));
+    return;
   }
   res.status(200).json(serverResponse(USER_FOUND_MESSAGE, username));
 };

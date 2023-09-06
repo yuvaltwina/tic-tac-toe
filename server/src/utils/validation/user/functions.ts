@@ -5,7 +5,6 @@ import userValidationScheme from './schema';
 
 export const newUserValidation: RequestHandler = (req, res, next) => {
   const { username, password } = req.body;
-  console.log(req.body);
   const newUser = { username, password };
   const { passwordCheck, usernameCheck } = userValidationScheme;
   const { error } = Joi.object({
