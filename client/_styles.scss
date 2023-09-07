@@ -3,11 +3,29 @@
 #root {
   display: flex;
   flex-direction: column;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   max-width: 2000px;
   padding: 2rem 1rem;
   text-align: center;
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #888;
+    border-radius: 1rem;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: white;
+    border-radius: 1rem;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(210, 210, 210);
+  }
 }
 
 $primary-color: #150067;

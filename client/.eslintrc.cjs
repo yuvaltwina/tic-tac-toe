@@ -43,5 +43,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': 'off',
     'implicit-arrow-linebreak': 'off',
     'react/jsx-curly-newline': 'off',
+    'react/no-array-index-key': 'off',
+    'react/jsx-one-expression-per-line': 'off',
   },
 };

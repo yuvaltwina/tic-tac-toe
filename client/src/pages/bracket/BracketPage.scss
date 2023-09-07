@@ -47,23 +47,23 @@
   padding: 10px 0px;
   border-radius: 10px;
   text-transform: capitalize;
-  .player {
+  .bracket-player {
     background-color: $third-color;
     color: white;
   }
-  .points {
+  .bracket-points {
     background-color: white;
     color: $forth-color;
   }
 }
 
-.users-data {
+.bracket-users-data {
   border-bottom: 1px solid white;
   padding: 1rem 0;
   font-size: 2rem;
 }
 
-.user {
+.bracket-user {
   display: flex;
   justify-content: start;
   align-items: center;
@@ -76,14 +76,14 @@
     text-overflow: ellipsis;
   }
 }
-.score-container {
+.bracket-score-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-width: 50%;
 }
 
-.user-profile {
+.bracket-user-profile {
   background-color: white;
   border-radius: 100%;
   aspect-ratio: 1/1;
@@ -104,7 +104,7 @@
   .bracket-row {
     gap: 70px;
   }
-  .users-data {
+  .bracket-users-data {
     font-size: 1.5rem;
   }
 }
@@ -118,7 +118,7 @@
   .bracket-row {
     gap: 50px;
   }
-  .users-data {
+  .bracket-users-data {
     font-size: 1rem;
   }
 }

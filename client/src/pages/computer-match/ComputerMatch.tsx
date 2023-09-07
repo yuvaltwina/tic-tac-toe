@@ -176,13 +176,6 @@ function ComputerMatch() {
   return (
     <div className="computer-match-container">
       <div className="computer-match-board-container">
-        <button type="button" onClick={switchMode}>
-          change mode
-        </button>
-        <div>
-          computer mode
-          {computerMode.active ? ' active' : ' not active'}
-        </div>
         <BoardScore {...scores} />
         <Board
           board={board}
@@ -190,7 +183,12 @@ function ComputerMatch() {
           gameOver={gameOver}
           isCellsActive={!computerMode.turn}
         />
-        <ResetButton onClick={resetBoard} />
+        <div>
+          <ResetButton onClick={resetBoard} />
+          <button type="button" onClick={switchMode}>
+            {computerMode.active ? ' active' : ' not active'}
+          </button>
+        </div>
       </div>
     </div>
   );

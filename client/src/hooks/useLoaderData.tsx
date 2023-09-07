@@ -1,7 +1,7 @@
 import { useLoaderData as useLoaderDataOriginal } from 'react-router-dom';
 
 interface UseLoaderDataHook {
-  <T>(): T;
+  <T>(): { data: Promise<T> };
 }
 
 const useLoaderData: UseLoaderDataHook = () => {
