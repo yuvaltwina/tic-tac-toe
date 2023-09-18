@@ -9,7 +9,6 @@ import CircleSvg from './components/CircleSvg';
 import XSvg from './components/XSvg';
 import './Board.scss';
 import WinningLineSvg from './components/WinningLineSvg';
-import TieSvg from './components/TieSvg';
 
 interface BoardProps {
   board: BoardValues[];
@@ -19,13 +18,24 @@ interface BoardProps {
     winningPattern: WinningPattern;
     isTie: boolean;
   };
+  inactiveMessage: JSX.Element;
   isCellsActive?: boolean;
 }
 
 const { XSign, OSign, emptySign } = BoardValuesEnum;
 
-function Board({ board, onClick, gameOver, isCellsActive }: BoardProps) {
+function Board({
+  board,
+  onClick,
+  gameOver,
+  isCellsActive,
+  inactiveMessage,
+}: BoardProps) {
   const { isOver, winningPattern, isTie } = gameOver;
+
+  const applyMessageDelay = winningPattern.some(
+    (value, index) => value !== 0 || value !== [0, 0, 0][index]
+  );
 
   const currentElement = {
     [OSign]: <CircleSvg />,
@@ -36,7 +46,17 @@ function Board({ board, onClick, gameOver, isCellsActive }: BoardProps) {
   return (
     <div className={`board ${isOver && 'board-inactive'}`}>
       {isOver && !isTie && <WinningLineSvg winningPattern={winningPattern} />}
-      {isOver && isTie && <TieSvg />}
+      {isOver && inactiveMessage && (
+        <div
+          className={`${
+            !applyMessageDelay
+              ? 'board-inactive-message-no-delay'
+              : 'board-inactive-message'
+          }`}
+        >
+          {inactiveMessage}
+        </div>
+      )}
       {board.map((value, index) => {
         const isCellActive = value === emptySign && !isOver && isCellsActive;
 

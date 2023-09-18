@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import StoreProvider from '../utils/reduxState/store';
+import StoreProvider from '../redux/store';
 
 interface AppWrapperProps {
   children: ReactNode;

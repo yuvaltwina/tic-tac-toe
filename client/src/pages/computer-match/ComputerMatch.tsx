@@ -2,6 +2,8 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import Board from '../../components/tic-tac-toe-board/Board';
 import BoardScore from '../../components/tic-tac-toe-board/BoardScore';
+import TieSvg from '../../components/tic-tac-toe-board/components/TieSvg';
+import checkWinner from '../../components/tic-tac-toe-board/functions/checkWinner';
 import computerBestIndex from '../../components/tic-tac-toe-board/functions/computerTurn';
 import ResetButton from '../../components/tic-tac-toe-board/ResetButton';
 import {
@@ -9,29 +11,12 @@ import {
   BoardValuesEnum,
   WinningPattern,
 } from '../../types/BoardValues';
-import { WIN_CONDITIONS } from '../../utils/data';
+import { GameOver } from '../../types/types';
 import './ComputerMatch.scss';
-
-type GameOver = {
-  isOver: boolean;
-  winningPattern: WinningPattern;
-  isTie: boolean;
-};
 
 const { XSign, OSign, emptySign } = BoardValuesEnum;
 
 const startingScores = { xScore: 0, oScore: 0, tie: 0 };
-
-const checkWinner = (board: BoardValues[]) => {
-  for (let i = 0; i < WIN_CONDITIONS.length; i++) {
-    const [x, y, z] = WIN_CONDITIONS[i];
-
-    if (board[x] && board[x] === board[y] && board[y] === board[z]) {
-      return { winner: board[x], winPattern: WIN_CONDITIONS[i] };
-    }
-  }
-  return { winner: undefined, winPattern: undefined };
-};
 
 const defaultSquares = new Array(9).fill(emptySign);
 
@@ -39,7 +24,7 @@ function ComputerMatch() {
   const actionCounter = useRef(0);
   const isWinnerAvailable = actionCounter.current >= 4;
   const isTieAvailable = actionCounter.current >= 8;
-
+  const [currentWinner, setCurrentWinner] = useState('');
   const [xPlaying, setXPlaying] = useState(true);
 
   const [board, setBoard] = useState<BoardValues[]>(defaultSquares);
@@ -109,6 +94,7 @@ function ComputerMatch() {
       // check for winner
       if (isWinnerAvailable) {
         const { winner, winPattern } = checkWinner(updateBoard);
+        setCurrentWinner(winner || '');
         updateGameScore(winner);
         setWinPattern(winPattern);
       }
@@ -134,6 +120,7 @@ function ComputerMatch() {
       isTie: false,
     });
     actionCounter.current = 0;
+    setCurrentWinner('');
     setBoard(defaultSquares);
   };
 
@@ -173,6 +160,13 @@ function ComputerMatch() {
     handleCellClick,
   ]);
 
+  const boardInactiveMessage = () => {
+    if (gameOver.isTie) {
+      return <TieSvg />;
+    }
+    return <h1>{currentWinner} won!</h1>;
+  };
+
   return (
     <div className="computer-match-container">
       <div className="computer-match-board-container">
@@ -182,6 +176,7 @@ function ComputerMatch() {
           onClick={handleCellClick}
           gameOver={gameOver}
           isCellsActive={!computerMode.turn}
+          inactiveMessage={boardInactiveMessage()}
         />
         <div>
           <ResetButton onClick={resetBoard} />

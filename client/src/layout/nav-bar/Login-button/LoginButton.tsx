@@ -3,7 +3,7 @@ import './LoginButton.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import AuthModal from '../../../components/authModals/AuthModal';
 import { UserState } from '../../../types/types';
-import { logout } from '../../../utils/reduxState/user';
+import { logout } from '../../../redux/user';
 
 function LoginButton() {
   const [isAuthModal, setIsAuthModal] = useState(false);

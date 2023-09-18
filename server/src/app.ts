@@ -3,16 +3,21 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+import http from 'http';
 import notFound from './middleware/notFound';
 import errorHandler from './middleware/errorHandler';
 import CustomError from './errors/CustomError';
 import { checkConnection } from './db/database';
 import MainRouter from './routes/MainRoute';
+import setupSocket from './socket';
 
 dotenv.config();
 const { WEBSITE_URL } = process.env;
 const PORT = process.env.PORT ?? 3000;
 const app = express();
+const server = http.createServer(app);
+setupSocket(server);
+
 app.use(
   cors({
     origin: WEBSITE_URL,
@@ -29,8 +34,8 @@ app.use(notFound);
 app.use(errorHandler);
 const start = async () => {
   try {
-    await checkConnection();
-    app.listen(PORT, () => {
+    // await checkConnection();
+    server.listen(PORT, () => {
       console.log(`Server listening at port: ${PORT}`);
     });
   } catch (error: any) {

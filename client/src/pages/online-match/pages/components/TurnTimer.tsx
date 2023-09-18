@@ -1,29 +1,39 @@
 import React, { useEffect, useState } from 'react';
 
 interface TurnTimerProps {
-  endTimeFunction: () => void;
-  time?: number;
+  shouldRun: boolean;
+  timerDuration: number;
+  onTimerEnd: () => void;
 }
 
-function TurnTimer({ endTimeFunction, time = 30 }: TurnTimerProps) {
-  const [seconds, setSeconds] = useState(time);
+function TurnTimer({
+  shouldRun,
+  timerDuration = 30,
+  onTimerEnd,
+}: TurnTimerProps) {
+  const [timeLeft, setTimeLeft] = useState(timerDuration);
 
   useEffect(() => {
-    const timerId = setInterval(() => {
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
-      } else {
-        clearInterval(timerId);
-        endTimeFunction();
-      }
-    }, 1000);
+    let timer: any;
 
-    return () => clearInterval(timerId);
-  }, [seconds, endTimeFunction]);
+    if (shouldRun && timeLeft > 0) {
+      timer = setTimeout(() => {
+        setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
+      }, 1000);
+    }
+
+    if (timeLeft === 0 && shouldRun) {
+      console.log();
+
+      onTimerEnd();
+    }
+
+    return () => clearTimeout(timer);
+  }, [shouldRun, timeLeft, onTimerEnd]);
 
   return (
     <div>
-      <p>{seconds}</p>
+      <h2>{timeLeft} seconds</h2>
     </div>
   );
 }

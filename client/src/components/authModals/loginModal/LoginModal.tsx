@@ -7,7 +7,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import InputField from '../components/inputField/InputField';
 import { loginValidationSchema } from '../../../utils/validation/userValidation';
 import { checkLoginDetails } from '../../../utils/apiService/axiosRequets';
-import { login } from '../../../utils/reduxState/user';
+import { login } from '../../../redux/user';
 import ErrorHandler from '../../../utils/ErrorHandler';
 
 import './LoginModal.scss';

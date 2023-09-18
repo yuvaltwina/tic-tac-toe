@@ -1,0 +1,18 @@
+.game-canceled-modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.game-canceled-container {
+  display: flex;
+  justify-content: center;
+  text-transform: uppercase;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  h1 {
+    font-weight: 800;
+    letter-spacing: 0.2rem;
+    font-size: 2rem;
+  }
+}

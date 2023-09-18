@@ -1,0 +1,53 @@
+@import 'styles';
+.end-game-modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in-out forwards;
+}
+.end-game-container {
+  display: flex;
+  justify-content: center;
+  text-transform: uppercase;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  h1 {
+    font-weight: 800;
+    letter-spacing: 0.2rem;
+    font-size: 5rem;
+  }
+}
+.end-game-modal-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 2rem;
+  button {
+    cursor: pointer;
+    border-radius: 1rem;
+    border: none;
+    outline: none;
+    text-transform: uppercase;
+    padding: 1rem;
+    font-weight: 800;
+    font-size: 1rem;
+    width: 40%;
+  }
+  .main-menu {
+    color: white;
+    background-color: $third-color;
+  }
+  .rematch {
+    color: $fifth-color;
+    background-color: white;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

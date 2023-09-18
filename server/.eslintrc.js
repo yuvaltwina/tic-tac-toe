@@ -27,5 +27,7 @@ module.exports = {
     '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/indent': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    'n/no-callback-literal': 'off',
+    'no-shadow': 'off',
   },
 };
