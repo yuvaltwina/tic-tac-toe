@@ -8,10 +8,9 @@ export type Socket =
 
 interface ServerToClientEvents {
   'game-error': ({ msg }: { msg: string }) => void;
-
   'user-joined': (game: OnlineGameProp) => void;
   'game-started': () => void;
-
+  'room-created': (gameId: string) => void;
   'round-started': () => void;
   'game-updated': ({
     board,
@@ -44,21 +43,22 @@ interface ServerToClientEvents {
   }: {
     opponent: OnlineGameProp['playerOne'];
   }) => void;
+  'conversation-updated': ({
+    userId,
+    message,
+  }: {
+    userId: string;
+    message: string;
+  }) => void;
 }
 
 interface ClientToServerEvents {
-  'create-game': ({
-    newGameId,
-    name,
-  }: {
-    newGameId: string;
-    name: string;
-  }) => void;
+  'create-game': ({ name }: { name: string }) => void;
   'close-game': ({ gameId }: { gameId: string }) => void;
   'join-game': ({ gameId, name }: { gameId: string; name: string }) => void;
   'ready-game': ({ gameId }: { gameId: string }) => void;
   'ready-round': ({ gameId }: { gameId: string }) => void;
-
+  'open-online-room': () => void;
   'game-move': ({
     board,
     playerTurn,
@@ -90,6 +90,11 @@ interface ClientToServerEvents {
     winner: BoardValues;
     gameId: string;
   }) => void;
-  move: (position: number) => void;
-  leaveGame: () => void;
+  'send-message': ({
+    gameId,
+    message,
+  }: {
+    gameId: string;
+    message: string;
+  }) => void;
 }

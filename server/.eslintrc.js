@@ -29,5 +29,6 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     'n/no-callback-literal': 'off',
     'no-shadow': 'off',
+    'import/no-extraneous-dependencies': 'off',
   },
 };

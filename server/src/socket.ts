@@ -1,5 +1,7 @@
 import type http from 'http';
 import { Server } from 'socket.io';
+import { v4 as uuidv4 } from 'uuid';
+
 import type { OnlineGameProp } from './utils/types/types';
 
 type ServerT = http.Server<
@@ -9,6 +11,7 @@ type ServerT = http.Server<
 
 const { WEBSITE_URL } = process.env;
 const games: OnlineGameProp[] = [];
+let openOnlineRoom: OnlineGameProp | any = {};
 
 const findCurrentGame = (gameId: string, gamesArr: typeof games) => {
   const game = gamesArr.find((game) => game.gameId === gameId);
@@ -26,16 +29,53 @@ export default function setupSocket(server: ServerT) {
   io.on('connection', (socket) => {
     console.log(`User connected: ${socket.id}`);
     console.log(io.sockets.adapter.rooms);
+    // chat
 
-    socket.on('create-game', ({ newGameId, name }) => {
-      socket.join(newGameId);
+    socket.on('send-message', ({ message, gameId }) => {
+      io.to(gameId).emit('conversation-updated', {
+        message,
+        playerId: socket.id,
+      });
+    });
+
+    // game
+
+    socket.on('open-online-room', () => {
+      const roomId = uuidv4();
+
+      if (openOnlineRoom.gameId) {
+        const room = openOnlineRoom;
+        socket.join(room.gameId);
+
+        room.playerTwo = { name: 'player-2', id: socket.id };
+
+        games.push(room);
+        openOnlineRoom = {};
+
+        io.to(room.gameId).emit('user-joined', room);
+      } else {
+        openOnlineRoom = {
+          gameId: roomId,
+          playerOne: { name: 'player-1', id: socket.id },
+          playerTwo: { name: '', id: '' },
+          readyCount: 0,
+          isOver: false,
+        };
+        socket.join(roomId);
+      }
+    });
+
+    socket.on('create-game', ({ name }) => {
+      const roomId = uuidv4();
+      socket.join(roomId);
       games.push({
-        gameId: newGameId,
+        gameId: roomId,
         playerOne: { name, id: socket.id },
         playerTwo: { name: '', id: '' },
         readyCount: 0,
         isOver: false,
       });
+      io.to(roomId).emit('room-created', roomId);
     });
 
     socket.on('close-game', ({ gameId }) => {
@@ -171,7 +211,13 @@ export default function setupSocket(server: ServerT) {
         }
         return true;
       });
-
+      if (
+        openOnlineRoom.gameId &&
+        (openOnlineRoom.playerOne.id === socket.id ||
+          openOnlineRoom.playerTwo.id === socket.id)
+      ) {
+        openOnlineRoom = {};
+      }
       console.log(`User disconnected: ${socket.id}`);
     });
   });

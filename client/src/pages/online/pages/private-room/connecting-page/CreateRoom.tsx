@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
-import SiteTitle from '../../../components/Site-title/SiteTitle';
-import useOnlineGameContext from '../context/useOnlineGameContext';
+import SiteTitle from '../../../../../components/Site-title/SiteTitle';
+import useOnlineGameContext from '../../../context/useOnlineGameContext';
+import useRoomCreated from './hooks/useRoomCreated';
+import './CreateRoom.scss';
 
-import './WaitingOtherPlayer.scss';
-
-interface WaitingOtherPlayerProps {
-  newGameId: string;
-  setShowWaiting: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function WaitingOtherPlayer({
-  newGameId,
-  setShowWaiting,
-}: WaitingOtherPlayerProps) {
+function CreateRoom({ setShowCreateRoom }: any) {
   const { socket } = useOnlineGameContext();
+  const { newGameId } = useRoomCreated();
   const [copySuccess, setCopySuccess] = useState(false);
 
   const copyToClipboard = () => {
@@ -23,7 +16,7 @@ function WaitingOtherPlayer({
 
   const closeRoom = () => {
     socket?.emit('close-game', { gameId: newGameId });
-    setShowWaiting((prev) => !prev);
+    setShowCreateRoom(false);
   };
 
   return (
@@ -51,4 +44,4 @@ function WaitingOtherPlayer({
   );
 }
 
-export default WaitingOtherPlayer;
+export default CreateRoom;

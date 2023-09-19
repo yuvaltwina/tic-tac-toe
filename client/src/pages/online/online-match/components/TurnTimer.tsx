@@ -23,8 +23,6 @@ function TurnTimer({
     }
 
     if (timeLeft === 0 && shouldRun) {
-      console.log();
-
       onTimerEnd();
     }
 

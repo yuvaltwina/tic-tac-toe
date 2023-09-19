@@ -22,6 +22,10 @@ type SetGameOverProps = {
   winningPattern?: GameOver['winningPattern'];
   isTie: GameOver['isTie'];
 };
+type Conversation = {
+  userId: string;
+  message: string;
+};
 
 type OnlineGameContext = {
   socket: Socket;
@@ -34,6 +38,8 @@ type OnlineGameContext = {
   board: BoardValues[];
   setBoard: (newBoard: BoardValues[]) => void;
   resetBoard: () => void;
+  gameConversation: Conversation[];
+  setGameConversation: ({ userId, message }: Conversation) => void;
 };
 
 export const Context = createContext<OnlineGameContext | null>(null);
@@ -70,6 +76,9 @@ function OnlineGameProvider({ children }: OnlineGameProviderProps) {
   const [gameOverState, setGameOverState] = useState<GameOver>(
     gameOverInitialValues
   );
+  const [gameConversationState, setGameConversationState] = useState<
+    Conversation[]
+  >([]);
 
   const socket = useMemo(() => socketState, [socketState]);
   const board = useMemo(() => boardState, [boardState]);
@@ -77,6 +86,10 @@ function OnlineGameProvider({ children }: OnlineGameProviderProps) {
   const currentGameInfo = useMemo(
     () => currentGameInfoState,
     [currentGameInfoState]
+  );
+  const gameConversation = useMemo(
+    () => gameConversationState,
+    [gameConversationState]
   );
 
   const setSocket = useCallback((socket: Socket) => {
@@ -107,6 +120,12 @@ function OnlineGameProvider({ children }: OnlineGameProviderProps) {
     []
   );
 
+  const setGameConversation = useCallback(
+    ({ message, userId }: Conversation) => {
+      setGameConversationState((prev) => [...prev, { message, userId }]);
+    },
+    []
+  );
   return (
     <Context.Provider
       value={{
@@ -120,6 +139,8 @@ function OnlineGameProvider({ children }: OnlineGameProviderProps) {
         board,
         setBoard,
         resetBoard,
+        gameConversation,
+        setGameConversation,
       }}
     >
       {children}
