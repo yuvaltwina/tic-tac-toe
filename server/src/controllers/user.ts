@@ -22,7 +22,6 @@ export const createUser: RequestHandler = async (req, res, next) => {
   res.status(201).json(serverResponse('new user created'));
 };
 
-// האם צריך לבדוק את המידע שאני מקבל מהיוזר בנוסף לדטהבייס?
 export const login: RequestHandler = async (req, res, next) => {
   const { username, password } = req.body;
   const formattedUsername = formattingUsername(username);

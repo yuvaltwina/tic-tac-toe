@@ -4,13 +4,12 @@ import { toast } from 'react-hot-toast';
 import InputField from '../components/inputField/InputField';
 import './RegisterModal.scss';
 import { registerValidationSchema } from '../../../utils/validation/userValidation';
-import { createUser } from '../../../utils/apiService/axiosRequets';
 import ErrorHandler from '../../../utils/ErrorHandler';
 import SubmitButton from '../components/submitButton/SubmitButton';
+import useRegisterMutation from '../../../utils/apiService/postRequest/useRegisterMutation';
 
-const CREATING_USER_TEXT = 'Creating User';
-const CREATED_USER_TEXT = 'User Created Sucssesfully';
-
+const CREATED_USER_TEXT = 'User Created Successesfully';
+const USERNAME_EXSIT_ERROR_TEXT = 'Username is already taken';
 type RegisterModalProps = {
   closeModal: () => void;
 };
@@ -51,23 +50,33 @@ const textFieldArray: TextFieldArray = [
 ];
 
 function RegisterModal({ closeModal }: RegisterModalProps) {
+  const onSuccess = (resetForm: () => void, loadingToastId: string) => {
+    toast.success(CREATED_USER_TEXT, { id: loadingToastId });
+    closeModal();
+    resetForm();
+  };
+
+  const onError = (error: unknown, loadingToastId: string) => {
+    const errorMessage = ErrorHandler(error);
+    if (errorMessage.startsWith('Duplicate')) {
+      toast.error(USERNAME_EXSIT_ERROR_TEXT, {
+        id: loadingToastId,
+      });
+    } else {
+      toast.error(errorMessage, {
+        id: loadingToastId,
+      });
+    }
+  };
+
+  const registerMutation = useRegisterMutation(onSuccess, onError);
+
   const submitHandler = async (
     values: InitialValues,
     resetForm: () => void
   ) => {
     const { username, password } = values;
-    const loadingToastId = toast.loading(CREATING_USER_TEXT);
-    try {
-      await createUser(username, password);
-      toast.success(CREATED_USER_TEXT, { id: loadingToastId });
-      closeModal();
-      resetForm();
-    } catch (error) {
-      const errorMessage = ErrorHandler(error);
-      toast.error(errorMessage, {
-        id: loadingToastId,
-      });
-    }
+    registerMutation.mutate({ resetForm, username, password });
   };
 
   const {

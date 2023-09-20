@@ -6,12 +6,12 @@ import { InputAdornment } from '@mui/material';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import InputField from '../components/inputField/InputField';
 import { loginValidationSchema } from '../../../utils/validation/userValidation';
-import { checkLoginDetails } from '../../../utils/apiService/axiosRequets';
 import { login } from '../../../redux/user';
 import ErrorHandler from '../../../utils/ErrorHandler';
 
 import './LoginModal.scss';
 import SubmitButton from '../components/submitButton/SubmitButton';
+import useLoginMutation from '../../../utils/apiService/postRequest/useLoginMutation';
 
 type LoginModalProps = {
   closeModal: () => void;
@@ -44,37 +44,41 @@ const textFieldArray: TextFieldArray = [
     label: 'Password',
   },
 ];
-
 const UNAUTHORIZED_TEXT = 'Wrong Username or Password';
 
 function LoginModal({ closeModal }: LoginModalProps) {
   const [isAuthorized, setIsAuthorized] = useState(true);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const dispatch = useDispatch();
-
   const iconClickHandler = () => setIsPasswordVisible(!isPasswordVisible);
+
+  const onSuccess = (
+    resetForm: () => void,
+    formattedUsername: string,
+    loginToken: string
+  ) => {
+    resetForm();
+    dispatch(login({ formattedUsername, loginToken }));
+    closeModal();
+  };
+
+  const onError = (error: unknown) => {
+    const errorMessage = ErrorHandler(error);
+    if (errorMessage === 'unauthorized') {
+      setIsAuthorized(false);
+    } else {
+      toast.error(errorMessage);
+    }
+  };
+  const loginMutation = useLoginMutation(onSuccess, onError);
+
   const submitHandler = async (
     values: InitialValues,
     resetForm: () => void
   ) => {
     const { username, password } = values;
     setIsAuthorized(true);
-    try {
-      const { formattedUsername, loginToken } = await checkLoginDetails(
-        username,
-        password
-      );
-      resetForm();
-      dispatch(login({ formattedUsername, loginToken }));
-      closeModal();
-    } catch (error) {
-      const errorMessage = ErrorHandler(error);
-      if (errorMessage === 'unauthorized') {
-        setIsAuthorized(false);
-      } else {
-        toast.error(errorMessage);
-      }
-    }
+    loginMutation.mutate({ resetForm, username, password });
   };
 
   const {
@@ -117,7 +121,6 @@ function LoginModal({ closeModal }: LoginModalProps) {
         : {};
       const passwordType = isPasswordVisible ? 'text' : 'password';
       const inputType = !isPasswordInput ? type : passwordType;
-
       return (
         <InputField
           key={id}

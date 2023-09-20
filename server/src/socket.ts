@@ -3,6 +3,9 @@ import { Server } from 'socket.io';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { OnlineGameProp } from './utils/types/types';
+import CustomError from './errors/CustomError';
+import { decodeLoginCookieToken } from './utils/jwt';
+import { NOT_AUTHORIZED_MESSAGE } from './utils/data/consts';
 
 type ServerT = http.Server<
   typeof http.IncomingMessage,
@@ -24,6 +27,20 @@ export default function setupSocket(server: ServerT) {
     cors: {
       origin: WEBSITE_URL,
     },
+  });
+  io.use((socket, next) => {
+    const authorizationHeader = socket.handshake.headers?.authorization;
+    if (!authorizationHeader) {
+      next(new CustomError(401, NOT_AUTHORIZED_MESSAGE));
+      return;
+    }
+    const token = authorizationHeader.split(' ')[1];
+    const isVerfied = !!decodeLoginCookieToken(token);
+    if (isVerfied) {
+      next();
+    } else {
+      next(new CustomError(401, NOT_AUTHORIZED_MESSAGE));
+    }
   });
 
   io.on('connection', (socket) => {

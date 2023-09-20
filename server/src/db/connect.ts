@@ -52,6 +52,6 @@ async function createTables() {
   }
 }
 
-// createTables();
+createTables();
 
 export default pool;

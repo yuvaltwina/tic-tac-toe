@@ -34,7 +34,7 @@ app.use(notFound);
 app.use(errorHandler);
 const start = async () => {
   try {
-    // await checkConnection();
+    await checkConnection();
     server.listen(PORT, () => {
       console.log(`Server listening at port: ${PORT}`);
     });
