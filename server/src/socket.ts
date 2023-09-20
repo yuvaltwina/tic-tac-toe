@@ -49,7 +49,7 @@ export default function setupSocket(server: ServerT) {
     // chat
 
     socket.on('send-message', ({ message, gameId }) => {
-      io.to(gameId).emit('conversation-updated', {
+      io.to(gameId).emit('received-message', {
         message,
         playerId: socket.id,
       });

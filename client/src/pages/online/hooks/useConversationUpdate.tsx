@@ -7,12 +7,12 @@ function useConversationUpdate() {
   // socket.emit('send-message',{message, gameId})
 
   useEffect(() => {
-    socket?.on('conversation-updated', ({ playerId, message }) => {
+    socket?.on('received-message', ({ playerId, message }) => {
       setGameConversation({ playerId, message });
     });
 
     return () => {
-      socket?.off('conversation-updated');
+      socket?.off('received-message');
     };
   }, [socket, setGameConversation]);
 }

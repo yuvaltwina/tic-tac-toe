@@ -43,7 +43,7 @@ interface ServerToClientEvents {
   }: {
     opponent: OnlineGameProp['playerOne'];
   }) => void;
-  'conversation-updated': ({
+  'received-message': ({
     playerId,
     message,
   }: {
