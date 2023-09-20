@@ -7,8 +7,8 @@ function useConversationUpdate() {
   // socket.emit('send-message',{message, gameId})
 
   useEffect(() => {
-    socket?.on('conversation-updated', ({ userId, message }) => {
-      setGameConversation({ userId, message });
+    socket?.on('conversation-updated', ({ playerId, message }) => {
+      setGameConversation({ playerId, message });
     });
 
     return () => {

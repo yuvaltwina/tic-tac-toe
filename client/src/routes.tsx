@@ -8,9 +8,9 @@ import { routesData } from './utils/data';
 import ComputerMatch from './pages/computer/ComputerMatch';
 import BracketPageRoute from './pages/bracket/BracketPage';
 import MatchHistoryPageRoute from './pages/match-history/MatchHistoryPage';
-import OnlineGameProvider from './pages/online/context/OnlineGameContext';
-import SearchOnline from './pages/online-match/pages/online-room';
 import PrivateRoom from './pages/online/pages/private-room';
+import OnlineGameProvider from './pages/online/context/OnlineGameContext';
+import OnlineRoom from './pages/online/pages/online-room';
 
 const { mainPage, bracketPage, linkPage, computer, matchHistory, online } =
   routesData;
@@ -43,7 +43,7 @@ const routes: RouteObject[] = [
             path: online,
             element: (
               <OnlineGameProvider>
-                <SearchOnline />
+                <OnlineRoom />
               </OnlineGameProvider>
             ),
           },

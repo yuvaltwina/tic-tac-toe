@@ -23,7 +23,7 @@ type SetGameOverProps = {
   isTie: GameOver['isTie'];
 };
 type Conversation = {
-  userId: string;
+  playerId: string;
   message: string;
 };
 
@@ -39,7 +39,7 @@ type OnlineGameContext = {
   setBoard: (newBoard: BoardValues[]) => void;
   resetBoard: () => void;
   gameConversation: Conversation[];
-  setGameConversation: ({ userId, message }: Conversation) => void;
+  setGameConversation: ({ playerId, message }: Conversation) => void;
 };
 
 export const Context = createContext<OnlineGameContext | null>(null);
@@ -121,8 +121,8 @@ function OnlineGameProvider({ children }: OnlineGameProviderProps) {
   );
 
   const setGameConversation = useCallback(
-    ({ message, userId }: Conversation) => {
-      setGameConversationState((prev) => [...prev, { message, userId }]);
+    ({ message, playerId }: Conversation) => {
+      setGameConversationState((prev) => [...prev, { message, playerId }]);
     },
     []
   );

@@ -44,10 +44,10 @@ interface ServerToClientEvents {
     opponent: OnlineGameProp['playerOne'];
   }) => void;
   'conversation-updated': ({
-    userId,
+    playerId,
     message,
   }: {
-    userId: string;
+    playerId: string;
     message: string;
   }) => void;
 }
