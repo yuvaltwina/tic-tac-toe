@@ -1,6 +1,5 @@
 import mysql from 'mysql2';
 import dotenv from 'dotenv';
-import CustomError from '../errors/CustomError';
 
 dotenv.config();
 
@@ -27,6 +26,7 @@ async function createTables() {
           username VARCHAR(255) NOT NULL UNIQUE,
           encrypted_password VARCHAR(255) NOT NULL,
           points INT NOT NULL DEFAULT 0,
+          imageId INT NOT NULL DEFAULT 1,
           PRIMARY KEY (user_id)
         )
       `);
@@ -45,10 +45,7 @@ async function createTables() {
         )
       `);
   } catch (error: any) {
-    throw new CustomError(
-      500,
-      error?.sqlMessage ?? error?.message ?? 'Internal server error'
-    );
+    console.log(error);
   }
 }
 

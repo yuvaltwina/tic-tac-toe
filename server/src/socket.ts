@@ -6,6 +6,7 @@ import type { OnlineGameProp } from './utils/types/types';
 import CustomError from './errors/CustomError';
 import { decodeLoginCookieToken } from './utils/jwt';
 import { NOT_AUTHORIZED_MESSAGE } from './utils/data/consts';
+import { getUserDetailsFromDB } from './db/database';
 
 type ServerT = http.Server<
   typeof http.IncomingMessage,
@@ -22,21 +23,25 @@ const findCurrentGame = (gameId: string, gamesArr: typeof games) => {
   return game;
 };
 
+const getUsername = () => {};
 export default function setupSocket(server: ServerT) {
   const io = new Server(server, {
     cors: {
       origin: WEBSITE_URL,
     },
   });
+
   io.use((socket, next) => {
     const authorizationHeader = socket.handshake.headers?.authorization;
+
     if (!authorizationHeader) {
       next(new CustomError(401, NOT_AUTHORIZED_MESSAGE));
       return;
     }
     const token = authorizationHeader.split(' ')[1];
-    const isVerfied = !!decodeLoginCookieToken(token);
-    if (isVerfied) {
+    const username = decodeLoginCookieToken(token);
+    if (username) {
+      socket.data.username = username;
       next();
     } else {
       next(new CustomError(401, NOT_AUTHORIZED_MESSAGE));
@@ -47,7 +52,6 @@ export default function setupSocket(server: ServerT) {
     console.log(`User connected: ${socket.id}`);
     console.log(io.sockets.adapter.rooms);
     // chat
-
     socket.on('send-message', ({ message, gameId }) => {
       io.to(gameId).emit('received-message', {
         message,
@@ -57,9 +61,8 @@ export default function setupSocket(server: ServerT) {
 
     // game
 
-    socket.on('open-online-room', () => {
+    socket.on('open-online-room', async () => {
       const roomId = uuidv4();
-
       if (openOnlineRoom.gameId) {
         const room = openOnlineRoom;
         socket.join(room.gameId);
@@ -71,10 +74,13 @@ export default function setupSocket(server: ServerT) {
 
         io.to(room.gameId).emit('user-joined', room);
       } else {
+        const { username, points, imageId } = await getUserDetailsFromDB(
+          socket.data.username
+        );
         openOnlineRoom = {
           gameId: roomId,
-          playerOne: { name: 'player-1', id: socket.id },
-          playerTwo: { name: '', id: '' },
+          playerOne: { name: username, points, imageId, id: socket.id },
+          playerTwo: { name: '', points: 0, imageId: 0, id: '' },
           readyCount: 0,
           isOver: false,
         };
@@ -82,13 +88,16 @@ export default function setupSocket(server: ServerT) {
       }
     });
 
-    socket.on('create-game', ({ name }) => {
+    socket.on('create-game', async ({ name }) => {
       const roomId = uuidv4();
       socket.join(roomId);
+      const { username, points, imageId } = await getUserDetailsFromDB(
+        socket.data.username
+      );
       games.push({
         gameId: roomId,
-        playerOne: { name, id: socket.id },
-        playerTwo: { name: '', id: '' },
+        playerOne: { name: username, points, imageId, id: socket.id },
+        playerTwo: { name: '', points: 0, imageId: 0, id: '' },
         readyCount: 0,
         isOver: false,
       });
@@ -111,7 +120,7 @@ export default function setupSocket(server: ServerT) {
       }
     });
 
-    socket.on('join-game', ({ gameId, name }) => {
+    socket.on('join-game', async ({ gameId, name }) => {
       const room = io.sockets.adapter.rooms.get(gameId);
       const game = findCurrentGame(gameId, games);
 
@@ -130,8 +139,11 @@ export default function setupSocket(server: ServerT) {
       }
 
       socket.join(gameId);
+      const { username, points, imageId } = await getUserDetailsFromDB(
+        socket.data.username
+      );
 
-      game.playerTwo = { name, id: socket.id };
+      game.playerTwo = { name: username, points, imageId, id: socket.id };
 
       return io.to(gameId).emit('user-joined', game);
     });

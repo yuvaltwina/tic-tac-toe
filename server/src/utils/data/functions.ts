@@ -6,7 +6,6 @@ export const formattingUsername = (username: string) => {
     loweredCaseUsername[0].toUpperCase() + loweredCaseUsername.slice(1);
   return formattedUsername;
 };
-export const g = 6;
 
 export const encryptingPassword = async (password: string) => {
   const salt = await bcrypt.genSalt(10);

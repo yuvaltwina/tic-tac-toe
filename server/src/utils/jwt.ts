@@ -13,12 +13,14 @@ export function generateloginToken(username: string) {
 }
 
 export function decodeLoginCookieToken(token: string): string {
+  let cookieUsername = '';
   jwt.verify(token, secret as string, (err, decoded) => {
     if (err) {
       return '';
     }
     const { username } = decoded as Tjwt;
-    return username;
+    cookieUsername = username;
+    return cookieUsername;
   });
-  return '';
+  return cookieUsername;
 }

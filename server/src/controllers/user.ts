@@ -1,7 +1,11 @@
 import dotenv from 'dotenv';
 import { type RequestHandler } from 'express';
 import bcrypt from 'bcrypt';
-import { checkIfUserExist, insertUser } from '../db/database';
+import {
+  checkIfUserExist,
+  getUserDetailsFromDB,
+  insertUser,
+} from '../db/database';
 import serverResponse from '../utils/serverResponse';
 import {
   encryptingPassword,
@@ -46,6 +50,7 @@ export const login: RequestHandler = async (req, res, next) => {
     })
   );
 };
+
 
 export const checkUserCookie: RequestHandler = async (req, res, next) => {
   const token = req.headers?.authorization?.split(' ')[1];
