@@ -73,16 +73,16 @@
 .chatbox .incoming {
   .chat-user-profile {
     aspect-ratio: 1/1;
-    height: 100%;
+    height: 50px;
     border-radius: 100%;
     color: #fff;
     cursor: default;
-    text-align: center;
-    align-self: flex-end;
+    align-self: flex-start;
     background: #724ae8;
   }
   p {
-    border-radius: 10px 10px 10px 0;
+    text-align: left;
+    border-radius: 0 10px 10px 10px;
     color: #000;
     background: #f2f2f2;
   }
@@ -91,6 +91,7 @@
 .chatbox .outgoing {
   justify-content: flex-end;
   p {
+    text-align: right;
     border-radius: 10px 10px 0 10px;
     color: #fff;
     background: #724ae8;

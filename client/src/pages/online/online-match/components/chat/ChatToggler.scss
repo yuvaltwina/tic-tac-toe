@@ -12,3 +12,16 @@
   border-radius: 50%;
   z-index: 99;
 }
+.chat-toggler-new-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 100%;
+  top: -5%;
+  left: -5%;
+}

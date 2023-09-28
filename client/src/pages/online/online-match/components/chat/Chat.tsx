@@ -15,10 +15,10 @@ interface ChatProps {
 function Chat({ openChat, setOpenChat }: ChatProps) {
   const {
     socket,
-    gameConversation,
+    gameConversation: { conversation },
     currentGameInfo: { gameId },
   } = useOnlineGameContext();
-  const { chatContainerRef } = useScrollChatToBottom(gameConversation);
+  const { chatContainerRef } = useScrollChatToBottom(conversation);
   useConversationUpdate();
 
   const submitHandler = (values: { message: string }) => {
@@ -29,7 +29,7 @@ function Chat({ openChat, setOpenChat }: ChatProps) {
     useFormik({
       initialValues: { message: '' },
       validationSchema: yup.object().shape({
-        message: yup.string().required(),
+        message: yup.string().required().max(100),
       }),
       onSubmit: async (values, { resetForm }) => {
         await submitHandler(values);
@@ -50,7 +50,7 @@ function Chat({ openChat, setOpenChat }: ChatProps) {
           />
         </header>
         <ul className="chatbox" ref={chatContainerRef}>
-          {gameConversation.map(({ message, playerId }, index) => {
+          {conversation.map(({ message, playerId }, index) => {
             const isCurrentUser = playerId === socket?.id;
 
             return isCurrentUser ? (
@@ -68,6 +68,7 @@ function Chat({ openChat, setOpenChat }: ChatProps) {
         </ul>
         <form className="chat-input" onSubmit={handleSubmit}>
           <textarea
+            maxLength={100}
             id="message"
             value={values.message}
             placeholder="Enter a message..."

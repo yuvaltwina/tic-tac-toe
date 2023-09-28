@@ -1,4 +1,5 @@
 import React from 'react';
+import OnlineSearchLoader from '../../../../Ui/OnlineSearchLoader';
 import useSocket from '../../hooks/useSocket';
 import useUserJoined from '../../hooks/useUserJoined';
 import OnlineMatchPage from '../../online-match/OnlineMatchPage';
@@ -12,7 +13,7 @@ function OnlineRoom() {
 
   const { showGame } = useUserJoined();
 
-  return !showGame ? <h1>search online for player...</h1> : <OnlineMatchPage />;
+  return !showGame ? <OnlineSearchLoader /> : <OnlineMatchPage />;
 }
 
 export default OnlineRoom;

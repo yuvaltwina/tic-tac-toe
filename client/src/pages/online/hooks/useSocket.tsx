@@ -5,8 +5,6 @@ import Cookies from 'js-cookie';
 
 import useOnlineGameContext from '../context/useOnlineGameContext';
 
-const token = Cookies.get('login');
-
 const { VITE_SERVER_URL } = import.meta.env;
 
 function useSocket() {
@@ -14,6 +12,7 @@ function useSocket() {
   const render = useRef(0);
   useEffect(() => {
     if (render.current === 0) {
+      const token = Cookies.get('login');
       setSocket(
         io(VITE_SERVER_URL, {
           extraHeaders: { Authorization: `Bearer ${token}` },

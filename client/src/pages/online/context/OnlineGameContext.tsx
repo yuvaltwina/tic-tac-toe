@@ -38,8 +38,9 @@ type OnlineGameContext = {
   board: BoardValues[];
   setBoard: (newBoard: BoardValues[]) => void;
   resetBoard: () => void;
-  gameConversation: Conversation[];
+  gameConversation: { conversation: Conversation[]; newMessages: number };
   setGameConversation: ({ playerId, message }: Conversation) => void;
+  addNewMessage: (reset?: boolean) => void;
 };
 
 export const Context = createContext<OnlineGameContext | null>(null);
@@ -76,9 +77,10 @@ function OnlineGameProvider({ children }: OnlineGameProviderProps) {
   const [gameOverState, setGameOverState] = useState<GameOver>(
     gameOverInitialValues
   );
-  const [gameConversationState, setGameConversationState] = useState<
-    Conversation[]
-  >([]);
+  const [gameConversationState, setGameConversationState] = useState<{
+    conversation: Conversation[];
+    newMessages: number;
+  }>({ conversation: [], newMessages: 0 });
 
   const socket = useMemo(() => socketState, [socketState]);
   const board = useMemo(() => boardState, [boardState]);
@@ -122,10 +124,28 @@ function OnlineGameProvider({ children }: OnlineGameProviderProps) {
 
   const setGameConversation = useCallback(
     ({ message, playerId }: Conversation) => {
-      setGameConversationState((prev) => [...prev, { message, playerId }]);
+      setGameConversationState((prev) => ({
+        ...prev,
+        conversation: [...prev.conversation, { message, playerId }],
+      }));
     },
     []
   );
+
+  const addNewMessage = useCallback((reset?: boolean) => {
+    if (reset) {
+      setGameConversationState((prev) => ({
+        ...prev,
+        newMessages: 0,
+      }));
+    } else {
+      setGameConversationState((prev) => ({
+        ...prev,
+        newMessages: prev.newMessages + 1,
+      }));
+    }
+  }, []);
+
   return (
     <Context.Provider
       value={{
@@ -141,6 +161,7 @@ function OnlineGameProvider({ children }: OnlineGameProviderProps) {
         resetBoard,
         gameConversation,
         setGameConversation,
+        addNewMessage,
       }}
     >
       {children}

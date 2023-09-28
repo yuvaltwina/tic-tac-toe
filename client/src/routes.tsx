@@ -11,6 +11,7 @@ import MatchHistoryPageRoute from './pages/match-history/MatchHistoryPage';
 import PrivateRoom from './pages/online/pages/private-room';
 import OnlineGameProvider from './pages/online/context/OnlineGameContext';
 import OnlineRoom from './pages/online/pages/online-room';
+import RequireAuth from './components/HOC/RequireAuth';
 
 const { mainPage, bracketPage, linkPage, computer, matchHistory, online } =
   routesData;
@@ -34,17 +35,21 @@ const routes: RouteObject[] = [
           {
             path: linkPage,
             element: (
-              <OnlineGameProvider>
-                <PrivateRoom />
-              </OnlineGameProvider>
+              <RequireAuth>
+                <OnlineGameProvider>
+                  <PrivateRoom />
+                </OnlineGameProvider>
+              </RequireAuth>
             ),
           },
           {
             path: online,
             element: (
-              <OnlineGameProvider>
-                <OnlineRoom />
-              </OnlineGameProvider>
+              <RequireAuth>
+                <OnlineGameProvider>
+                  <OnlineRoom />
+                </OnlineGameProvider>
+              </RequireAuth>
             ),
           },
           {
