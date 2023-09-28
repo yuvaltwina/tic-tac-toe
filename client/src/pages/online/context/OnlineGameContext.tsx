@@ -22,7 +22,7 @@ type SetGameOverProps = {
   winningPattern?: GameOver['winningPattern'];
   isTie: GameOver['isTie'];
 };
-type Conversation = {
+export type Conversation = {
   playerId: string;
   message: string;
 };

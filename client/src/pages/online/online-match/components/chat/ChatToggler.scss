@@ -1,0 +1,14 @@
+@import 'styles';
+
+.chat-toggler {
+  position: fixed;
+  bottom: 30px;
+  right: 35px;
+  outline: none;
+  border: none;
+  height: 50px;
+  width: 50px;
+  background-color: $forth-color;
+  border-radius: 50%;
+  z-index: 99;
+}

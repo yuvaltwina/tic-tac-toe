@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from 'react';
-import { BsFillChatTextFill } from 'react-icons/bs';
+import React, { useCallback } from 'react';
 import Board from '../../../components/tic-tac-toe-board/Board';
 import checkWinner from '../../../components/tic-tac-toe-board/functions/checkWinner';
 import { BoardValuesEnum } from '../../../types/BoardValues';
@@ -10,12 +9,11 @@ import './OnlineMatchPage.scss';
 import useOnlineGameContext from '../context/useOnlineGameContext';
 import EndGameModal from '../modal/EndGameModal';
 import GameCanceled from '../modal/GameCanceled';
-import Chat from './components/chat/Chat';
+import ChatToggler from './components/chat/ChatToggler';
 
 const { XSign, OSign } = BoardValuesEnum;
 
 function OnlineMatchPage() {
-  const [isChat, setIsChat] = useState(false);
   const { socket, gameOver, board, currentGameInfo } = useOnlineGameContext();
   const {
     playerOne: { id: playerOneId },
@@ -105,6 +103,7 @@ function OnlineMatchPage() {
 
   return (
     <>
+      <ChatToggler />
       <EndGameModal />
       <GameCanceled />
       <div className="online-match-container">
@@ -139,18 +138,6 @@ function OnlineMatchPage() {
               gameLive: !gameOver.isOver,
             }}
           />
-        </div>
-        <div className="online-match-button-and-chat-container">
-          <Chat isChat={isChat} setIsChat={setIsChat} />
-          <button
-            type="button"
-            className="online-match-chat-button"
-            onClick={() => {
-              setIsChat(true);
-            }}
-          >
-            <BsFillChatTextFill className="chat-button-icon" />
-          </button>
         </div>
       </div>
     </>
