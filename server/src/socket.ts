@@ -23,7 +23,6 @@ const findCurrentGame = (gameId: string, gamesArr: typeof games) => {
   return game;
 };
 
-const getUsername = () => {};
 export default function setupSocket(server: ServerT) {
   const io = new Server(server, {
     cors: {
@@ -63,24 +62,37 @@ export default function setupSocket(server: ServerT) {
 
     socket.on('open-online-room', async () => {
       const roomId = uuidv4();
+      const playerDetails = await getUserDetailsFromDB(socket.data.username);
+      if (!playerDetails) {
+        socket.emit('game-error', { msg: 'username not exist' });
+        return;
+      }
+      const { image_id, points, player_id, name: username } = playerDetails;
       if (openOnlineRoom.gameId) {
         const room = openOnlineRoom;
         socket.join(room.gameId);
-
-        room.playerTwo = { name: 'player-2', id: socket.id };
-
+        room.playerTwo = { name: 'player-2', id: socket.id }; // מה זה ההשמה הזאת ?
         games.push(room);
         openOnlineRoom = {};
 
         io.to(room.gameId).emit('user-joined', room);
       } else {
-        const { username, points, imageId } = await getUserDetailsFromDB(
-          socket.data.username
-        );
         openOnlineRoom = {
           gameId: roomId,
-          playerOne: { name: username, points, imageId, id: socket.id },
-          playerTwo: { name: '', points: 0, imageId: 0, id: '' },
+          playerOne: {
+            name: username,
+            points,
+            image_id,
+            id: socket.id,
+            player_id,
+          },
+          playerTwo: {
+            name: '',
+            points: 0,
+            image_id: 0,
+            id: '',
+            player_id: '',
+          },
           readyCount: 0,
           isOver: false,
         };
@@ -91,13 +103,21 @@ export default function setupSocket(server: ServerT) {
     socket.on('create-game', async ({ name }) => {
       const roomId = uuidv4();
       socket.join(roomId);
-      const { username, points, imageId } = await getUserDetailsFromDB(
-        socket.data.username
-      );
+      const playerDetails = await getUserDetailsFromDB(socket.data.username);
+      if (!playerDetails) {
+        return; // לטפל בבעיה במקרה שהיוזר לא נכון
+      }
+      const { name: username, points, image_id, player_id } = playerDetails;
       games.push({
         gameId: roomId,
-        playerOne: { name: username, points, imageId, id: socket.id },
-        playerTwo: { name: '', points: 0, imageId: 0, id: '' },
+        playerOne: {
+          name: username,
+          points,
+          image_id,
+          id: socket.id,
+          player_id,
+        },
+        playerTwo: { name: '', points: 0, image_id: 0, id: '', player_id: '' },
         readyCount: 0,
         isOver: false,
       });
@@ -139,11 +159,19 @@ export default function setupSocket(server: ServerT) {
       }
 
       socket.join(gameId);
-      const { username, points, imageId } = await getUserDetailsFromDB(
-        socket.data.username
-      );
+      const playerDetails = await getUserDetailsFromDB(socket.data.username);
+      if (!playerDetails) {
+        return; // לטפל בבעיה במקרה שהיוזר לא נכון
+      }
+      const { name: username, points, image_id, player_id } = playerDetails;
 
-      game.playerTwo = { name: username, points, imageId, id: socket.id };
+      game.playerTwo = {
+        name: username,
+        points,
+        image_id,
+        id: socket.id,
+        player_id,
+      };
 
       return io.to(gameId).emit('user-joined', game);
     });
@@ -208,6 +236,7 @@ export default function setupSocket(server: ServerT) {
     });
 
     socket.on('game-over', ({ winner, gameId }) => {
+      //לשמור את המאצ
       const game = findCurrentGame(gameId, games);
       if (!game) return;
       game.isOver = true;
@@ -227,7 +256,7 @@ export default function setupSocket(server: ServerT) {
         const { playerOne, playerTwo } = game;
         games.splice(games.indexOf(game), 1);
         if (game.isOver) return true;
-
+        //לשמור את המאצ
         if (playerOne.id === socket.id) {
           io.to(playerTwo.id).emit('listen-game-canceled', {
             opponent: playerOne,

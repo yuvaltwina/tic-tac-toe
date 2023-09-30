@@ -1,19 +1,16 @@
-import express, { type RequestHandler } from 'express';
-import { createUser, login } from '../controllers/user';
+import express from 'express';
+import { checkUserCookie, createUser, login } from '../controllers/user';
 import {
   newUserValidation,
   userCookieValidtion,
 } from '../utils/validation/user/functions';
-
-const errorWrapper =
-  (cb: any): RequestHandler =>
-  (req, res, next) =>
-    cb(req, res, next).catch(next);
+import { errorWrapper } from '../utils/data/functions';
 
 const router = express.Router();
 router.post('/register', newUserValidation, errorWrapper(createUser));
 router.post('/login', errorWrapper(login));
-
+router.post('/checkUserCookie', errorWrapper(checkUserCookie));
+// router.post('/getMostPointsUsers', errorWrapper(login));
 router.use(userCookieValidtion);
 
 export default router;

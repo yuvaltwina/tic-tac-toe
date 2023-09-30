@@ -26,7 +26,7 @@ async function createTables() {
           username VARCHAR(255) NOT NULL UNIQUE,
           encrypted_password VARCHAR(255) NOT NULL,
           points INT NOT NULL DEFAULT 0,
-          imageId INT NOT NULL DEFAULT 1,
+          image_id INT NOT NULL DEFAULT 1,
           PRIMARY KEY (user_id)
         )
       `);

@@ -28,10 +28,20 @@ const passwordCheck = Joi.string()
     'string.pattern.base':
       'Password  should include both uppercase and lowercase letters and at least one digit',
   });
-
+const pointsCheck = Joi.number().required().messages({
+  'number.base': 'Points should be a number',
+  'any.required': 'Points is required',
+});
+const imageIdCheck = Joi.number().required().valid(1, 2, 3, 4).messages({
+  'number.base': 'Points should be a number',
+  'any.required': 'Points is required',
+  'any.only': 'Points must be 1, 2, 3, or 4',
+});
 const userValidationScheme = {
   usernameCheck,
   passwordCheck,
+  pointsCheck,
+  imageIdCheck,
 };
 
 export default userValidationScheme;

@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { RequestHandler } from 'express';
 
 export const formattingUsername = (username: string) => {
   const loweredCaseUsername = username.toLocaleLowerCase();
@@ -12,3 +13,7 @@ export const encryptingPassword = async (password: string) => {
   const encryptedPassword = await bcrypt.hash(password, salt);
   return encryptedPassword;
 };
+export const errorWrapper =
+  (cb: any): RequestHandler =>
+  (req, res, next) =>
+    cb(req, res, next).catch(next);
