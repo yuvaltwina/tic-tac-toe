@@ -1,6 +1,15 @@
 @import 'styles';
 
-.board-reset-button {
+.offline-mode-buttons-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.offline-mode-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
   padding: 1rem 3rem;
   background: linear-gradient(90deg, $primary-color, $secondary-color);
   border: none;
@@ -10,14 +19,13 @@
   cursor: pointer;
 }
 @media (max-width: #{$tablet-width}) {
-  .board-reset-button {
+  .offline-mode-button {
     font-size: 1rem;
     padding: 1rem 3rem;
   }
 }
 @media (max-width: #{$phone-width}) {
-  .board-reset-button {
-    font-size: 0.7rem;
+  .offline-mode-button {
     padding: 0.5rem 1.5rem;
   }
 }

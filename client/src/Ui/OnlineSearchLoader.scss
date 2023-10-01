@@ -47,8 +47,8 @@ $primary-color: white;
   font-size: 0;
   span {
     position: relative;
-    width: $size/2;
-    height: $size/2;
+    width: calc($size/2);
+    height: calc($size/2);
     @include transform(scale(1.1));
     display: inline-block;
     &::before {
@@ -58,8 +58,8 @@ $primary-color: white;
       left: 0;
       top: 0;
       display: block;
-      width: $size/2;
-      height: $size/2;
+      width: calc($size/2);
+      height: calc($size/2);
       -moz-transform-origin: 100% 100%;
       -ms-transform-origin: 100% 100%;
       -webkit-transform-origin: 100% 100%;
@@ -145,14 +145,14 @@ $primary-color: white;
     display: block;
     color: $primary-color;
     position: relative;
-    top: $size/2;
+    top: calc($size/2);
     z-index: 2;
     @include animation(text 0.5s ease infinite alternate);
   }
 }
 @include keyframes(text, text animation) {
   100% {
-    top: ($size/2) + 10;
+    top: (calc($size/2)) + 10;
   }
 }
 @include keyframes(shadow, shadow animation) {

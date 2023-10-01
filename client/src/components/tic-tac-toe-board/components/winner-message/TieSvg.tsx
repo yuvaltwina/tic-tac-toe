@@ -1,9 +1,9 @@
 import React from 'react';
-import './TieSvg.scss';
+import './WinnerStyle.scss';
 
 function TieSvg() {
   return (
-    <svg className="tie-svg" viewBox="0 0 173 31">
+    <svg className="winner-svg" viewBox="0 0 173 31">
       <mask
         id="path-1-outside-1_1_4"
         maskUnits="userSpaceOnUse"

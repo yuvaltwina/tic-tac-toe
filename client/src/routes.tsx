@@ -5,7 +5,7 @@ import ErrorPage from './pages/error/ErrorPage';
 import MainPage from './pages/main/MainPage';
 import NotFound from './pages/not-found/NotFound';
 import { routesData } from './utils/data';
-import ComputerMatch from './pages/computer/ComputerMatch';
+import ComputerMatch from './pages/offline/ComputerMatch';
 import BracketPageRoute from './pages/bracket/BracketPage';
 import MatchHistoryPageRoute from './pages/match-history/MatchHistoryPage';
 import PrivateRoom from './pages/online/pages/private-room';

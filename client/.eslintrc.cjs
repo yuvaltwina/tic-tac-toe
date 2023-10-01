@@ -45,5 +45,6 @@ module.exports = {
     'react/jsx-curly-newline': 'off',
     'react/no-array-index-key': 'off',
     'react/jsx-one-expression-per-line': 'off',
+    'react/react-in-jsx-scope': 'off',
   },
 };

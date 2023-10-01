@@ -1,17 +1,20 @@
 /* eslint consistent-return: 0 */
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Board from '../../components/tic-tac-toe-board/Board';
-import BoardScore from '../../components/tic-tac-toe-board/BoardScore';
-import TieSvg from '../../components/tic-tac-toe-board/components/TieSvg';
+import OwonSvg from '../../components/tic-tac-toe-board/components/winner-message/OwonSvg';
+import TieSvg from '../../components/tic-tac-toe-board/components/winner-message/TieSvg';
+import XwonSvg from '../../components/tic-tac-toe-board/components/winner-message/XwonSvg';
 import checkWinner from '../../components/tic-tac-toe-board/functions/checkWinner';
 import computerBestIndex from '../../components/tic-tac-toe-board/functions/computerTurn';
-import ResetButton from '../../components/tic-tac-toe-board/ResetButton';
 import {
   BoardValues,
   BoardValuesEnum,
   WinningPattern,
 } from '../../types/BoardValues';
 import { GameOver } from '../../types/types';
+import BoardScore from './components/BoardScore';
+import OfflineModeButtons from './components/OfflineModeButtons';
 import './ComputerMatch.scss';
 
 const { XSign, OSign, emptySign } = BoardValuesEnum;
@@ -164,13 +167,14 @@ function ComputerMatch() {
     if (gameOver.isTie) {
       return <TieSvg />;
     }
-    return <h1>{currentWinner} won!</h1>;
+    const OWon = currentWinner === OSign;
+    return OWon ? <OwonSvg /> : <XwonSvg />;
   };
 
   return (
     <div className="computer-match-container">
       <div className="computer-match-board-container">
-        <BoardScore {...scores} />
+        <BoardScore {...scores} isComputerMode={computerMode.active} />
         <Board
           board={board}
           onClick={handleCellClick}
@@ -179,10 +183,11 @@ function ComputerMatch() {
           inactiveMessage={boardInactiveMessage()}
         />
         <div>
-          <ResetButton onClick={resetBoard} />
-          <button type="button" onClick={switchMode}>
-            {computerMode.active ? ' active' : ' not active'}
-          </button>
+          <OfflineModeButtons
+            resetFunction={resetBoard}
+            isComputerModeActive={computerMode.active}
+            switchModeFunction={switchMode}
+          />
         </div>
       </div>
     </div>
