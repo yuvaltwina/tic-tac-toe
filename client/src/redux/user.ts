@@ -13,10 +13,14 @@ const getInitialUsername = () => {
   const loginCookie = Cookies.get('login');
   if (loginCookie) {
     const token = loginCookie.split('.')[1];
-    const decodedToken = window.atob(token);
-    const { username } = JSON.parse(decodedToken);
-    if (typeof username === 'string') {
-      return username;
+    try {
+      const decodedToken = window.atob(token);
+      const { username } = JSON.parse(decodedToken);
+      if (username) {
+        return username;
+      }
+    } catch (error) {
+      Cookies.remove('login');
     }
   }
   return '';

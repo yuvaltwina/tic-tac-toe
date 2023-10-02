@@ -12,11 +12,15 @@
   cursor: pointer;
 }
 
-.main-button:hover {
+.main-button:not(:disabled):hover {
   background: white;
   color: $forth-color;
   border: 3px solid $forth-color;
   box-shadow: 0px 0px 40px 0px $forth-color;
+}
+
+.main-button:disabled {
+  cursor: not-allowed;
 }
 @media (max-width: #{$desktop-width}) {
   .main-button {

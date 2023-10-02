@@ -67,11 +67,18 @@ export default function setupSocket(server: ServerT) {
         socket.emit('game-error', { msg: 'username not exist' });
         return;
       }
-      const { image_id, points, player_id, name: username } = playerDetails;
+      const { image_id, points, player_id, username } = playerDetails;
+
       if (openOnlineRoom.gameId) {
         const room = openOnlineRoom;
         socket.join(room.gameId);
-        room.playerTwo = { name: 'player-2', id: socket.id }; // מה זה ההשמה הזאת ?
+        room.playerTwo = {
+          name: username,
+          points,
+          image_id,
+          id: socket.id,
+          player_id,
+        }; // מה זה ההשמה הזאת ?
         games.push(room);
         openOnlineRoom = {};
 
@@ -107,7 +114,7 @@ export default function setupSocket(server: ServerT) {
       if (!playerDetails) {
         return; // לטפל בבעיה במקרה שהיוזר לא נכון
       }
-      const { name: username, points, image_id, player_id } = playerDetails;
+      const { username, points, image_id, player_id } = playerDetails;
       games.push({
         gameId: roomId,
         playerOne: {
@@ -163,7 +170,7 @@ export default function setupSocket(server: ServerT) {
       if (!playerDetails) {
         return; // לטפל בבעיה במקרה שהיוזר לא נכון
       }
-      const { name: username, points, image_id, player_id } = playerDetails;
+      const { username, points, image_id, player_id } = playerDetails;
 
       game.playerTwo = {
         name: username,
