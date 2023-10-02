@@ -54,14 +54,14 @@ export default function setupSocket(server: ServerT) {
     const readyGame = (
       gameId: string,
       emitId: string,
-      gameOver: boolean = true
+      gameOver: boolean = false
     ) => {
       const game = findCurrentGame(gameId, games);
       if (!game) return;
 
       if (game.readyCount === 1) {
         game.readyCount = 0;
-        game.isOver = gameOver;
+        game.isGameOver = gameOver;
         io.to(gameId).emit(emitId);
       } else {
         game.readyCount += 1;
@@ -122,8 +122,9 @@ export default function setupSocket(server: ServerT) {
             id: '',
           },
           readyCount: 0,
-          isOver: false,
+          isGameOver: false,
         };
+
         socket.join(roomId);
       };
 
@@ -156,7 +157,7 @@ export default function setupSocket(server: ServerT) {
         },
         playerTwo: { name: '', points: 0, image_id: 0, id: '' },
         readyCount: 0,
-        isOver: false,
+        isGameOver: false,
       });
 
       io.to(roomId).emit('room-created', roomId);
@@ -238,7 +239,7 @@ export default function setupSocket(server: ServerT) {
     );
 
     socket.on('game-rematch', ({ gameId }) => {
-      readyGame(gameId, 'listen-game-rematch', false);
+      readyGame(gameId, 'listen-game-rematch', true);
     });
 
     socket.on('game-over', ({ winner, gameId }) => {
@@ -246,7 +247,7 @@ export default function setupSocket(server: ServerT) {
 
       if (!game) return;
 
-      game.isOver = true;
+      game.isGameOver = true;
 
       if (winner === 'O') {
         io.to(gameId).emit('listen-game-over', {
@@ -274,7 +275,7 @@ export default function setupSocket(server: ServerT) {
         games.find((game) => {
           const { playerOne, playerTwo } = game;
           games.splice(games.indexOf(game), 1);
-          if (game.isOver) return true;
+          if (game.isGameOver) return true;
 
           //לשמור את המאצ
 
@@ -295,7 +296,6 @@ export default function setupSocket(server: ServerT) {
       closeOnlineGame();
 
       closeCostumeOnlineGame();
-
       console.log(`User disconnected: ${connectedSocketUserId}`);
     });
   });

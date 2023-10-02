@@ -22,5 +22,5 @@ export type OnlineGameProp = {
   playerTwo: Player;
   gameId: string;
   readyCount: number;
-  isOver: boolean;
+  isGameOver: boolean;
 };
