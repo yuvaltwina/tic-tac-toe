@@ -51,17 +51,13 @@ export default function setupSocket(server: ServerT) {
     const connectedSocketUserName = socket.data.username;
     const connectedSocketUserId = socket.id;
 
-    const readyGame = (
-      gameId: string,
-      emitId: string,
-      gameOver: boolean = false
-    ) => {
+    const readyGame = (gameId: string, emitId: string) => {
       const game = findCurrentGame(gameId, games);
       if (!game) return;
 
       if (game.readyCount === 1) {
         game.readyCount = 0;
-        game.isGameOver = gameOver;
+        game.isGameOver = false;
         io.to(gameId).emit(emitId);
       } else {
         game.readyCount += 1;
@@ -239,7 +235,7 @@ export default function setupSocket(server: ServerT) {
     );
 
     socket.on('game-rematch', ({ gameId }) => {
-      readyGame(gameId, 'listen-game-rematch', true);
+      readyGame(gameId, 'listen-game-rematch');
     });
 
     socket.on('game-over', ({ winner, gameId }) => {

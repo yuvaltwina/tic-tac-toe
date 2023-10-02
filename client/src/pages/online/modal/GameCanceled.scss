@@ -1,18 +1,48 @@
+@import 'styles';
+
 .game-canceled-modal-container {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .game-canceled-container {
+  padding: 1rem;
+  text-align: center;
   display: flex;
   justify-content: center;
-  text-transform: uppercase;
+  text-transform: capitalize;
   align-items: center;
   flex-direction: column;
   gap: 2rem;
+  font-size: 1.5rem;
   h1 {
     font-weight: 800;
     letter-spacing: 0.2rem;
-    font-size: 2rem;
+  }
+}
+.game-canceled-modal-button {
+  font-family: Holtwood One SC;
+  cursor: pointer;
+  border-radius: 1rem;
+  border: none;
+  outline: none;
+  text-transform: uppercase;
+  padding: 1rem 2rem;
+  font-size: inherit;
+  color: white;
+  background-color: $third-color;
+}
+
+@media (max-width: #{$tablet-width}) {
+  .game-canceled-container {
+    font-size: 1rem;
+  }
+}
+@media (max-width: #{$phone-width}) {
+  .game-canceled-container {
+    font-size: 0.7rem;
+  }
+  .game-canceled-modal-button {
+    padding: 0.7rem 1.2rem;
   }
 }

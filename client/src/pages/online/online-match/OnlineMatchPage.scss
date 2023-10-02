@@ -110,4 +110,26 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  button {
+    background-image: linear-gradient(
+      92.88deg,
+      #455eb5 9.16%,
+      #5643cc 43.89%,
+      #673fd7 64.72%
+    );
+    border-radius: 8px;
+    border-style: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 1rem;
+    text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+    transition: all 0.5s;
+    user-select: none;
+    touch-action: manipulation;
+    &:hover {
+      box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+      transition-duration: 0.1s;
+    }
+  }
 }

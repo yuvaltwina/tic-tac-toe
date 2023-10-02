@@ -19,15 +19,13 @@ function GameCanceled() {
     <Modal open={isModalOpen} className="game-canceled-modal-container">
       <div className="game-canceled-container">
         <h1>{opponentLeft} left the game</h1>
-        <div className="game-canceled-modal-button-container">
-          <button
-            type="button"
-            onClick={returnToMainMenu}
-            className="main-menu"
-          >
-            main menu
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={returnToMainMenu}
+          className="game-canceled-modal-button"
+        >
+          main menu
+        </button>
       </div>
     </Modal>
   );

@@ -4,18 +4,20 @@ import useOnlineGameContext from '../context/useOnlineGameContext';
 function useGameOver(setRematchButton: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [isWon, setIsWon] = useState(false);
   const { socket } = useOnlineGameContext();
 
   useEffect(() => {
     socket?.on('listen-game-over', ({ winner, isTie }) => {
       if (winner) {
         if (winner.id === socket?.id) {
-          setModalMessage('win');
+          setModalMessage('You Won!');
+          setIsWon(true);
         } else {
-          setModalMessage('lose');
+          setModalMessage('You Lost!');
         }
       } else if (isTie) {
-        setModalMessage('tie');
+        setModalMessage('Its A Tie!');
       }
       setIsModalOpen(true);
     });
@@ -28,7 +30,7 @@ function useGameOver(setRematchButton: any) {
   useEffect(() => {
     socket?.on('listen-game-rematch', () => {
       console.log('rematch');
-
+      setIsWon(false);
       setIsModalOpen(false);
       setRematchButton({
         text: 'rematch',
@@ -41,7 +43,7 @@ function useGameOver(setRematchButton: any) {
     };
   }, [socket, setRematchButton]);
 
-  return { isModalOpen, modalMessage };
+  return { isModalOpen, modalMessage, isWon };
 }
 
 export default useGameOver;

@@ -5,6 +5,7 @@ import './EndGameModal.scss';
 import { routesData } from '../../../utils/data';
 import useGameOver from '../hooks/useGameOver';
 import useOnlineGameContext from '../context/useOnlineGameContext';
+import ConfettiAnimation from './component/ConfettiAnimation';
 
 const { mainPage } = routesData;
 
@@ -18,7 +19,7 @@ function EndGameModal() {
     disable: false,
   });
 
-  const { isModalOpen, modalMessage } = useGameOver(setRematchButton);
+  const { isModalOpen, modalMessage, isWon } = useGameOver(setRematchButton);
 
   const navigate = useNavigate();
 
@@ -34,6 +35,7 @@ function EndGameModal() {
   return (
     <Modal open={isModalOpen} className="end-game-modal-container">
       <div className="end-game-container">
+        {isWon && <ConfettiAnimation />}
         <h1>{modalMessage}</h1>
         <div className="end-game-modal-button-container">
           <button

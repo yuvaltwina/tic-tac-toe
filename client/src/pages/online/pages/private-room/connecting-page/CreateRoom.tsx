@@ -25,8 +25,8 @@ function CreateRoom({ setShowCreateRoom }: any) {
       <h1> Waiting for other player to join...</h1>
       <div>
         <p>Your game ID is</p>
-        <div className="waiting-player-id">
-          {newGameId}
+        <div>
+          <div className="line-page-game-id">{newGameId}</div>
           <button type="button" onClick={copyToClipboard}>
             {copySuccess ? 'Copied!' : 'Copy'}
           </button>

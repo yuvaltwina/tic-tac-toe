@@ -43,7 +43,7 @@ function JoinRoom({ setShowCreateRoom }: any) {
         <TextField
           type="text"
           name="gameId"
-          placeholder="insert your gameId"
+          placeholder="Insert your gameId"
           onBlur={handleBlur}
           onChange={handleChange}
           value={values.gameId}
