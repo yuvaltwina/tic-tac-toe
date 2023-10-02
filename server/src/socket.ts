@@ -107,7 +107,7 @@ export default function setupSocket(server: ServerT) {
       }
     });
 
-    socket.on('create-game', async ({ name }) => {
+    socket.on('create-game', async () => {
       const roomId = uuidv4();
       socket.join(roomId);
       const playerDetails = await getUserDetailsFromDB(socket.data.username);
@@ -147,7 +147,7 @@ export default function setupSocket(server: ServerT) {
       }
     });
 
-    socket.on('join-game', async ({ gameId, name }) => {
+    socket.on('join-game', async ({ gameId }) => {
       const room = io.sockets.adapter.rooms.get(gameId);
       const game = findCurrentGame(gameId, games);
 
@@ -159,10 +159,6 @@ export default function setupSocket(server: ServerT) {
 
       if (room.size >= 2) {
         return socket.emit('game-error', { msg: 'Game is full' });
-      }
-
-      if (game.playerOne.name === name) {
-        return socket.emit('game-error', { msg: 'Name already taken' });
       }
 
       socket.join(gameId);

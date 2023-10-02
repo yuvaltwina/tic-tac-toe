@@ -53,9 +53,9 @@ interface ServerToClientEvents {
 }
 
 interface ClientToServerEvents {
-  'create-game': ({ name }: { name: string }) => void;
+  'create-game': () => void;
   'close-game': ({ gameId }: { gameId: string }) => void;
-  'join-game': ({ gameId, name }: { gameId: string; name: string }) => void;
+  'join-game': ({ gameId }: { gameId: string }) => void;
   'ready-game': ({ gameId }: { gameId: string }) => void;
   'ready-round': ({ gameId }: { gameId: string }) => void;
   'open-online-room': () => void;

@@ -5,14 +5,14 @@ import './JoinRoom.scss';
 import useOnlineGameContext from '../../../context/useOnlineGameContext';
 import SiteTitle from '../../../../../components/Site-title/SiteTitle';
 
-const initialValues = { name: '', gameId: '' };
+const initialValues = { gameId: '' };
 
 function JoinRoom({ setShowCreateRoom }: any) {
   const { socket } = useOnlineGameContext();
 
   const submitHandler = (values: typeof initialValues) => {
-    const { gameId, name } = values;
-    socket?.emit('join-game', { gameId, name });
+    const { gameId } = values;
+    socket?.emit('join-game', { gameId });
   };
 
   const {
@@ -31,10 +31,7 @@ function JoinRoom({ setShowCreateRoom }: any) {
   });
 
   const createGame = () => {
-    socket?.emit('create-game', {
-      name: values.name || 'my name',
-    });
-
+    socket?.emit('create-game');
     setShowCreateRoom(true);
   };
 
@@ -43,17 +40,6 @@ function JoinRoom({ setShowCreateRoom }: any) {
       <SiteTitle />
       <h1>Play XO online with your friends</h1>
       <form onSubmit={handleSubmit}>
-        <TextField
-          type="text"
-          name="name"
-          placeholder="insert your name"
-          onBlur={handleBlur}
-          onChange={handleChange}
-          value={values.name}
-          required
-          error={touched.name && Boolean(errors.name)}
-          helperText={touched.name && errors.name}
-        />
         <TextField
           type="text"
           name="gameId"
