@@ -30,5 +30,6 @@ module.exports = {
     'n/no-callback-literal': 'off',
     'no-shadow': 'off',
     'import/no-extraneous-dependencies': 'off',
+    '@typescript-eslint/naming-convention': 'off',
   },
 };

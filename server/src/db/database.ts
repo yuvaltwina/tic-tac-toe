@@ -1,6 +1,6 @@
 import { type RowDataPacket } from 'mysql2';
 import pool from './connect';
-import type { Player } from '../utils/types/types';
+import type { UserFromDB } from '../utils/types/types';
 
 export async function checkConnection() {
   try {
@@ -54,7 +54,7 @@ export const getUserDetailsFromDB = async (username: string) => {
     if (!userDetails[0]) {
       return null;
     }
-    return userDetails[0] as Omit<Player, 'name'> & { username: string };
+    return userDetails[0] as UserFromDB;
   } catch {
     return null;
   }

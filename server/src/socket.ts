@@ -1,12 +1,11 @@
 import type http from 'http';
 import { Server } from 'socket.io';
 import { v4 as uuidv4 } from 'uuid';
-
-import type { OnlineGameProp } from './utils/types/types';
 import CustomError from './errors/CustomError';
 import { decodeLoginCookieToken } from './utils/jwt';
 import { NOT_AUTHORIZED_MESSAGE } from './utils/data/consts';
 import { getUserDetailsFromDB } from './db/database';
+import type { OnlineGameProp } from './utils/types/types';
 
 type ServerT = http.Server<
   typeof http.IncomingMessage,
@@ -30,7 +29,8 @@ export default function setupSocket(server: ServerT) {
     },
   });
 
-  io.use((socket, next) => {
+  io.use((currentSocket, next) => {
+    const socket = currentSocket;
     const authorizationHeader = socket.handshake.headers?.authorization;
 
     if (!authorizationHeader) {
@@ -48,86 +48,117 @@ export default function setupSocket(server: ServerT) {
   });
 
   io.on('connection', (socket) => {
-    console.log(`User connected: ${socket.id}`);
+    const connectedSocketUserName = socket.data.username;
+    const connectedSocketUserId = socket.id;
+
+    const readyGame = (
+      gameId: string,
+      emitId: string,
+      gameOver: boolean = true
+    ) => {
+      const game = findCurrentGame(gameId, games);
+      if (!game) return;
+
+      if (game.readyCount === 1) {
+        game.readyCount = 0;
+        game.isOver = gameOver;
+        io.to(gameId).emit(emitId);
+      } else {
+        game.readyCount += 1;
+      }
+    };
+
+    console.log(`User connected: ${connectedSocketUserId}`);
     console.log(io.sockets.adapter.rooms);
-    // chat
+
     socket.on('send-message', ({ message, gameId }) => {
       io.to(gameId).emit('received-message', {
         message,
-        playerId: socket.id,
+        playerId: connectedSocketUserId,
       });
     });
 
-    // game
-
     socket.on('open-online-room', async () => {
       const roomId = uuidv4();
-      const playerDetails = await getUserDetailsFromDB(socket.data.username);
+
+      const playerDetails = await getUserDetailsFromDB(connectedSocketUserName);
+
       if (!playerDetails) {
         socket.emit('game-error', { msg: 'username not exist' });
         return;
       }
-      const { image_id, points, player_id, username } = playerDetails;
 
-      if (openOnlineRoom.gameId) {
+      const { image_id, points, username } = playerDetails;
+
+      const joinOnlineGame = () => {
         const room = openOnlineRoom;
         socket.join(room.gameId);
         room.playerTwo = {
           name: username,
           points,
           image_id,
-          id: socket.id,
-          player_id,
-        }; // מה זה ההשמה הזאת ?
+          id: connectedSocketUserId,
+        };
+
         games.push(room);
         openOnlineRoom = {};
 
         io.to(room.gameId).emit('user-joined', room);
-      } else {
+      };
+
+      const createOnlineGame = () => {
         openOnlineRoom = {
           gameId: roomId,
           playerOne: {
             name: username,
             points,
             image_id,
-            id: socket.id,
-            player_id,
+            id: connectedSocketUserId,
           },
           playerTwo: {
             name: '',
             points: 0,
             image_id: 0,
             id: '',
-            player_id: '',
           },
           readyCount: 0,
           isOver: false,
         };
         socket.join(roomId);
+      };
+
+      if (openOnlineRoom.gameId) {
+        joinOnlineGame();
+      } else {
+        createOnlineGame();
       }
     });
 
     socket.on('create-game', async () => {
       const roomId = uuidv4();
-      socket.join(roomId);
-      const playerDetails = await getUserDetailsFromDB(socket.data.username);
+
+      const playerDetails = await getUserDetailsFromDB(connectedSocketUserName);
+
       if (!playerDetails) {
-        return; // לטפל בבעיה במקרה שהיוזר לא נכון
+        socket.emit('game-error', { msg: 'username not exist' });
+        return;
       }
-      const { username, points, image_id, player_id } = playerDetails;
+
+      const { username, points, image_id } = playerDetails;
+      socket.join(roomId);
       games.push({
         gameId: roomId,
         playerOne: {
           name: username,
           points,
           image_id,
-          id: socket.id,
-          player_id,
+          id: connectedSocketUserId,
         },
-        playerTwo: { name: '', points: 0, image_id: 0, id: '', player_id: '' },
+        playerTwo: { name: '', points: 0, image_id: 0, id: '' },
         readyCount: 0,
         isOver: false,
       });
+
       io.to(roomId).emit('room-created', roomId);
     });
 
@@ -139,7 +170,7 @@ export default function setupSocket(server: ServerT) {
         return;
       }
 
-      if (gameToClose.playerOne.id === socket.id) {
+      if (gameToClose.playerOne.id === connectedSocketUserId) {
         games.splice(games.indexOf(gameToClose), 1);
         socket.leave(gameId);
       } else {
@@ -161,46 +192,30 @@ export default function setupSocket(server: ServerT) {
         return socket.emit('game-error', { msg: 'Game is full' });
       }
 
-      socket.join(gameId);
-      const playerDetails = await getUserDetailsFromDB(socket.data.username);
-      if (!playerDetails) {
-        return; // לטפל בבעיה במקרה שהיוזר לא נכון
-      }
-      const { username, points, image_id, player_id } = playerDetails;
+      const playerDetails = await getUserDetailsFromDB(connectedSocketUserName);
 
+      if (!playerDetails) {
+        return socket.emit('game-error', { msg: 'username not exist' });
+      }
+
+      const { username, points, image_id } = playerDetails;
+      socket.join(gameId);
       game.playerTwo = {
         name: username,
         points,
         image_id,
-        id: socket.id,
-        player_id,
+        id: connectedSocketUserId,
       };
 
       return io.to(gameId).emit('user-joined', game);
     });
 
     socket.on('ready-game', ({ gameId }) => {
-      const game = findCurrentGame(gameId, games);
-      if (!game) return;
-
-      if (game.readyCount === 1) {
-        game.readyCount = 0;
-        io.to(gameId).emit('game-started');
-      } else {
-        game.readyCount += 1;
-      }
+      readyGame(gameId, 'game-started');
     });
 
     socket.on('ready-round', ({ gameId }) => {
-      const game = findCurrentGame(gameId, games);
-      if (!game) return;
-
-      if (game.readyCount === 1) {
-        game.readyCount = 0;
-        io.to(gameId).emit('round-started');
-      } else {
-        game.readyCount += 1;
-      }
+      readyGame(gameId, 'round-started');
     });
 
     socket.on('game-move', ({ board, playerTurn, gameId }) => {
@@ -210,76 +225,78 @@ export default function setupSocket(server: ServerT) {
     socket.on(
       'round-over',
       ({ winner, winningPattern, isTie, gameId, winnerByTime }) => {
-        if (winnerByTime) {
-          io.to(gameId).emit('listen-round-over', {
+        const roundOverData = {
+          ...(winnerByTime && {
             winner: winnerByTime,
             byTime: true,
-          });
-        } else {
-          io.to(gameId).emit('listen-round-over', {
-            winner,
-            winningPattern,
-            isTie,
-          });
-        }
+          }),
+          ...(!winnerByTime && { winner, winningPattern, isTie }),
+        };
+
+        io.to(gameId).emit('listen-round-over', roundOverData);
       }
     );
 
     socket.on('game-rematch', ({ gameId }) => {
-      const game = findCurrentGame(gameId, games);
-      if (!game) return;
-
-      if (game.readyCount === 1) {
-        game.readyCount = 0;
-        game.isOver = false;
-        io.to(gameId).emit('listen-game-rematch');
-      } else {
-        game.readyCount += 1;
-      }
+      readyGame(gameId, 'listen-game-rematch', false);
     });
 
     socket.on('game-over', ({ winner, gameId }) => {
-      //לשמור את המאצ
       const game = findCurrentGame(gameId, games);
+
       if (!game) return;
+
       game.isOver = true;
+
       if (winner === 'O') {
         io.to(gameId).emit('listen-game-over', {
-          winner: game?.playerTwo,
+          winner: game.playerTwo,
         });
       } else if (winner === 'X') {
         io.to(gameId).emit('listen-game-over', {
-          winner: game?.playerOne,
+          winner: game.playerOne,
         });
       } else io.to(gameId).emit('listen-game-over', { isTie: true });
     });
 
     socket.on('disconnect', () => {
-      games.find((game) => {
-        const { playerOne, playerTwo } = game;
-        games.splice(games.indexOf(game), 1);
-        if (game.isOver) return true;
-        //לשמור את המאצ
-        if (playerOne.id === socket.id) {
-          io.to(playerTwo.id).emit('listen-game-canceled', {
-            opponent: playerOne,
-          });
+      const closeOnlineGame = () => {
+        if (
+          openOnlineRoom.gameId &&
+          (openOnlineRoom.playerOne.id === connectedSocketUserId ||
+            openOnlineRoom.playerTwo.id === connectedSocketUserId)
+        ) {
+          openOnlineRoom = {};
         }
-        if (playerTwo.id === socket.id) {
-          io.to(playerOne.id).emit('listen-game-canceled', {
-            opponent: playerTwo,
-          });
-        }
-        return true;
-      });
-      if (
-        openOnlineRoom.gameId &&
-        (openOnlineRoom.playerOne.id === socket.id ||
-          openOnlineRoom.playerTwo.id === socket.id)
-      ) {
-        openOnlineRoom = {};
-      }
-      console.log(`User disconnected: ${socket.id}`);
+      };
+
+      const closeCostumeOnlineGame = () => {
+        games.find((game) => {
+          const { playerOne, playerTwo } = game;
+          games.splice(games.indexOf(game), 1);
+          if (game.isOver) return true;
+
+          //לשמור את המאצ
+
+          if (playerOne.id === connectedSocketUserId) {
+            io.to(playerTwo.id).emit('listen-game-canceled', {
+              opponent: playerOne,
+            });
+          }
+          if (playerTwo.id === connectedSocketUserId) {
+            io.to(playerOne.id).emit('listen-game-canceled', {
+              opponent: playerTwo,
+            });
+          }
+          return true;
+        });
+      };
+
+      closeOnlineGame();
+
+      closeCostumeOnlineGame();
+
+      console.log(`User disconnected: ${connectedSocketUserId}`);
     });
   });
 }

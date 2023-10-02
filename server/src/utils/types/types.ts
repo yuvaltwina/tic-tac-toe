@@ -8,7 +8,13 @@ export type Player = {
   points: number;
   image_id: number;
   id: string;
-  player_id: string;
+};
+
+export type UserFromDB = {
+  user_id: number;
+  username: string;
+  points: number;
+  image_id: number;
 };
 
 export type OnlineGameProp = {
