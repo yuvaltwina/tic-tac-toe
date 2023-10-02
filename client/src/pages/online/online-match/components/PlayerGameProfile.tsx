@@ -5,7 +5,7 @@ interface PlayerGameProfileProps {
   isPlaying: boolean;
   playerScore: number;
   playerName: string;
-  playerImage: string;
+  playerImage: number;
   timerFunction: () => void;
   gameLive: boolean;
 }
@@ -18,6 +18,8 @@ function PlayerGameProfile({
   timerFunction,
   gameLive,
 }: PlayerGameProfileProps) {
+  const playerProfileImage = `/avatars/${playerImage}.png`;
+
   return (
     <div
       className={`online-match-player ${
@@ -31,7 +33,11 @@ function PlayerGameProfile({
           onTimerEnd={timerFunction}
         />
       )}
-      <span className="user-profile" />
+      <img
+        alt="user-profile"
+        src={playerProfileImage}
+        className="user-profile"
+      />
       <p className="user-score">
         Total score
         <span> {playerScore}</span>

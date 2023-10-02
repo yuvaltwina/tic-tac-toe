@@ -57,10 +57,14 @@ const currentGameInitialValues: OnlineGameProp = {
   playerOne: {
     name: '',
     id: '',
+    image_id: 0,
+    points: 0,
   },
   playerTwo: {
     name: '',
     id: '',
+    image_id: 0,
+    points: 0,
   },
   gameId: '',
   readyCount: 0,

@@ -16,10 +16,14 @@ function Chat({ openChat, setOpenChat }: ChatProps) {
   const {
     socket,
     gameConversation: { conversation },
-    currentGameInfo: { gameId },
+    currentGameInfo: { gameId, playerOne, playerTwo },
   } = useOnlineGameContext();
   const { chatContainerRef } = useScrollChatToBottom(conversation);
   useConversationUpdate();
+
+  const opponentUserImage =
+    socket?.id === playerOne.id ? playerTwo.image_id : playerOne.image_id;
+  const playerProfileImage = `/avatars/${opponentUserImage}.png`;
 
   const submitHandler = (values: { message: string }) => {
     socket?.emit('send-message', { message: values.message, gameId });
@@ -60,7 +64,11 @@ function Chat({ openChat, setOpenChat }: ChatProps) {
               </li>
             ) : (
               <li className="chat incoming" key={index}>
-                <span className="chat-user-profile">s</span>
+                <img
+                  alt="user-profile"
+                  src={playerProfileImage}
+                  className="chat-user-profile"
+                />
                 <p>{message}</p>
               </li>
             );

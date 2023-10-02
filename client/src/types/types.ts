@@ -10,8 +10,8 @@ export interface UserState {
 }
 
 export type OnlineGameProp = {
-  playerOne: { name: string; id: string };
-  playerTwo: { name: string; id: string };
+  playerOne: { name: string; id: string; points: number; image_id: number };
+  playerTwo: { name: string; id: string; points: number; image_id: number };
   gameId: string;
   readyCount: number;
   isOver: boolean;

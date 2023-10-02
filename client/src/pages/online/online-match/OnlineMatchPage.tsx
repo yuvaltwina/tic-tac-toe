@@ -116,7 +116,7 @@ function OnlineMatchPage() {
               isPlaying: canPlay === opponentPlayer.id && !gameOver.isOver,
               playerScore: 0,
               playerName: opponentPlayer.name,
-              playerImage: 'string',
+              playerImage: opponentPlayer.image_id,
               timerFunction,
               gameLive: !gameOver.isOver,
             }}
@@ -133,7 +133,7 @@ function OnlineMatchPage() {
               isPlaying: canPlay === currentPlayer.id && !gameOver.isOver,
               playerScore: 0,
               playerName: currentPlayer.name,
-              playerImage: 'string',
+              playerImage: currentPlayer.image_id,
               timerFunction,
               gameLive: !gameOver.isOver,
             }}
