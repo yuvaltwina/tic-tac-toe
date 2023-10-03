@@ -5,8 +5,8 @@ import { type Tjwt } from './types/types';
 dotenv.config();
 const secret = process.env.TOKEN_SECRET;
 
-export function generateloginToken(username: string) {
-  const registerToken = jwt.sign({ username }, secret as string, {
+export function generateLoginToken(tokenData: object) {
+  const registerToken = jwt.sign(tokenData, secret as string, {
     expiresIn: '7d',
   });
   return registerToken;

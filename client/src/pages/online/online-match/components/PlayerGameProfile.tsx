@@ -1,4 +1,5 @@
 import React from 'react';
+import getUserImageSrc from '../../../../utils/getUserImageSrc';
 import TurnTimer from './TurnTimer';
 
 interface PlayerGameProfileProps {
@@ -18,7 +19,7 @@ function PlayerGameProfile({
   timerFunction,
   gameLive,
 }: PlayerGameProfileProps) {
-  const playerProfileImage = `/avatars/${playerImage}.png`;
+  const playerProfileImage = getUserImageSrc(playerImage);
 
   return (
     <div

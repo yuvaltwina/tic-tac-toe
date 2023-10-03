@@ -2,13 +2,6 @@
 
 import { WinningPattern } from './BoardValues';
 
-export interface UserState {
-  user: {
-    username: string;
-    isLoggedIn: boolean;
-  };
-}
-
 export type OnlineGameProp = {
   playerOne: { name: string; id: string; points: number; image_id: number };
   playerTwo: { name: string; id: string; points: number; image_id: number };

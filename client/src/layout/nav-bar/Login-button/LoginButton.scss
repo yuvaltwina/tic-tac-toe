@@ -11,6 +11,16 @@
   border: none;
   cursor: pointer;
 }
+.user-image-button {
+  height: 50px;
+  border: none;
+  background: transparent;
+  border-radius: 100%;
+  cursor: pointer;
+  img {
+    height: 100%;
+  }
+}
 @media (max-width: #{$phone-width}) {
   .login-button-container {
     font-size: 0.7rem;

@@ -52,13 +52,9 @@ function LoginModal({ closeModal }: LoginModalProps) {
   const dispatch = useDispatch();
   const iconClickHandler = () => setIsPasswordVisible(!isPasswordVisible);
 
-  const onSuccess = (
-    resetForm: () => void,
-    formattedUsername: string,
-    loginToken: string
-  ) => {
+  const onSuccess = (resetForm: () => void, loginToken: string) => {
     resetForm();
-    dispatch(login({ formattedUsername, loginToken }));
+    dispatch(login({ loginToken }));
     closeModal();
   };
 

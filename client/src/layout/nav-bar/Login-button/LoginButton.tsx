@@ -1,29 +1,51 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import AuthModal from '../../../components/authModals/AuthModal';
 import { useUserSelector } from '../../../redux/selectors';
 import { logout } from '../../../redux/user';
+import { routesData } from '../../../utils/data';
+import getUserImageSrc from '../../../utils/getUserImageSrc';
 import './LoginButton.scss';
+
+const { mainPage } = routesData;
 
 function LoginButton() {
   const [isAuthModal, setIsAuthModal] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { username, isLoggedIn } = useUserSelector();
+  const {
+    userData: { imageId },
+    isLoggedIn,
+  } = useUserSelector();
 
   const openAuthModal = () => setIsAuthModal(true);
 
-  const logOutUser = () => dispatch(logout());
+  const logOutUser = () => {
+    dispatch(logout());
+    navigate(mainPage);
+  };
 
   return (
     <>
       <AuthModal isModalOpen={isAuthModal} setIsModalOpen={setIsAuthModal} />
-      <button
-        type="button"
-        className="login-button-container"
-        onClick={isLoggedIn ? logOutUser : openAuthModal}
-      >
-        {isLoggedIn ? username : 'login'}
-      </button>
+      {isLoggedIn ? (
+        <button
+          className="user-image-button"
+          type="button"
+          onClick={logOutUser}
+        >
+          <img alt="user-profile" src={getUserImageSrc(imageId)} />
+        </button>
+      ) : (
+        <button
+          type="button"
+          className="login-button-container"
+          onClick={openAuthModal}
+        >
+          login
+        </button>
+      )}
     </>
   );
 }

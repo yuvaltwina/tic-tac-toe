@@ -2,45 +2,62 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
-
-type ReduxUserState = { username: string; isLoggedIn: boolean };
+import { UserSliceState } from './types/slices';
 
 type ReduxLoginAction = {
-  payload: { formattedUsername: string; loginToken: string };
+  payload: { loginToken: string };
+};
+const userDataInitialValues: UserSliceState['userData'] = {
+  imageId: 0,
+  points: 0,
+  userId: 0,
+  username: '',
 };
 
-const getInitialUsername = () => {
-  const loginCookie = Cookies.get('login');
-  if (loginCookie) {
-    const token = loginCookie.split('.')[1];
+const decodeToken = (token: string): UserSliceState['userData'] => {
+  const splitToken = token.split('.')[1];
+  const decodedToken = window.atob(splitToken);
+  const tokenDecoded = JSON.parse(decodedToken);
+  return tokenDecoded;
+};
+
+const getInitialUserData = (): UserSliceState['userData'] => {
+  const loginToken = Cookies.get('login');
+  if (loginToken) {
     try {
-      const decodedToken = window.atob(token);
-      const { username } = JSON.parse(decodedToken);
-      if (username) {
-        return username;
+      const userData = decodeToken(loginToken);
+      if (userData) {
+        return userData;
       }
     } catch (error) {
       Cookies.remove('login');
     }
   }
-  return '';
+  return userDataInitialValues;
 };
 
 const initialState = {
-  username: getInitialUsername(),
-  isLoggedIn: !!getInitialUsername(),
+  userData: getInitialUserData(),
+  isLoggedIn: !!getInitialUserData(),
 };
 
-const loginHandler = (state: ReduxUserState, action: ReduxLoginAction) => {
-  const { formattedUsername, loginToken } = action.payload;
+const loginHandler = (state: UserSliceState, action: ReduxLoginAction) => {
+  const { loginToken } = action.payload;
   state.isLoggedIn = true;
-  state.username = formattedUsername;
-  Cookies.set('login', loginToken, { expires: 7 });
+
+  try {
+    const userData = decodeToken(loginToken);
+
+    state.userData = userData;
+    Cookies.set('login', loginToken, { expires: 7 });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const logoutHandler = (state: ReduxUserState) => {
+const logoutHandler = (state: UserSliceState) => {
   state.isLoggedIn = false;
-  state.username = '';
+  state.userData = userDataInitialValues;
   Cookies.remove('login');
 };
 

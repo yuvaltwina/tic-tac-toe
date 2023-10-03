@@ -6,6 +6,7 @@ import useOnlineGameContext from '../../../context/useOnlineGameContext';
 import useConversationUpdate from '../../../hooks/useConversationUpdate';
 import './Chat.scss';
 import useScrollChatToBottom from './hooks/useScrollChatToBottom';
+import getUserImageSrc from '../../../../../utils/getUserImageSrc';
 
 interface ChatProps {
   openChat: boolean;
@@ -23,7 +24,7 @@ function Chat({ openChat, setOpenChat }: ChatProps) {
 
   const opponentUserImage =
     socket?.id === playerOne.id ? playerTwo.image_id : playerOne.image_id;
-  const playerProfileImage = `/avatars/${opponentUserImage}.png`;
+  const playerProfileImage = getUserImageSrc(opponentUserImage);
 
   const submitHandler = (values: { message: string }) => {
     socket?.emit('send-message', { message: values.message, gameId });

@@ -21,6 +21,6 @@ export const checkLoginDetails = async ({
     username,
     password,
   });
-  const { formattedUsername, loginToken } = serverResponse.data.payload;
-  return { formattedUsername, loginToken };
+  const { loginToken } = serverResponse.data.payload;
+  return { loginToken };
 };

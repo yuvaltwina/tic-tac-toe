@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
-import { UserState } from '../types/types';
+import { UserSelectorState } from './types/selectors';
 
 export function useUserSelector() {
-  const data = useSelector((state: UserState) => state.user);
+  const data = useSelector((state: UserSelectorState) => state.user);
   return data;
 }
 

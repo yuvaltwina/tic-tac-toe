@@ -8,7 +8,7 @@ import {
   formattingUsername,
 } from '../utils/data/functions';
 import CustomError from '../errors/CustomError';
-import { decodeLoginCookieToken, generateloginToken } from '../utils/jwt';
+import { decodeLoginCookieToken, generateLoginToken } from '../utils/jwt';
 
 const BAD_LOGIN_MESSAGE = 'unauthorized';
 dotenv.config();
@@ -38,11 +38,19 @@ export const login: RequestHandler = async (req, res, next) => {
     next(new CustomError(401, BAD_LOGIN_MESSAGE));
     return;
   }
-  const loginToken = generateloginToken(formattedUsername);
+
+  const { user_id, username: existUserName, points, image_id } = existingUser;
+  const loginTokenData = {
+    userId: user_id,
+    username: existUserName,
+    points,
+    imageId: image_id,
+  };
+
+  const loginToken = generateLoginToken(loginTokenData);
   res.status(200).json(
     serverResponse(USER_FOUND_MESSAGE, {
       loginToken,
-      formattedUsername,
     })
   );
 };
