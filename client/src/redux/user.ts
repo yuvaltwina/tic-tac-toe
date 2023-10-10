@@ -38,7 +38,7 @@ const getInitialUserData = (): UserSliceState['userData'] => {
 
 const initialState = {
   userData: getInitialUserData(),
-  isLoggedIn: !!getInitialUserData(),
+  isLoggedIn: !!getInitialUserData().userId,
 };
 
 const loginHandler = (state: UserSliceState, action: ReduxLoginAction) => {

@@ -7,7 +7,8 @@ import LoginButton from './Login-button/LoginButton';
 import ReturnButton from './return-button/ReturnButton';
 import './NavBar.scss';
 
-const { bracketPage, mainPage, linkPage, computer, online } = routesData;
+ const { bracketPage, mainPage, linkPage, computer, online, matchHistory } =
+  routesData;
 
 const leftButton = {
   [mainPage]: { element: <LeaderBoardButton />, toRoute: bracketPage },
@@ -15,6 +16,7 @@ const leftButton = {
   [linkPage]: { element: <ReturnButton />, toRoute: mainPage },
   [computer]: { element: <ReturnButton />, toRoute: mainPage },
   [online]: { element: <ReturnButton />, toRoute: mainPage },
+  [matchHistory]: { element: <ReturnButton />, toRoute: mainPage },
 };
 
 function NavBar() {
@@ -22,8 +24,8 @@ function NavBar() {
 
   return (
     <div className="nav-bar">
-      <Link className="link-class" to={leftButton[pathname]?.toRoute}>
-        {leftButton[pathname]?.element || <div />}
+      <Link className="link-class" to={leftButton[pathname].toRoute}>
+        {leftButton[pathname].element || <div />}
       </Link>
       <LoginButton />
     </div>
