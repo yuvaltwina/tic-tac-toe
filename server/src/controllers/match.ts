@@ -14,8 +14,8 @@ const userPoints = {
 };
 
 export const saveMatchResults = async (
-  player1_id: number,
-  player2_id: number,
+  player1_username: string,
+  player2_username: string,
   game_winner: keyof typeof userPoints
 ) => {
   const { playerOnePoints, playerTwoPoints } = userPoints[game_winner];
@@ -24,9 +24,9 @@ export const saveMatchResults = async (
     console.log('start saving');
     await connection.beginTransaction();
 
-    await insertMatch(player1_id, player2_id, game_winner);
-    await updateUserPoints(player1_id, playerOnePoints);
-    await updateUserPoints(player2_id, playerTwoPoints);
+    await insertMatch(player1_username, player2_username, game_winner);
+    await updateUserPoints(player1_username, playerOnePoints);
+    await updateUserPoints(player2_username, playerTwoPoints);
 
     await connection.commit();
     console.log('saved');

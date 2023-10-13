@@ -35,13 +35,15 @@ async function createTables() {
     await pool.query(`
         CREATE TABLE IF NOT EXISTS matches (
           match_id INT NOT NULL AUTO_INCREMENT,
-          player1_id INT NOT NULL,
-          player2_id INT NOT NULL,
+          player1_username VARCHAR(255) NOT NULL,
+          player1_score INT NOT NULL,
+          player2_username VARCHAR(255) NOT NULL,
+          player2_score INT NOT NULL,
           game_winner INT NOT NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           PRIMARY KEY (match_id),
-          FOREIGN KEY (player1_id) REFERENCES users(user_id),
-          FOREIGN KEY (player2_id) REFERENCES users(user_id)
+          FOREIGN KEY (player1_username) REFERENCES users(username),
+          FOREIGN KEY (player2_username) REFERENCES users(username)
         )
       `);
   } catch (error: any) {

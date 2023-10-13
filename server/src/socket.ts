@@ -6,12 +6,13 @@ import { decodeLoginCookieToken } from './utils/jwt';
 import { NOT_AUTHORIZED_MESSAGE } from './utils/data/consts';
 import { getUserDetailsFromDB } from './db/database';
 import type { OnlineGameProp } from './utils/types/types';
+import { saveMatchResults } from './controllers/match';
 
 type ServerT = http.Server<
   typeof http.IncomingMessage,
   typeof http.ServerResponse
 >;
-
+type GameWinner = 0 | 1 | 2;
 const { WEBSITE_URL } = process.env;
 const games: OnlineGameProp[] = [];
 let openOnlineRoom: OnlineGameProp | any = {};
@@ -249,11 +250,11 @@ export default function setupSocket(server: ServerT) {
       readyGame(gameId, 'listen-game-rematch');
     });
 
-    socket.on('game-over', ({ winner, gameId }) => {
+    socket.on('game-over', async ({ winner, gameId }) => {
       const game = findCurrentGame(gameId, games);
       if (!game) return;
 
-      let gameWinner = 0;
+      let gameWinner: GameWinner = 0;
       game.isGameOver = true;
       console.log(winner, gameId);
       if (winner === 'O') {
@@ -267,6 +268,11 @@ export default function setupSocket(server: ServerT) {
           winner: game.playerOne,
         });
       } else io.to(gameId).emit('listen-game-over', { isTie: true });
+      await saveMatchResults(
+        game.playerOne.name,
+        game.playerTwo.name,
+        gameWinner
+      );
     });
 
     socket.on('disconnect', () => {

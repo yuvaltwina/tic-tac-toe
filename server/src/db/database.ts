@@ -29,10 +29,10 @@ export const checkIfUserExist = async (username: string) => {
   return user[0];
 };
 
-export const updateUserPoints = async (user_id: number, newPoints: number) => {
+export const updateUserPoints = async (username: string, newPoints: number) => {
   const updateQuery =
-    'UPDATE users SET points = points + ? WHERE user_id = ? LIMIT 1';
-  await pool.execute(updateQuery, [newPoints, user_id]);
+    'UPDATE users SET points = points + ? WHERE username = ? LIMIT 1';
+  await pool.execute(updateQuery, [newPoints, username]);
 };
 
 export const getUserDetailsFromDB = async (username: string) => {
@@ -52,18 +52,32 @@ export const getUserDetailsFromDB = async (username: string) => {
 };
 
 export const insertMatch = async (
-  player1_id: number,
-  player2_id: number,
+  player1_username: string,
+  player2_username: string,
   game_winner: number
 ) => {
   const insertQuery =
-    'INSERT INTO matches (player1_id, player2_id, game_winner) VALUES (?, ?, ?)';
-  await pool.execute(insertQuery, [player1_id, player2_id, game_winner]);
+    'INSERT INTO matches (player1_username, player2_username, game_winner) VALUES (?, ?, ?)';
+  await pool.execute(insertQuery, [
+    player1_username,
+    player2_username,
+    game_winner,
+  ]);
 };
 
 export const getTopPointsUsersFromDB = async () => {
-  const insertQuery =
+  const selectQuery =
     'SELECT username, points FROM users ORDER BY points DESC LIMIT 5;';
-  const users = await pool.execute(insertQuery);
+  const users = await pool.execute(selectQuery);
+  return users[0]; //האם להוסיף טרי קאץ למרות שיש באיפה שאני משתמש בפונקציה
+};
+export const getMatchHistoryFromDB = async (username: string) => {
+  const selectQuery = `
+  SELECT m.player1_id, m.player2_id, m.game_winner, m.created_at
+  FROM matches AS m
+  WHERE m.player1_id = ? OR m.player2_id = ?
+`;
+  const users = await pool.execute(selectQuery, [username, username]);
+  console;
   return users[0]; //האם להוסיף טרי קאץ למרות שיש באיפה שאני משתמש בפונקציה
 };
