@@ -2,9 +2,17 @@
 
 import { WinningPattern } from './BoardValues';
 
+type Player = {
+  name: string;
+  points: number;
+  imageId: number;
+  socketId: string;
+  userId: number;
+};
+
 export type OnlineGameProp = {
-  playerOne: { name: string; id: string; points: number; image_id: number };
-  playerTwo: { name: string; id: string; points: number; image_id: number };
+  playerOne: Player;
+  playerTwo: Player;
   gameId: string;
   readyCount: number;
   isOver: boolean;

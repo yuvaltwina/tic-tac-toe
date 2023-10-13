@@ -84,7 +84,7 @@ export default function setupSocket(server: ServerT) {
         return;
       }
 
-      const { image_id, points, username } = playerDetails;
+      const { image_id, points, username, user_id } = playerDetails;
 
       const joinOnlineGame = () => {
         const room = openOnlineRoom;
@@ -92,8 +92,9 @@ export default function setupSocket(server: ServerT) {
         room.playerTwo = {
           name: username,
           points,
-          image_id,
-          id: connectedSocketUserId,
+          imageId: image_id,
+          socketId: connectedSocketUserId,
+          userId: user_id,
         };
 
         games.push(room);
@@ -108,14 +109,16 @@ export default function setupSocket(server: ServerT) {
           playerOne: {
             name: username,
             points,
-            image_id,
-            id: connectedSocketUserId,
+            imageId: image_id,
+            socketId: connectedSocketUserId,
+            userId: user_id,
           },
           playerTwo: {
             name: '',
             points: 0,
-            image_id: 0,
-            id: '',
+            imageId: 0,
+            socketId: '',
+            userId: null,
           },
           readyCount: 0,
           isGameOver: false,
@@ -141,17 +144,24 @@ export default function setupSocket(server: ServerT) {
         return;
       }
 
-      const { username, points, image_id } = playerDetails;
+      const { username, points, image_id, user_id } = playerDetails;
       socket.join(roomId);
       games.push({
         gameId: roomId,
         playerOne: {
           name: username,
           points,
-          image_id,
-          id: connectedSocketUserId,
+          imageId: image_id,
+          socketId: connectedSocketUserId,
+          userId: user_id,
         },
-        playerTwo: { name: '', points: 0, image_id: 0, id: '' },
+        playerTwo: {
+          name: '',
+          points: 0,
+          imageId: 0,
+          socketId: '',
+          userId: null,
+        },
         readyCount: 0,
         isGameOver: false,
       });
@@ -167,7 +177,7 @@ export default function setupSocket(server: ServerT) {
         return;
       }
 
-      if (gameToClose.playerOne.id === connectedSocketUserId) {
+      if (gameToClose.playerOne.socketId === connectedSocketUserId) {
         games.splice(games.indexOf(gameToClose), 1);
         socket.leave(gameId);
       } else {
@@ -195,13 +205,14 @@ export default function setupSocket(server: ServerT) {
         return socket.emit('game-error', { msg: 'username not exist' });
       }
 
-      const { username, points, image_id } = playerDetails;
+      const { username, points, image_id, user_id } = playerDetails;
       socket.join(gameId);
       game.playerTwo = {
         name: username,
         points,
-        image_id,
-        id: connectedSocketUserId,
+        imageId: image_id,
+        socketId: connectedSocketUserId,
+        userId: user_id,
       };
 
       return io.to(gameId).emit('user-joined', game);
@@ -244,7 +255,7 @@ export default function setupSocket(server: ServerT) {
 
       let gameWinner = 0;
       game.isGameOver = true;
-
+      console.log(winner, gameId);
       if (winner === 'O') {
         gameWinner = 1;
         io.to(gameId).emit('listen-game-over', {
@@ -277,13 +288,13 @@ export default function setupSocket(server: ServerT) {
 
           //לשמור את המאצ
 
-          if (playerOne.id === connectedSocketUserId) {
-            io.to(playerTwo.id).emit('listen-game-canceled', {
+          if (playerOne.socketId === connectedSocketUserId) {
+            io.to(playerTwo.socketId).emit('listen-game-canceled', {
               opponent: playerOne,
             });
           }
-          if (playerTwo.id === connectedSocketUserId) {
-            io.to(playerOne.id).emit('listen-game-canceled', {
+          if (playerTwo.socketId === connectedSocketUserId) {
+            io.to(playerOne.socketId).emit('listen-game-canceled', {
               opponent: playerTwo,
             });
           }

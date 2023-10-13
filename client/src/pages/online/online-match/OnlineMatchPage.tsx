@@ -16,8 +16,8 @@ const { XSign, OSign } = BoardValuesEnum;
 function OnlineMatchPage() {
   const { socket, gameOver, board, currentGameInfo } = useOnlineGameContext();
   const {
-    playerOne: { id: playerOneId },
-    playerTwo: { id: playerTwoId },
+    playerOne: { socketId: playerOneId },
+    playerTwo: { socketId: playerTwoId },
     gameId,
   } = currentGameInfo;
   const currentPlayer =
@@ -113,10 +113,10 @@ function OnlineMatchPage() {
         <div className="online-match-board-container">
           <PlayerGameProfile
             {...{
-              isPlaying: canPlay === opponentPlayer.id && !gameOver.isOver,
+              isPlaying: canPlay === opponentPlayer.socketId && !gameOver.isOver,
               playerScore: 0,
               playerName: opponentPlayer.name,
-              playerImage: opponentPlayer.image_id,
+              playerImage: opponentPlayer.imageId,
               timerFunction,
               gameLive: !gameOver.isOver,
             }}
@@ -130,10 +130,10 @@ function OnlineMatchPage() {
           />
           <PlayerGameProfile
             {...{
-              isPlaying: canPlay === currentPlayer.id && !gameOver.isOver,
+              isPlaying: canPlay === currentPlayer.socketId && !gameOver.isOver,
               playerScore: 0,
               playerName: currentPlayer.name,
-              playerImage: currentPlayer.image_id,
+              playerImage: currentPlayer.imageId,
               timerFunction,
               gameLive: !gameOver.isOver,
             }}

@@ -23,24 +23,30 @@ function Chat({ openChat, setOpenChat }: ChatProps) {
   useConversationUpdate();
 
   const opponentUserImage =
-    socket?.id === playerOne.id ? playerTwo.image_id : playerOne.image_id;
+    socket?.id === playerOne.socketId ? playerTwo.imageId : playerOne.imageId;
   const playerProfileImage = getUserImageSrc(opponentUserImage);
 
   const submitHandler = (values: { message: string }) => {
     socket?.emit('send-message', { message: values.message, gameId });
   };
 
-  const { handleChange, handleBlur, values, handleSubmit, isSubmitting } =
-    useFormik({
-      initialValues: { message: '' },
-      validationSchema: yup.object().shape({
-        message: yup.string().required().max(100),
-      }),
-      onSubmit: async (values, { resetForm }) => {
-        await submitHandler(values);
-        resetForm();
-      },
-    });
+  const {
+    handleChange,
+    handleBlur,
+    values,
+    handleSubmit,
+    isSubmitting,
+    submitForm,
+  } = useFormik({
+    initialValues: { message: '' },
+    validationSchema: yup.object().shape({
+      message: yup.string().required().max(100),
+    }),
+    onSubmit: async (values, { resetForm }) => {
+      await submitHandler(values);
+      resetForm();
+    },
+  });
 
   return (
     <div className={`${openChat && 'show-chat-container'}`}>
@@ -85,6 +91,12 @@ function Chat({ openChat, setOpenChat }: ChatProps) {
             required
             onChange={handleChange}
             onBlur={handleBlur}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                submitForm();
+              }
+            }}
           />
           <button type="submit" disabled={isSubmitting}>
             <IoMdSend className="chat-input-send" />

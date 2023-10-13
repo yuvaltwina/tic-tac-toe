@@ -56,14 +56,16 @@ const gameOverInitialValues: GameOver = {
 const currentGameInitialValues: OnlineGameProp = {
   playerOne: {
     name: '',
-    id: '',
-    image_id: 0,
+    socketId: '',
+    userId: 0,
+    imageId: 0,
     points: 0,
   },
   playerTwo: {
     name: '',
-    id: '',
-    image_id: 0,
+    socketId: '',
+    userId: 0,
+    imageId: 0,
     points: 0,
   },
   gameId: '',

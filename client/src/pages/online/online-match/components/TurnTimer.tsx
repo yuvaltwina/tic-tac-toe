@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './TurnTimer.scss';
 
 interface TurnTimerProps {
   shouldRun: boolean;
@@ -30,8 +31,8 @@ function TurnTimer({
   }, [shouldRun, timeLeft, onTimerEnd]);
 
   return (
-    <div>
-      <h2>{timeLeft} seconds</h2>
+    <div className="turn-timer">
+      <span>{timeLeft}0s</span>
     </div>
   );
 }

@@ -10,7 +10,7 @@ function useGameOver(setRematchButton: any) {
   useEffect(() => {
     socket?.on('listen-game-over', ({ winner, isTie }) => {
       if (winner) {
-        if (winner.id === socket?.id) {
+        if (winner.socketId === socket?.id) {
           setModalMessage('You Won!');
           setIsWon(true);
         } else {

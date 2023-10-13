@@ -6,8 +6,9 @@ export interface Tjwt {
 export type Player = {
   name: string;
   points: number;
-  image_id: number;
-  id: string;
+  imageId: number;
+  socketId: string;
+  userId: number | null;
 };
 
 export type UserFromDB = {

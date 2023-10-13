@@ -49,6 +49,7 @@ const loginHandler = (state: UserSliceState, action: ReduxLoginAction) => {
     const userData = decodeToken(loginToken);
 
     state.userData = userData;
+    sessionStorage.setItem('login', loginToken);
     Cookies.set('login', loginToken, { expires: 7 });
   } catch (error) {
     console.log(error);
