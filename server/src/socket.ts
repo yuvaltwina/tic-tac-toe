@@ -249,7 +249,7 @@ export default function setupSocket(server: ServerT) {
       readyGame(gameId, 'listen-game-rematch');
     });
 
-    socket.on('game-over', ({ winner, gameId }) => {
+    socket.on('game-over', ({ winner, gameId, scores }) => {
       const game = findCurrentGame(gameId, games);
       if (!game) return;
 
