@@ -1,7 +1,7 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import { getSessionStorageItem } from '../sessionStorageFn';
 
-const token = Cookies.get('login');
+const token = getSessionStorageItem('login');
 const { VITE_SERVER_URL } = import.meta.env;
 
 const axiosInstance = axios.create({
