@@ -7,10 +7,10 @@ import { decodeLoginCookieToken } from '../../jwt';
 export const newUserValidation: RequestHandler = (req, res, next) => {
   const { username, password } = req.body;
   const newUser = { username, password };
-  const { passwordCheck, usernameCheck } = userValidationScheme;
+  const { passwordValidation, usernameValidation } = userValidationScheme;
   const { error } = Joi.object({
-    password: passwordCheck,
-    username: usernameCheck,
+    password: passwordValidation,
+    username: usernameValidation,
   }).validate(newUser);
   if (error) {
     next(new CustomError(400, error.message));

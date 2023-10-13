@@ -1,7 +1,11 @@
 import dotenv from 'dotenv';
 import { type RequestHandler } from 'express';
 import bcrypt from 'bcrypt';
-import { checkIfUserExist, insertUser } from '../db/database';
+import {
+  checkIfUserExist,
+  getTopPointsUsersFromDB,
+  insertUser,
+} from '../db/database';
 import serverResponse from '../utils/serverResponse';
 import {
   encryptingPassword,
@@ -11,14 +15,15 @@ import CustomError from '../errors/CustomError';
 import { decodeLoginCookieToken, generateLoginToken } from '../utils/jwt';
 
 const BAD_LOGIN_MESSAGE = 'unauthorized';
-dotenv.config();
 const USER_FOUND_MESSAGE = 'user exists';
+dotenv.config();
 
 export const createUser: RequestHandler = async (req, res, next) => {
   const { username, password } = req.body;
   const formattedUsername = formattingUsername(username);
   const encryptedPassword = await encryptingPassword(password);
   await insertUser(formattedUsername, encryptedPassword);
+
   res.status(201).json(serverResponse('new user created'));
 };
 
@@ -67,4 +72,11 @@ export const checkUserCookie: RequestHandler = async (req, res, next) => {
     return;
   }
   res.status(200).json(serverResponse(USER_FOUND_MESSAGE, username));
+};
+export const getTopPointsUsers: RequestHandler = async (req, res, next) => {
+  const topUsers = await getTopPointsUsersFromDB();
+  if (!topUsers) {
+    next(new CustomError());
+  }
+  res.status(200).json(serverResponse('top users', topUsers));
 };

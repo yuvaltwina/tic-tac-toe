@@ -37,7 +37,7 @@ async function createTables() {
           match_id INT NOT NULL AUTO_INCREMENT,
           player1_id INT NOT NULL,
           player2_id INT NOT NULL,
-          game_status INT NOT NULL,
+          game_winner INT NOT NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           PRIMARY KEY (match_id),
           FOREIGN KEY (player1_id) REFERENCES users(user_id),
@@ -48,7 +48,8 @@ async function createTables() {
     console.log(error);
   }
 }
-
+// player1_score INT NOT NULL,
+// player2_score INT NOT NULL,
 createTables();
 
 export default pool;

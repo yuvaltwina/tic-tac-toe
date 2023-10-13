@@ -1,5 +1,10 @@
 import express from 'express';
-import { checkUserCookie, createUser, login } from '../controllers/user';
+import {
+  checkUserCookie,
+  createUser,
+  getTopPointsUsers,
+  login,
+} from '../controllers/user';
 import {
   newUserValidation,
   userCookieValidtion,
@@ -10,7 +15,7 @@ const router = express.Router();
 router.post('/register', newUserValidation, errorWrapper(createUser));
 router.post('/login', errorWrapper(login));
 router.post('/checkUserCookie', errorWrapper(checkUserCookie));
-// router.post('/getMostPointsUsers', errorWrapper(login));
+router.post('/getTopPointsUsers', errorWrapper(getTopPointsUsers));
 router.use(userCookieValidtion);
 
 export default router;

@@ -240,16 +240,18 @@ export default function setupSocket(server: ServerT) {
 
     socket.on('game-over', ({ winner, gameId }) => {
       const game = findCurrentGame(gameId, games);
-
       if (!game) return;
 
+      let gameWinner = 0;
       game.isGameOver = true;
 
       if (winner === 'O') {
+        gameWinner = 1;
         io.to(gameId).emit('listen-game-over', {
           winner: game.playerTwo,
         });
       } else if (winner === 'X') {
+        gameWinner = 2;
         io.to(gameId).emit('listen-game-over', {
           winner: game.playerOne,
         });
