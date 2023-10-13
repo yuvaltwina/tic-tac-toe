@@ -1,4 +1,5 @@
 //custom mixins
+
 @mixin transform($transform) {
   -webkit-transform: $transform;
   -moz-transform: $transform;
@@ -39,6 +40,11 @@ $size: 80px;
 $primary-color: white;
 
 //cube only
+
+.online-loader-wrapper {
+  position: relative;
+  top: 10rem;
+}
 .cube-folding {
   width: $size;
   height: $size;
@@ -114,7 +120,7 @@ $primary-color: white;
 
 //with loading text and shadow
 .cube-wrapper {
-  position: fixed;
+  position: absolute;
   left: 50%;
   top: 40%;
   margin-top: -$size;

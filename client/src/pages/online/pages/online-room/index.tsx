@@ -1,5 +1,5 @@
 import React from 'react';
-import OnlineSearchLoader from '../../../../Ui/OnlineSearchLoader';
+import OnlineSearchLoader from '../../online-match/components/online-loader/OnlineSearchLoader';
 import useSocket from '../../hooks/useSocket';
 import useUserJoined from '../../hooks/useUserJoined';
 import OnlineMatchPage from '../../online-match/OnlineMatchPage';
