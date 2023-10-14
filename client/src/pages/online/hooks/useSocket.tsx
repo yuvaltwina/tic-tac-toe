@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { toast } from 'react-hot-toast';
 import { io } from 'socket.io-client';
-import Cookies from 'js-cookie';
+import { getSessionStorageItem } from '../../../utils/sessionStorageFn';
 
 import useOnlineGameContext from '../context/useOnlineGameContext';
 
@@ -12,7 +12,7 @@ function useSocket() {
   const render = useRef(0);
   useEffect(() => {
     if (render.current === 0) {
-      const token = Cookies.get('login');
+      const token = getSessionStorageItem('login');
       setSocket(
         io(VITE_SERVER_URL, {
           extraHeaders: { Authorization: `Bearer ${token}` },

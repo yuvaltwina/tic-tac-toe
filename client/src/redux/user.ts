@@ -1,7 +1,11 @@
 /* eslint-disable no-param-reassign */
 
 import { createSlice } from '@reduxjs/toolkit';
-import Cookies from 'js-cookie';
+import {
+  deleteSessionStorageItem,
+  getSessionStorageItem,
+  setSessionStorageItem,
+} from '../utils/sessionStorageFn';
 import { UserSliceState } from './types/slices';
 
 type ReduxLoginAction = {
@@ -22,7 +26,7 @@ const decodeToken = (token: string): UserSliceState['userData'] => {
 };
 
 const getInitialUserData = (): UserSliceState['userData'] => {
-  const loginToken = Cookies.get('login');
+  const loginToken = getSessionStorageItem('login');
   if (loginToken) {
     try {
       const userData = decodeToken(loginToken);
@@ -30,7 +34,7 @@ const getInitialUserData = (): UserSliceState['userData'] => {
         return userData;
       }
     } catch (error) {
-      Cookies.remove('login');
+      deleteSessionStorageItem('login');
     }
   }
   return userDataInitialValues;
@@ -49,8 +53,7 @@ const loginHandler = (state: UserSliceState, action: ReduxLoginAction) => {
     const userData = decodeToken(loginToken);
 
     state.userData = userData;
-    sessionStorage.setItem('login', loginToken);
-    Cookies.set('login', loginToken, { expires: 7 });
+    setSessionStorageItem('login', loginToken);
   } catch (error) {
     console.log(error);
   }
@@ -59,7 +62,7 @@ const loginHandler = (state: UserSliceState, action: ReduxLoginAction) => {
 const logoutHandler = (state: UserSliceState) => {
   state.isLoggedIn = false;
   state.userData = userDataInitialValues;
-  Cookies.remove('login');
+  deleteSessionStorageItem('login');
 };
 
 const counterSlice = createSlice({

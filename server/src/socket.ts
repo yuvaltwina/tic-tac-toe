@@ -280,8 +280,8 @@ export default function setupSocket(server: ServerT) {
       const closeOnlineGame = () => {
         if (
           openOnlineRoom.gameId &&
-          (openOnlineRoom.playerOne.id === connectedSocketUserId ||
-            openOnlineRoom.playerTwo.id === connectedSocketUserId)
+          (openOnlineRoom.playerOne.socketId === connectedSocketUserId ||
+            openOnlineRoom.playerTwo.socketId === connectedSocketUserId)
         ) {
           openOnlineRoom = {};
         }
