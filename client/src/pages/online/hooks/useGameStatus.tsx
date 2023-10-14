@@ -138,16 +138,16 @@ function useGameStatus() {
         mainText: '',
         buttonText: '',
       }));
-      let finalWinner: BoardValues;
-      if (scores.xScore > scores.oScore) {
+
+      const { oScore, xScore } = scores;
+      let finalWinner: BoardValues = '';
+      if (xScore > oScore) {
         finalWinner = XSign;
-      } else if (scores.oScore > scores.xScore) {
+      } else if (oScore > xScore) {
         finalWinner = OSign;
-      } else {
-        finalWinner = '';
       }
 
-      socket?.emit('game-over', { gameId, winner: finalWinner });
+      socket?.emit('game-over', { gameId, winner: finalWinner, scores });
     }
   }, [scores, gameId, socket]);
 

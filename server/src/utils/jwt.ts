@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { type Tjwt } from './types/types';
-
+//fix cuse we moved to session
 dotenv.config();
 const secret = process.env.TOKEN_SECRET;
 

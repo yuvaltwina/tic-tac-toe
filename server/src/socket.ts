@@ -6,7 +6,7 @@ import { decodeLoginCookieToken } from './utils/jwt';
 import { NOT_AUTHORIZED_MESSAGE } from './utils/data/consts';
 import { getUserDetailsFromDB } from './db/database';
 import type { OnlineGameProp } from './utils/types/types';
-import { saveMatchResults } from './controllers/match';
+import { saveMatchResults } from './utils/data/functions';
 
 type ServerT = http.Server<
   typeof http.IncomingMessage,
@@ -250,28 +250,29 @@ export default function setupSocket(server: ServerT) {
       readyGame(gameId, 'listen-game-rematch');
     });
 
-    socket.on('game-over', async ({ winner, gameId }) => {
+    socket.on('game-over', async ({ winner, gameId, scores }) => {
       const game = findCurrentGame(gameId, games);
       if (!game) return;
-
+      const { playerOne, playerTwo } = game;
       let gameWinner: GameWinner = 0;
       game.isGameOver = true;
       console.log(winner, gameId);
       if (winner === 'O') {
         gameWinner = 1;
         io.to(gameId).emit('listen-game-over', {
-          winner: game.playerTwo,
+          winner: playerTwo,
         });
       } else if (winner === 'X') {
         gameWinner = 2;
         io.to(gameId).emit('listen-game-over', {
-          winner: game.playerOne,
+          winner: playerOne,
         });
       } else io.to(gameId).emit('listen-game-over', { isTie: true });
       await saveMatchResults(
-        game.playerOne.name,
-        game.playerTwo.name,
-        gameWinner
+        playerOne.name,
+        playerTwo.name,
+        gameWinner,
+        scores
       );
     });
 

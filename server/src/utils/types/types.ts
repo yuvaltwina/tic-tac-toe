@@ -25,3 +25,8 @@ export type OnlineGameProp = {
   readyCount: number;
   isGameOver: boolean;
 };
+export type Scores = {
+  xScore: number;
+  oScore: number;
+  tie: number;
+};

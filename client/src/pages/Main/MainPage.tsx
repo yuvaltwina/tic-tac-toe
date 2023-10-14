@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router';
-import MainButton from '../../components/Main-button/MainButton';
 import SiteTitle from '../../components/Site-title/SiteTitle';
 import { useUserSelector } from '../../redux/selectors';
 import { routesData } from '../../utils/data';
 import './MainPage.scss';
+import MainButton from '../../components/main-button/MainButton';
 
 function MainPage() {
   const { linkPage, online, computer } = routesData;

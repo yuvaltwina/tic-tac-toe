@@ -1,6 +1,6 @@
 import { type RowDataPacket } from 'mysql2';
 import pool from './connect';
-import type { UserFromDB } from '../utils/types/types';
+import type { Scores, UserFromDB } from '../utils/types/types';
 
 export async function checkConnection() {
   try {
@@ -54,13 +54,15 @@ export const getUserDetailsFromDB = async (username: string) => {
 export const insertMatch = async (
   player1_username: string,
   player2_username: string,
-  game_winner: number
+  game_winner: number,
+  scores: Scores
 ) => {
   const insertQuery =
-    'INSERT INTO matches (player1_username, player2_username, game_winner) VALUES (?, ?, ?)';
+    'INSERT INTO matches (player1_username, player2_username,scores, game_winner) VALUES (?, ?, ?,?)';
   await pool.execute(insertQuery, [
     player1_username,
     player2_username,
+    scores,
     game_winner,
   ]);
 };
@@ -69,15 +71,21 @@ export const getTopPointsUsersFromDB = async () => {
   const selectQuery =
     'SELECT username, points FROM users ORDER BY points DESC LIMIT 5;';
   const users = await pool.execute(selectQuery);
-  return users[0]; //האם להוסיף טרי קאץ למרות שיש באיפה שאני משתמש בפונקציה
+  return users[0];
 };
-export const getMatchHistoryFromDB = async (username: string) => {
-  const selectQuery = `
-  SELECT m.player1_id, m.player2_id, m.game_winner, m.created_at
-  FROM matches AS m
-  WHERE m.player1_id = ? OR m.player2_id = ?
+export const getMatchHistoryFromDB = async (user_id: string) => {
+  const userMatchesQuery = `
+  SELECT
+    matches.match_id,
+    matches.player1_username,
+    matches.player2_username,
+    matches.game_winner,
+    matches.created_at
+  FROM
+    matches
+  WHERE
+  matches.player1_username = ? OR matches.player2_username= ?
 `;
-  const users = await pool.execute(selectQuery, [username, username]);
-  console;
-  return users[0]; //האם להוסיף טרי קאץ למרות שיש באיפה שאני משתמש בפונקציה
+  const matches = await pool.execute(userMatchesQuery, [user_id, user_id]);
+  return matches[0];
 };

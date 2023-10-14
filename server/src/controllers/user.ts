@@ -74,9 +74,10 @@ export const checkUserCookie: RequestHandler = async (req, res, next) => {
   res.status(200).json(serverResponse(USER_FOUND_MESSAGE, username));
 };
 export const getTopPointsUsers: RequestHandler = async (req, res, next) => {
-  const topUsers = await getTopPointsUsersFromDB();
-  if (!topUsers) {
-    next(new CustomError());
+  try {
+    const topUsers = await getTopPointsUsersFromDB();
+    res.status(200).json(serverResponse('top points users', topUsers));
+  } catch {
+    next(new CustomError(500, 'error fetching the top points users'));
   }
-  res.status(200).json(serverResponse('top users', topUsers));
 };

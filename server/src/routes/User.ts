@@ -15,7 +15,9 @@ const router = express.Router();
 router.post('/register', newUserValidation, errorWrapper(createUser));
 router.post('/login', errorWrapper(login));
 router.post('/checkUserCookie', errorWrapper(checkUserCookie));
-router.post('/getTopPointsUsers', errorWrapper(getTopPointsUsers));
+
+router.get('/getTopPointsUsers', errorWrapper(getTopPointsUsers));
+
 router.use(userCookieValidtion);
 
 export default router;

@@ -36,9 +36,8 @@ async function createTables() {
         CREATE TABLE IF NOT EXISTS matches (
           match_id INT NOT NULL AUTO_INCREMENT,
           player1_username VARCHAR(255) NOT NULL,
-          player1_score INT NOT NULL,
           player2_username VARCHAR(255) NOT NULL,
-          player2_score INT NOT NULL,
+          scores JSON,
           game_winner INT NOT NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           PRIMARY KEY (match_id),

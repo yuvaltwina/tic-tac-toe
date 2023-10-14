@@ -86,9 +86,11 @@ interface ClientToServerEvents {
   'game-over': ({
     winner,
     gameId,
+    scores,
   }: {
     winner: BoardValues;
     gameId: string;
+    scores: { xScore: number; oScore: number; tie: number };
   }) => void;
   'send-message': ({
     gameId,
