@@ -37,11 +37,22 @@ export const saveMatchResults = async (
   game_winner: keyof typeof userPoints,
   scores: Scores
 ) => {
+  let winnerUsername = null;
+  if (game_winner === 1) {
+    winnerUsername = player1_username;
+  } else if (game_winner === 2) {
+    winnerUsername = player2_username;
+  }
   const { playerOnePoints, playerTwoPoints } = userPoints[game_winner];
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
-    await insertMatch(player1_username, player2_username, game_winner, scores);
+    await insertMatch(
+      player1_username,
+      player2_username,
+      winnerUsername,
+      scores
+    );
     await updateUserPoints(player1_username, playerOnePoints);
     await updateUserPoints(player2_username, playerTwoPoints);
     await connection.commit();

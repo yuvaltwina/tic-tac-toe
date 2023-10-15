@@ -29,9 +29,20 @@ export const checkIfUserExist = async (username: string) => {
   return user[0];
 };
 
-export const updateUserPoints = async (username: string, newPoints: number) => {
-  const updateQuery =
-    'UPDATE users SET points = points + ? WHERE username = ? LIMIT 1';
+export const updateUserPoints = async (
+  username: string,
+  addedPoints: number
+) => {
+  const userDetails = await getUserDetailsFromDB(username);
+  if (!userDetails) {
+    throw new Error(`coudlnt find the user :  ${username} details`);
+  }
+  const { points: currentPoints } = userDetails;
+  let newPoints = currentPoints + addedPoints;
+  if (newPoints < 0) {
+    newPoints = 0;
+  }
+  const updateQuery = 'UPDATE users SET points = ? WHERE username = ? LIMIT 1';
   await pool.execute(updateQuery, [newPoints, username]);
 };
 
@@ -54,7 +65,7 @@ export const getUserDetailsFromDB = async (username: string) => {
 export const insertMatch = async (
   player1_username: string,
   player2_username: string,
-  game_winner: number,
+  winnerUsername: string | null,
   scores: Scores
 ) => {
   const insertQuery =
@@ -63,7 +74,7 @@ export const insertMatch = async (
     player1_username,
     player2_username,
     scores,
-    game_winner,
+    winnerUsername,
   ]);
 };
 
@@ -74,18 +85,31 @@ export const getTopPointsUsersFromDB = async () => {
   return users[0];
 };
 export const getMatchHistoryFromDB = async (user_id: string) => {
-  const userMatchesQuery = `
+  const selectQuery = `
   SELECT
     matches.match_id,
-    matches.player1_username,
-    matches.player2_username,
+    matches.scores,
     matches.game_winner,
-    matches.created_at
+    matches.created_at,
+    users1.username AS player1_username,
+    users1.points AS player1_points,
+    users1.image_id AS player1_image_id,
+    users2.username AS player2_username,
+    users2.points AS player2_points,
+    users2.image_id AS player2_image_id
   FROM
     matches
+  INNER JOIN
+    users AS users1
+  ON
+    matches.player1_username = users1.username
+  INNER JOIN
+    users AS users2
+  ON
+    matches.player2_username = users2.username
   WHERE
-  matches.player1_username = ? OR matches.player2_username= ?
+    matches.player1_username = ? OR matches.player2_username = ?
 `;
-  const matches = await pool.execute(userMatchesQuery, [user_id, user_id]);
+  const matches = await pool.execute(selectQuery, [user_id, user_id]);
   return matches[0];
 };

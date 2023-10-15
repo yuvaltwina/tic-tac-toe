@@ -12,7 +12,7 @@ import {
   formattingUsername,
 } from '../utils/data/functions';
 import CustomError from '../errors/CustomError';
-import { decodeLoginCookieToken, generateLoginToken } from '../utils/jwt';
+import { decodeLoginToken, generateLoginToken } from '../utils/jwt';
 
 const BAD_LOGIN_MESSAGE = 'unauthorized';
 const USER_FOUND_MESSAGE = 'user exists';
@@ -66,7 +66,7 @@ export const checkUserCookie: RequestHandler = async (req, res, next) => {
     next(new CustomError(401, 'token missing'));
     return;
   }
-  const username = decodeLoginCookieToken(token);
+  const username = decodeLoginToken(token);
   if (!username) {
     next(new CustomError(401, BAD_LOGIN_MESSAGE));
     return;

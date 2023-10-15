@@ -128,7 +128,12 @@ function LoginModal({ closeModal }: LoginModalProps) {
             placeholder: placeHolder,
             onBlur: handleBlur,
             value: values[id],
-            onChange: handleChange,
+            onChange: (e) => {
+              if (id === 'username') {
+                e.target.value = e.target.value.toLowerCase();
+              }
+              handleChange(e);
+            },
             error: touched[id] && Boolean(errors[id]),
             InputProps: iconProperty,
           }}

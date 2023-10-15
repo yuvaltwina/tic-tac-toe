@@ -4,6 +4,7 @@ import { useUserSelector } from '../../redux/selectors';
 import { routesData } from '../../utils/data';
 import './MainPage.scss';
 import MainButton from '../../components/main-button/MainButton';
+import useGetMatchHistory from '../../utils/apiService/getRequest/useGetMatchHistory';
 
 function MainPage() {
   const { linkPage, online, computer } = routesData;

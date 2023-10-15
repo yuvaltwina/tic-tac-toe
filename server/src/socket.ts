@@ -2,7 +2,7 @@ import type http from 'http';
 import { Server } from 'socket.io';
 import { v4 as uuidv4 } from 'uuid';
 import CustomError from './errors/CustomError';
-import { decodeLoginCookieToken } from './utils/jwt';
+import { decodeLoginToken } from './utils/jwt';
 import { NOT_AUTHORIZED_MESSAGE } from './utils/data/consts';
 import { getUserDetailsFromDB } from './db/database';
 import type { OnlineGameProp } from './utils/types/types';
@@ -39,7 +39,7 @@ export default function setupSocket(server: ServerT) {
       return;
     }
     const token = authorizationHeader.split(' ')[1];
-    const username = decodeLoginCookieToken(token);
+    const username = decodeLoginToken(token);
     if (username) {
       socket.data.username = username;
       next();
@@ -268,12 +268,14 @@ export default function setupSocket(server: ServerT) {
           winner: playerOne,
         });
       } else io.to(gameId).emit('listen-game-over', { isTie: true });
-      await saveMatchResults(
-        playerOne.name,
-        playerTwo.name,
-        gameWinner,
-        scores
-      );
+      if (playerOne.socketId === socket.id) {
+        await saveMatchResults(
+          playerOne.name,
+          playerTwo.name,
+          gameWinner,
+          scores
+        );
+      }
     });
 
     socket.on('disconnect', () => {
@@ -292,9 +294,6 @@ export default function setupSocket(server: ServerT) {
           const { playerOne, playerTwo } = game;
           games.splice(games.indexOf(game), 1);
           if (game.isGameOver) return true;
-
-          //לשמור את המאצ
-
           if (playerOne.socketId === connectedSocketUserId) {
             io.to(playerTwo.socketId).emit('listen-game-canceled', {
               opponent: playerOne,

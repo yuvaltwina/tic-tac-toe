@@ -12,15 +12,15 @@ export function generateLoginToken(tokenData: object) {
   return registerToken;
 }
 
-export function decodeLoginCookieToken(token: string): string {
-  let cookieUsername = '';
+export function decodeLoginToken(token: string): string {
+  let tokensername = '';
   jwt.verify(token, secret as string, (err, decoded) => {
     if (err) {
       return '';
     }
     const { username } = decoded as Tjwt;
-    cookieUsername = username;
-    return cookieUsername;
+    tokensername = username;
+    return tokensername;
   });
-  return cookieUsername;
+  return tokensername;
 }

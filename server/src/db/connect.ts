@@ -31,14 +31,13 @@ async function createTables() {
         )
       `);
 
-    // Create the 'matches' table
     await pool.query(`
         CREATE TABLE IF NOT EXISTS matches (
           match_id INT NOT NULL AUTO_INCREMENT,
           player1_username VARCHAR(255) NOT NULL,
           player2_username VARCHAR(255) NOT NULL,
           scores JSON,
-          game_winner INT NOT NULL,
+          game_winner VARCHAR(255) ,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           PRIMARY KEY (match_id),
           FOREIGN KEY (player1_username) REFERENCES users(username),
@@ -49,8 +48,7 @@ async function createTables() {
     console.log(error);
   }
 }
-// player1_score INT NOT NULL,
-// player2_score INT NOT NULL,
+
 createTables();
 
 export default pool;

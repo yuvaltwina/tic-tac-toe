@@ -2,7 +2,7 @@ import Joi from 'joi';
 import { type RequestHandler } from 'express';
 import CustomError from '../../../errors/CustomError';
 import userValidationScheme from './schema';
-import { decodeLoginCookieToken } from '../../jwt';
+import { decodeLoginToken } from '../../jwt';
 
 export const newUserValidation: RequestHandler = (req, res, next) => {
   const { username, password } = req.body;
@@ -23,7 +23,7 @@ export const userCookieValidtion: RequestHandler = (req, res, next) => {
   if (!token) {
     return next(new CustomError(401, 'token missing'));
   }
-  const username = decodeLoginCookieToken(token);
+  const username = decodeLoginToken(token);
   if (!username) {
     return next(new CustomError(401, 'unauthorized'));
   }
