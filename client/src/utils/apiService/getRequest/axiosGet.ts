@@ -1,11 +1,15 @@
 import axiosInstance from '../axiosInstance';
-
-export const getTopPointsUsers = async () => {
-  const serverResponse = await axiosInstance.get('/user/getTopPointsUsers');
-  return serverResponse;
-};
+import { AxiosType } from '../types/axiosType';
+import { TGetMatchHistory, TGetTopPointsUsers } from '../types/getReq';
 
 export const getMatchHistory = async () => {
-  const serverResponse = await axiosInstance.get('/match/getMatchHistory');
+  const serverResponse: AxiosType<TGetMatchHistory, any> =
+    await axiosInstance.get('/match/getMatchHistory');
+  return serverResponse;
+};
+export const getTopPointsUsers = async () => {
+  const serverResponse: AxiosType<TGetTopPointsUsers, any> =
+    await axiosInstance.get('/user/getTopPointsUsers');
+
   return serverResponse;
 };
