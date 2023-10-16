@@ -30,3 +30,17 @@ export type Scores = {
   oScore: number;
   tie: number;
 };
+
+export type MatchHistory = {
+  match_id: number;
+  scores: Scores;
+  game_winner: string | null;
+  created_at: string;
+  player1_username: string;
+  player1_points: number;
+  player1_image_id: number;
+  player2_username: string;
+  player2_points: number;
+  player2_image_id: number;
+  game_canceled: boolean;
+}[];

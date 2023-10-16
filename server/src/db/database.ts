@@ -1,6 +1,6 @@
 import { type RowDataPacket } from 'mysql2';
 import pool from './connect';
-import type { Scores, UserFromDB } from '../utils/types/types';
+import type { MatchHistory, Scores, UserFromDB } from '../utils/types/types';
 
 export async function checkConnection() {
   try {
@@ -66,23 +66,25 @@ export const insertMatch = async (
   player1_username: string,
   player2_username: string,
   winnerUsername: string | null,
-  scores: Scores
+  scores: Scores,
+  gameCanceled: boolean
 ) => {
   const insertQuery =
-    'INSERT INTO matches (player1_username, player2_username,scores, game_winner) VALUES (?, ?, ?,?)';
+    'INSERT INTO matches (player1_username, player2_username,scores, game_winner,game_canceled) VALUES (?, ?, ?,?,?)';
   await pool.execute(insertQuery, [
     player1_username,
     player2_username,
     scores,
     winnerUsername,
+    gameCanceled,
   ]);
 };
 
 export const getTopPointsUsersFromDB = async () => {
   const selectQuery =
-    'SELECT username, points FROM users ORDER BY points DESC LIMIT 5;';
+    'SELECT user_id, username, points, image_id FROM users ORDER BY points DESC LIMIT 5;';
   const users = await pool.execute(selectQuery);
-  return users[0];
+  return users[0] as UserFromDB[];
 };
 export const getMatchHistoryFromDB = async (user_id: string) => {
   const selectQuery = `
@@ -91,6 +93,7 @@ export const getMatchHistoryFromDB = async (user_id: string) => {
     matches.scores,
     matches.game_winner,
     matches.created_at,
+    matches.game_canceled,
     users1.username AS player1_username,
     users1.points AS player1_points,
     users1.image_id AS player1_image_id,
@@ -111,5 +114,5 @@ export const getMatchHistoryFromDB = async (user_id: string) => {
     matches.player1_username = ? OR matches.player2_username = ?
 `;
   const matches = await pool.execute(selectQuery, [user_id, user_id]);
-  return matches[0];
+  return matches[0] as MatchHistory;
 };

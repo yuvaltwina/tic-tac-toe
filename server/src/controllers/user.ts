@@ -76,7 +76,14 @@ export const checkUserCookie: RequestHandler = async (req, res, next) => {
 export const getTopPointsUsers: RequestHandler = async (req, res, next) => {
   try {
     const topUsers = await getTopPointsUsersFromDB();
-    res.status(200).json(serverResponse('top points users', topUsers));
+    if (topUsers.length === 0) {
+      res.status(200).json(serverResponse('match history', []));
+      return;
+    }
+    const formatedTopUsers = topUsers.map(({ username, image_id, points }) => {
+      return { username, imageId: image_id, points };
+    });
+    res.status(200).json(serverResponse('top points users', formatedTopUsers));
   } catch {
     next(new CustomError(500, 'error fetching the top points users'));
   }

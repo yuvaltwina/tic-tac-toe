@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { type Tjwt } from './types/types';
-//fix cuse we moved to session
 dotenv.config();
 const secret = process.env.TOKEN_SECRET;
 
@@ -13,14 +12,14 @@ export function generateLoginToken(tokenData: object) {
 }
 
 export function decodeLoginToken(token: string): string {
-  let tokensername = '';
+  let tokenUsername = '';
   jwt.verify(token, secret as string, (err, decoded) => {
     if (err) {
       return '';
     }
     const { username } = decoded as Tjwt;
-    tokensername = username;
-    return tokensername;
+    tokenUsername = username;
+    return tokenUsername;
   });
-  return tokensername;
+  return tokenUsername;
 }

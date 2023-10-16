@@ -37,6 +37,7 @@ async function createTables() {
           player1_username VARCHAR(255) NOT NULL,
           player2_username VARCHAR(255) NOT NULL,
           scores JSON,
+          game_canceled BOOLEAN NOT NULL,
           game_winner VARCHAR(255) ,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           PRIMARY KEY (match_id),

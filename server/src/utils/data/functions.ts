@@ -35,7 +35,8 @@ export const saveMatchResults = async (
   player1_username: string,
   player2_username: string,
   game_winner: keyof typeof userPoints,
-  scores: Scores
+  scores: Scores,
+  gameCanceled: boolean = false
 ) => {
   let winnerUsername = null;
   if (game_winner === 1) {
@@ -51,7 +52,8 @@ export const saveMatchResults = async (
       player1_username,
       player2_username,
       winnerUsername,
-      scores
+      scores,
+      gameCanceled
     );
     await updateUserPoints(player1_username, playerOnePoints);
     await updateUserPoints(player2_username, playerTwoPoints);
