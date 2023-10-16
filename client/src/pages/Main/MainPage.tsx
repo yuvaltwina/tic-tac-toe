@@ -26,8 +26,7 @@ function MainPage() {
     },
     { name: 'Play online', route: online, disable: !isLoggedIn },
   ];
-  const bla1 = useGetMatchHistory();
-  const bla2 = useGetTopPointsUsers();
+
   return (
     <div className="main-page">
       <SiteTitle />
