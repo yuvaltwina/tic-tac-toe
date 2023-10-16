@@ -39,7 +39,7 @@ export const getMatchHistory: RequestHandler = async (req, res, next) => {
 
         return {
           matchId: match_id,
-          game_canceled,
+          gameCanceled: game_canceled,
           scores,
           gameWinner: game_winner,
           createdAt: created_at,

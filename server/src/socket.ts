@@ -257,12 +257,12 @@ export default function setupSocket(server: ServerT) {
       let gameWinner: GameWinner = 0;
       game.isGameOver = true;
       if (winner === 'O') {
-        gameWinner = 1;
+        gameWinner = 2;
         io.to(gameId).emit('listen-game-over', {
           winner: playerTwo,
         });
       } else if (winner === 'X') {
-        gameWinner = 2;
+        gameWinner = 1;
         io.to(gameId).emit('listen-game-over', {
           winner: playerOne,
         });

@@ -112,6 +112,8 @@ export const getMatchHistoryFromDB = async (user_id: string) => {
     matches.player2_username = users2.username
   WHERE
     matches.player1_username = ? OR matches.player2_username = ?
+  ORDER BY
+    matches.created_at DESC;
 `;
   const matches = await pool.execute(selectQuery, [user_id, user_id]);
   return matches[0] as MatchHistory;
