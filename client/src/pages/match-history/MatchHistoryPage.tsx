@@ -1,42 +1,23 @@
-import React, { Suspense } from 'react';
-import { Await, defer } from 'react-router';
 import SiteTitle from '../../components/Site-title/SiteTitle';
-import useLoaderData from '../../hooks/useLoaderData';
-import { getData } from '../../utils/data';
+import { useUserSelector } from '../../redux/selectors';
+import { useGetMatchHistory } from '../../utils/apiService/getRequest/hooks';
 import MatchHistoryFallback from './MatchHistoryFallback';
+import getUserImageSrc from '../../utils/getUserImageSrc';
 import './MatchHistoryPage.scss';
-
-type MatchHistory = {
-  name: string;
-  name2: string;
-  score: string;
-  gameStatus: 'win' | 'lose' | 'tie';
-};
-
-const DUMMY_DATA: MatchHistory[] = [
-  { name: 'Player1', name2: 'player2', score: '1:0:1', gameStatus: 'win' },
-  { name: 'Player1', name2: 'player2', score: '1:0:1', gameStatus: 'lose' },
-  { name: 'Player1', name2: 'player2', score: '1:0:1', gameStatus: 'tie' },
-  { name: 'Player1', name2: 'player2', score: '1:0:1', gameStatus: 'win' },
-  { name: 'Player1', name2: 'player2', score: '1:0:1', gameStatus: 'win' },
-  { name: 'Player1', name2: 'player2', score: '1:0:1', gameStatus: 'win' },
-  { name: 'Player1', name2: 'player2', score: '1:0:1', gameStatus: 'win' },
-  { name: 'Player1', name2: 'player2', score: '1:0:1', gameStatus: 'win' },
-  { name: 'Player1', name2: 'player2', score: '1:0:1', gameStatus: 'win' },
-  { name: 'Player1', name2: 'player2', score: '1:0:1', gameStatus: 'win' },
-];
 
 const gameStatusIcons = {
   win: <img src="/match-history/Win-icon.svg" alt="win" />,
   lose: <img src="/match-history/Lose-icon.svg" alt="lose" />,
-  tie: 'tie',
+  tie: <img src="/match-history/Tie-icon.svg" alt="lose" />,
 };
-function MatchHistoryPageLoader({ request: { signal } }) {
-  return defer({ data: getData(true, DUMMY_DATA) });
-}
 
 function MatchHistoryPage() {
-  const { data } = useLoaderData<typeof DUMMY_DATA>();
+  const { data, isError, isLoading } = useGetMatchHistory();
+  const {
+    userData: { username },
+  } = useUserSelector();
+  const { data: { payload } = { payload: null } } = data || {};
+  console.log(payload);
 
   return (
     <div className="match-history-container">
@@ -52,43 +33,92 @@ function MatchHistoryPage() {
       </div>
       <div className="match-history-games-container">
         <div className="match-history-games">
-          <Suspense fallback={<MatchHistoryFallback />}>
-            <Await resolve={data} errorElement={<p>Error loading data</p>}>
-              {(data) =>
-                data.map(
-                  ({ name, name2, score, gameStatus }: any, index: number) => (
-                    <div key={index} className="match-history-game">
-                      <div className="match-history-profile-container">
-                        <div className="match-history-profile-image" />
-                        <p>{name}</p>
-                      </div>
-                      <div className="match-history-score-container">
-                        <span className="match-history-score-icon">
-                          {
-                            gameStatusIcons[
-                              gameStatus as keyof typeof gameStatusIcons
-                            ]
-                          }
-                        </span>
-                        <span className="match-history-score">{score}</span>
-                      </div>
-                      <div className="match-history-profile-container">
-                        <div className="match-history-profile-image" />
-                        <p>{name2}</p>
-                      </div>
+          {isLoading && <MatchHistoryFallback />}
+
+          {isError && <h1>Failed load brackets</h1>}
+
+          {payload?.length ? (
+            payload?.map(
+              ({
+                scores,
+                playerOne,
+                playerTwo,
+                gameWinner,
+                matchId,
+                gameCanceled,
+              }) => {
+                const { oScore, xScore, tie } = scores;
+                let connectedUser;
+                let opponentUser;
+
+                if (playerOne.username === username) {
+                  connectedUser = { ...playerOne, score: xScore };
+                  opponentUser = { ...playerTwo, score: oScore };
+                } else {
+                  connectedUser = { ...playerTwo, score: oScore };
+                  opponentUser = { ...playerOne, score: xScore };
+                }
+
+                const {
+                  username: connectedUserName,
+                  imageId: connectedUserImageId,
+                } = connectedUser;
+
+                const {
+                  username: opponentUserName,
+                  imageId: opponentUserImageId,
+                } = opponentUser;
+
+                const isConnectedPlayerWon =
+                  gameWinner === username ? 'win' : 'lose';
+
+                const matchIconToDisplay = gameWinner
+                  ? isConnectedPlayerWon
+                  : 'tie';
+
+                return (
+                  <div key={matchId} className="match-history-game">
+                    <div className="match-history-profile-container">
+                      <img
+                        alt="user-profile"
+                        src={getUserImageSrc(connectedUserImageId)}
+                        className="match-history-profile-image"
+                      />
+                      <p>{connectedUserName}</p>
                     </div>
-                  )
-                )
+                    <div className="match-history-score-container">
+                      <span className="match-history-score-icon">
+                        {
+                          gameStatusIcons[
+                            matchIconToDisplay as keyof typeof gameStatusIcons
+                          ]
+                        }
+                      </span>
+                      <span className="match-history-score">
+                        {!gameCanceled
+                          ? `${connectedUser.score}:${tie}:${opponentUser.score}`
+                          : 'Canceled'}
+                      </span>
+                    </div>
+                    <div className="match-history-profile-container justify-end">
+                      <img
+                        alt="user-profile"
+                        src={getUserImageSrc(opponentUserImageId)}
+                        className="match-history-profile-image"
+                      />
+                      <p>{opponentUserName}</p>
+                    </div>
+                  </div>
+                );
               }
-            </Await>
-          </Suspense>
+            )
+          ) : (
+            <h1>No history found</h1>
+          )}
         </div>
       </div>
     </div>
   );
 }
-const MatchHistoryPageRoute = {
-  loader: MatchHistoryPageLoader,
-  element: <MatchHistoryPage />,
-};
-export default MatchHistoryPageRoute;
+
+export default MatchHistoryPage;

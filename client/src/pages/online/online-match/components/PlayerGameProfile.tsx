@@ -36,11 +36,6 @@ function PlayerGameProfile({
         />
       )}
 
-      <TurnTimer
-        shouldRun={isPlaying}
-        timerDuration={5}
-        onTimerEnd={timerFunction}
-      />
       <img
         alt="user-profile"
         src={playerProfileImage}
