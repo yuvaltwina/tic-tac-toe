@@ -4,9 +4,13 @@
   display: flex;
   flex-direction: column;
   overflow: auto;
+  justify-content: center;
+  align-items: center;
 }
 .match-history-games-container {
+  max-width: 90rem;
   display: flex;
+  width: 100%;
   flex-direction: column;
   overflow-y: auto;
   padding: 2rem 1rem;
@@ -24,8 +28,8 @@
 .match-history-vs-icon {
   z-index: 10;
   position: absolute;
-  width: 15rem;
-  transform: translate(-53%, -50%);
+  width: 12rem;
+  transform: translate(-50%, -53%);
 }
 
 .match-history-games {
@@ -52,6 +56,16 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  width: 100%;
+  min-width: 40px;
+  &.justify-end {
+    justify-content: end;
+  }
+  p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .match-history-profile-image {
@@ -123,8 +137,12 @@
 
 @media (max-width: #{$phone-width}) {
   .match-history-container {
-    padding: 1rem 1rem;
+    padding: 1rem 0rem;
     gap: 1rem;
+    border-radius: 2rem;
+  }
+  .match-history-games-container {
+    padding: 1rem 0.5rem;
     border-radius: 2rem;
   }
   .match-history-game {

@@ -2,6 +2,7 @@ import SiteTitle from '../../components/Site-title/SiteTitle';
 import { useGetTopPointsUsers } from '../../utils/apiService/getRequest/hooks';
 import BracketPageFallback from './BracketPageFallback';
 import './BracketPage.scss';
+import getUserImageSrc from '../../utils/getUserImageSrc';
 
 function BracketPage() {
   const { data, isError, isLoading } = useGetTopPointsUsers();
@@ -23,10 +24,11 @@ function BracketPage() {
 
         {isError && <h1>Failed load brackets</h1>}
 
-        {payload?.map(({ username, points }) => (
+        {payload?.map(({ username, points, imageId }) => (
           <div key={username} className="bracket-row bracket-users-data">
             <div className="bracket-user">
-              <div className="bracket-user-profile"> </div>
+              <img alt="user-profile" src={getUserImageSrc(imageId)} />
+
               <p>{username}</p>
             </div>
             <div className="bracket-score-container">

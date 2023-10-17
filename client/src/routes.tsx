@@ -6,12 +6,12 @@ import MainPage from './pages/main/MainPage';
 import NotFound from './pages/not-found/NotFound';
 import { routesData } from './utils/data';
 import ComputerMatch from './pages/offline/ComputerMatch';
-import MatchHistoryPageRoute from './pages/match-history/MatchHistoryPage';
 import PrivateRoom from './pages/online/pages/private-room';
 import OnlineGameProvider from './pages/online/context/OnlineGameContext';
 import OnlineRoom from './pages/online/pages/online-room';
 import RequireAuth from './components/HOC/RequireAuth';
 import BracketPage from './pages/bracket/BracketPage';
+import MatchHistoryPage from './pages/match-history/MatchHistoryPage';
 
 const { mainPage, bracketPage, linkPage, computer, matchHistory, online } =
   routesData;
@@ -58,7 +58,11 @@ const routes: RouteObject[] = [
           },
           {
             path: matchHistory,
-            ...MatchHistoryPageRoute,
+            element: (
+              <RequireAuth>
+                <MatchHistoryPage />
+              </RequireAuth>
+            ),
           },
           { path: '*', element: <NotFound /> },
         ],

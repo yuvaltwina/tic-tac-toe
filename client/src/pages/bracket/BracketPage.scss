@@ -65,15 +65,21 @@
 
 .bracket-user {
   display: flex;
-  justify-content: start;
   align-items: center;
   gap: 10px;
   height: 100%;
   min-width: 50%;
+  margin-left: 1rem;
   p {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  img {
+    background-color: white;
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+    height: 3rem;
   }
 }
 .bracket-score-container {
@@ -81,13 +87,9 @@
   justify-content: center;
   align-items: center;
   min-width: 50%;
-}
-
-.bracket-user-profile {
-  background-color: white;
-  border-radius: 100%;
-  aspect-ratio: 1/1;
-  height: 100%;
+  .bracket-score {
+    font-weight: 700;
+  }
 }
 
 @media (max-width: #{$tablet-width}) {
@@ -120,5 +122,11 @@
   }
   .bracket-users-data {
     font-size: 1rem;
+  }
+  .bracket-user {
+    margin-left: 0.5rem;
+    img {
+      height: 1.7rem;
+    }
   }
 }
