@@ -46,20 +46,13 @@ export const updateUserPoints = async (
   await pool.execute(updateQuery, [newPoints, username]);
 };
 
-export const getUserDetailsFromDB = async (username: string) => {
-  try {
-    const selectQuery =
-      'SELECT user_id, username, points, image_id FROM users WHERE username = ? LIMIT 1';
-    const [userDetails] = (await pool.execute(selectQuery, [
-      username,
-    ])) as RowDataPacket[];
-    if (!userDetails[0]) {
-      return null;
-    }
-    return userDetails[0] as UserFromDB;
-  } catch {
-    return null;
-  }
+export const updateUserConnectedStatus = async (
+  username: string,
+  isConnected: boolean
+) => {
+  const updateQuery =
+    'UPDATE users SET is_connected_to_socket = ? WHERE username = ? LIMIT 1';
+  await pool.execute(updateQuery, [isConnected, username]);
 };
 
 export const insertMatch = async (
@@ -80,12 +73,29 @@ export const insertMatch = async (
   ]);
 };
 
+export const getUserDetailsFromDB = async (username: string) => {
+  try {
+    const selectQuery =
+      'SELECT user_id, username, points, image_id , is_connected_to_socket FROM users WHERE username = ? LIMIT 1';
+    const [userDetails] = (await pool.execute(selectQuery, [
+      username,
+    ])) as RowDataPacket[];
+    if (!userDetails[0]) {
+      return null;
+    }
+    return userDetails[0] as UserFromDB;
+  } catch {
+    return null;
+  }
+};
+
 export const getTopPointsUsersFromDB = async () => {
   const selectQuery =
     'SELECT user_id, username, points, image_id FROM users ORDER BY points DESC LIMIT 5;';
   const users = await pool.execute(selectQuery);
   return users[0] as UserFromDB[];
 };
+
 export const getMatchHistoryFromDB = async (user_id: string) => {
   const selectQuery = `
   SELECT

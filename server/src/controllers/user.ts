@@ -13,7 +13,7 @@ import {
 } from '../utils/data/functions';
 import CustomError from '../errors/CustomError';
 import { decodeLoginToken, generateLoginToken } from '../utils/jwt';
-
+const USER_ALREADY_LOGGED_MESSAGE = 'user is already logged in';
 const BAD_LOGIN_MESSAGE = 'unauthorized';
 const USER_FOUND_MESSAGE = 'user exists';
 dotenv.config();
@@ -32,15 +32,17 @@ export const login: RequestHandler = async (req, res, next) => {
   const formattedUsername = formattingUsername(username);
   const existingUser = await checkIfUserExist(formattedUsername);
   if (!existingUser) {
-    next(new CustomError(401, BAD_LOGIN_MESSAGE));
+    next(new CustomError(400, BAD_LOGIN_MESSAGE));
     return;
   }
-  const isPasswordMatch = await bcrypt.compare(
-    password,
-    existingUser.encrypted_password
-  );
+  const { encrypted_password, is_logged_in } = existingUser;
+  const isPasswordMatch = await bcrypt.compare(password, encrypted_password);
   if (!isPasswordMatch) {
-    next(new CustomError(401, BAD_LOGIN_MESSAGE));
+    next(new CustomError(400, BAD_LOGIN_MESSAGE));
+    return;
+  }
+  if (is_logged_in) {
+    next(new CustomError(400, USER_ALREADY_LOGGED_MESSAGE));
     return;
   }
 

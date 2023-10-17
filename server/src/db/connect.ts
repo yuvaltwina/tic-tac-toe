@@ -24,13 +24,13 @@ async function createTables() {
         CREATE TABLE IF NOT EXISTS users (
           user_id INT NOT NULL AUTO_INCREMENT,
           username VARCHAR(255) NOT NULL UNIQUE,
+          is_connected_to_socket BOOLEAN DEFAULT FALSE,
           encrypted_password VARCHAR(255) NOT NULL,
           points INT NOT NULL DEFAULT 0,
           image_id INT NOT NULL DEFAULT 1,
           PRIMARY KEY (user_id)
         )
       `);
-
     await pool.query(`
         CREATE TABLE IF NOT EXISTS matches (
           match_id INT NOT NULL AUTO_INCREMENT,

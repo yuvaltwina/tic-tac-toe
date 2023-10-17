@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import CustomError from './errors/CustomError';
 import { decodeLoginToken } from './utils/jwt';
 import { NOT_AUTHORIZED_MESSAGE } from './utils/data/consts';
-import { getUserDetailsFromDB } from './db/database';
+import { getUserDetailsFromDB, updateUserConnectedStatus } from './db/database';
 import type { OnlineGameProp, Scores } from './utils/types/types';
 import { saveMatchResults } from './utils/data/functions';
 
@@ -17,9 +17,16 @@ const { WEBSITE_URL } = process.env;
 const games: OnlineGameProp[] = [];
 let openOnlineRoom: OnlineGameProp | any = {};
 
+const playerDefualtDetails = {
+  name: '',
+  points: 0,
+  imageId: 0,
+  socketId: '',
+  userId: null,
+};
+
 const findCurrentGame = (gameId: string, gamesArr: typeof games) => {
   const game = gamesArr.find((game) => game.gameId === gameId);
-
   return game;
 };
 
@@ -30,27 +37,46 @@ export default function setupSocket(server: ServerT) {
     },
   });
 
-  io.use((currentSocket, next) => {
+  io.use(async (currentSocket, next) => {
     const socket = currentSocket;
     const authorizationHeader = socket.handshake.headers?.authorization;
 
     if (!authorizationHeader) {
-      next(new CustomError(401, NOT_AUTHORIZED_MESSAGE));
       return;
     }
     const token = authorizationHeader.split(' ')[1];
-    const username = decodeLoginToken(token);
-    if (username) {
-      socket.data.username = username;
-      next();
-    } else {
-      next(new CustomError(401, NOT_AUTHORIZED_MESSAGE));
+    const toeknUsername = decodeLoginToken(token);
+
+    if (!toeknUsername) {
+      return;
     }
+    const user = await getUserDetailsFromDB(toeknUsername);
+
+    if (!user) {
+      return;
+    }
+    const { user_id, image_id, username, points, is_connected_to_socket } =
+      user;
+    if (is_connected_to_socket) {
+      return;
+    }
+    try {
+      await updateUserConnectedStatus(username, true);
+    } catch {
+      return;
+    }
+    socket.data.playerDetails = {
+      userId: user_id,
+      imageId: image_id,
+      username,
+      points,
+    };
+    next();
   });
 
   io.on('connection', (socket) => {
-    const connectedSocketUserName = socket.data.username;
     const connectedSocketUserId = socket.id;
+    const { userId, imageId, username, points } = socket.data.playerDetails;
 
     const readyGame = (gameId: string, emitId: string) => {
       const game = findCurrentGame(gameId, games);
@@ -65,9 +91,6 @@ export default function setupSocket(server: ServerT) {
       }
     };
 
-    console.log(`User connected: ${connectedSocketUserId}`);
-    console.log(io.sockets.adapter.rooms);
-
     socket.on('send-message', ({ message, gameId }) => {
       io.to(gameId).emit('received-message', {
         message,
@@ -78,24 +101,15 @@ export default function setupSocket(server: ServerT) {
     socket.on('open-online-room', async () => {
       const roomId = uuidv4();
 
-      const playerDetails = await getUserDetailsFromDB(connectedSocketUserName);
-
-      if (!playerDetails) {
-        socket.emit('game-error', { msg: 'username not exist' });
-        return;
-      }
-
-      const { image_id, points, username, user_id } = playerDetails;
-
       const joinOnlineGame = () => {
         const room = openOnlineRoom;
         socket.join(room.gameId);
         room.playerTwo = {
           name: username,
           points,
-          imageId: image_id,
+          imageId,
           socketId: connectedSocketUserId,
-          userId: user_id,
+          userId,
         };
 
         games.push(room);
@@ -110,17 +124,11 @@ export default function setupSocket(server: ServerT) {
           playerOne: {
             name: username,
             points,
-            imageId: image_id,
+            imageId,
             socketId: connectedSocketUserId,
-            userId: user_id,
+            userId,
           },
-          playerTwo: {
-            name: '',
-            points: 0,
-            imageId: 0,
-            socketId: '',
-            userId: null,
-          },
+          playerTwo: playerDefualtDetails,
           readyCount: 0,
           isGameOver: false,
         };
@@ -138,31 +146,17 @@ export default function setupSocket(server: ServerT) {
     socket.on('create-game', async () => {
       const roomId = uuidv4();
 
-      const playerDetails = await getUserDetailsFromDB(connectedSocketUserName);
-
-      if (!playerDetails) {
-        socket.emit('game-error', { msg: 'username not exist' });
-        return;
-      }
-
-      const { username, points, image_id, user_id } = playerDetails;
       socket.join(roomId);
       games.push({
         gameId: roomId,
         playerOne: {
           name: username,
           points,
-          imageId: image_id,
+          imageId,
           socketId: connectedSocketUserId,
-          userId: user_id,
+          userId,
         },
-        playerTwo: {
-          name: '',
-          points: 0,
-          imageId: 0,
-          socketId: '',
-          userId: null,
-        },
+        playerTwo: playerDefualtDetails,
         readyCount: 0,
         isGameOver: false,
       });
@@ -200,20 +194,13 @@ export default function setupSocket(server: ServerT) {
         return socket.emit('game-error', { msg: 'Game is full' });
       }
 
-      const playerDetails = await getUserDetailsFromDB(connectedSocketUserName);
-
-      if (!playerDetails) {
-        return socket.emit('game-error', { msg: 'username not exist' });
-      }
-
-      const { username, points, image_id, user_id } = playerDetails;
       socket.join(gameId);
       game.playerTwo = {
         name: username,
         points,
-        imageId: image_id,
+        imageId,
         socketId: connectedSocketUserId,
-        userId: user_id,
+        userId,
       };
 
       return io.to(gameId).emit('user-joined', game);
@@ -278,7 +265,7 @@ export default function setupSocket(server: ServerT) {
       }
     });
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
       const closeOnlineGame = () => {
         if (
           openOnlineRoom.gameId &&
@@ -326,6 +313,12 @@ export default function setupSocket(server: ServerT) {
       closeOnlineGame();
 
       closeCostumeOnlineGame();
+      try {
+        await updateUserConnectedStatus(username, false);
+      } catch {
+        console.log('coudlnt update user connection to false');
+      }
+
       console.log(`User disconnected: ${connectedSocketUserId}`);
     });
   });

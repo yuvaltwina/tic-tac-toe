@@ -16,6 +16,7 @@ export type UserFromDB = {
   username: string;
   points: number;
   image_id: number;
+  is_connected_to_socket: number;
 };
 
 export type OnlineGameProp = {
