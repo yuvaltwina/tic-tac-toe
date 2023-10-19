@@ -48,7 +48,6 @@ export const getMatchHistory: RequestHandler = async (req, res, next) => {
         };
       }
     );
-    console.log(formatedMatchHistory);
     res.status(200).json(serverResponse('match history', formatedMatchHistory));
   } catch {
     next(new CustomError(500, 'error fetching the match history'));

@@ -1,0 +1,42 @@
+.user-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.user-modal-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 2rem;
+  border-radius: 35px;
+  background: linear-gradient(
+    90deg,
+    rgba(#af00cc, 0.8) 0%,
+    rgba(#1e0073, 0.8) 100%
+  );
+  box-shadow: 0px 0px 50px 0px #d58fffb2;
+  border: 2px solid #b234ff;
+  gap: 1rem;
+  padding: 3.5rem 1rem;
+  width: 100%;
+  max-width: 50rem;
+  height: 20rem;
+}
+.user-modal-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  img {
+    width: 100%;
+    max-width: 10rem;
+  }
+}
+
+.user-profile-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}

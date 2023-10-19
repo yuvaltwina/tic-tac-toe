@@ -14,3 +14,8 @@ export type TGetMatchHistory = {
     scores: { oScore: number; tie: number; xScore: number };
   }[];
 };
+export type TGetUserInfo = {
+  username: string;
+  profileImage: number;
+  score: number;
+};
