@@ -25,6 +25,13 @@ const playerDefualtDetails = {
   userId: null,
 };
 
+const errorMessages = {
+  badToken: 'Not A Valid Token',
+  cantFindUser: 'Cant Find User in DB',
+  doubleLogin: 'User Already Connected',
+  cantUpdateConnectedStatus: 'Something Went Wrong',
+};
+
 const findCurrentGame = (gameId: string, gamesArr: typeof games) => {
   const game = gamesArr.find((game) => game.gameId === gameId);
   return game;
@@ -37,33 +44,33 @@ export default function setupSocket(server: ServerT) {
     },
   });
 
-  io.use(async (currentSocket, next) => {
-    const socket = currentSocket;
+  io.use(async (socket, next) => {
     const authorizationHeader = socket.handshake.headers?.authorization;
 
     if (!authorizationHeader) {
-      return;
+      return next(new Error(errorMessages.badToken));
     }
     const token = authorizationHeader.split(' ')[1];
-    const toeknUsername = decodeLoginToken(token);
+    const tokenUsername = decodeLoginToken(token);
 
-    if (!toeknUsername) {
-      return;
+    if (!tokenUsername) {
+      return next(new Error(errorMessages.badToken));
     }
-    const user = await getUserDetailsFromDB(toeknUsername);
+    const user = await getUserDetailsFromDB(tokenUsername);
 
     if (!user) {
-      return;
+      return next(new Error(errorMessages.cantFindUser));
     }
     const { user_id, image_id, username, points, is_connected_to_socket } =
       user;
+
     if (is_connected_to_socket) {
-      return;
+      return next(new Error(errorMessages.doubleLogin));
     }
     try {
       await updateUserConnectedStatus(username, true);
     } catch {
-      return;
+      return next(new Error(errorMessages.cantUpdateConnectedStatus));
     }
     socket.data.playerDetails = {
       userId: user_id,

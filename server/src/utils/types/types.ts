@@ -31,6 +31,7 @@ export type Scores = {
   oScore: number;
   tie: number;
 };
+export type ImageId = 1 | 2 | 3 | 4 | 5 | 6;
 
 export type MatchHistory = {
   match_id: number;

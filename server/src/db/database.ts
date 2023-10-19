@@ -1,6 +1,11 @@
 import { type RowDataPacket } from 'mysql2';
 import pool from './connect';
-import type { MatchHistory, Scores, UserFromDB } from '../utils/types/types';
+import type {
+  ImageId,
+  MatchHistory,
+  Scores,
+  UserFromDB,
+} from '../utils/types/types';
 
 export async function checkConnection() {
   try {
@@ -54,7 +59,11 @@ export const updateUserConnectedStatus = async (
     'UPDATE users SET is_connected_to_socket = ? WHERE username = ? LIMIT 1';
   await pool.execute(updateQuery, [isConnected, username]);
 };
-
+export const updateUserImage = async (username: string, imageId: ImageId) => {
+  const updateQuery =
+    'UPDATE users SET image_id = ? WHERE username = ? LIMIT 1';
+  await pool.execute(updateQuery, [imageId, username]);
+};
 export const insertMatch = async (
   player1_username: string,
   player2_username: string,

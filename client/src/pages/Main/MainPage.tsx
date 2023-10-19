@@ -4,7 +4,6 @@ import { useUserSelector } from '../../redux/selectors';
 import { routesData } from '../../utils/data';
 import './MainPage.scss';
 import MainButton from '../../components/main-button/MainButton';
-import { useGetMatchHistory } from '../../utils/apiService/getRequest/hooks';
 
 function MainPage() {
   const { linkPage, online, computer } = routesData;
@@ -23,7 +22,6 @@ function MainPage() {
     },
     { name: 'Play online', route: online, disable: !isLoggedIn },
   ];
-  const bla = useGetMatchHistory();
   return (
     <div className="main-page">
       <SiteTitle />

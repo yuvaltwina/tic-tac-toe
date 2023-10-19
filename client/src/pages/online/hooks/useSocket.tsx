@@ -23,12 +23,13 @@ function useSocket() {
       render.current += 1;
     };
   }, [setSocket]);
-
   useEffect(() => {
     socket?.on('connect', () => {
       console.log('connected');
     });
-
+    socket?.on('connect_error', (err: any) => {
+      toast.error(err.message);
+    });
     socket?.on('disconnect', () => {
       console.log('disconnect');
     });
@@ -40,6 +41,7 @@ function useSocket() {
     return () => {
       socket?.disconnect();
       socket?.off('connect');
+      socket?.off('connect_error');
       socket?.off('disconnect');
       socket?.off('game-error');
     };

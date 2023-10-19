@@ -32,11 +32,14 @@ const pointsValidation = Joi.number().required().messages({
   'number.base': 'Points should be a number',
   'any.required': 'Points is required',
 });
-const imageIdValidation = Joi.number().required().valid(1, 2, 3, 4).messages({
-  'number.base': 'Points should be a number',
-  'any.required': 'Points is required',
-  'any.only': 'Points must be 1, 2, 3, or 4',
-});
+const imageIdValidation = Joi.number()
+  .required()
+  .valid(1, 2, 3, 4, 5, 6)
+  .messages({
+    'number.base': 'Points should be a number',
+    'any.required': 'Points is required',
+    'any.only': 'Points must be 1, 2, 3, or 4',
+  });
 const userValidationScheme = {
   usernameValidation,
   passwordValidation,
