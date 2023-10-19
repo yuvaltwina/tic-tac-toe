@@ -1,6 +1,6 @@
 import axiosInstance from '../axiosInstance';
 import { AxiosType } from '../types/axiosType';
-import { TGetMatchHistory, TGetTopPointsUsers } from '../types/getReq';
+import { TGetMatchHistory, TGetTopPointsUsers, TGetUserInfo } from '../types/getReq';
 
 export const getMatchHistory = async () => {
   const serverResponse: AxiosType<TGetMatchHistory, any> =
@@ -10,6 +10,12 @@ export const getMatchHistory = async () => {
 export const getTopPointsUsers = async () => {
   const serverResponse: AxiosType<TGetTopPointsUsers, any> =
     await axiosInstance.get('/user/getTopPointsUsers');
+
+  return serverResponse;
+};
+export const getUserInfo = async () => {
+  const serverResponse: AxiosType<TGetUserInfo, any> =
+    await axiosInstance.get('/user/getInfo');
 
   return serverResponse;
 };

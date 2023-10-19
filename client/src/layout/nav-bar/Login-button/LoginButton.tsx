@@ -1,19 +1,14 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import AuthModal from '../../../components/authModals/AuthModal';
+import UserModal from '../../../components/user-modal/UserModal';
 import { useUserSelector } from '../../../redux/selectors';
-import { logout } from '../../../redux/user';
-import { routesData } from '../../../utils/data';
 import getUserImageSrc from '../../../utils/getUserImageSrc';
 import './LoginButton.scss';
 
-const { mainPage } = routesData;
-
 function LoginButton() {
   const [isAuthModal, setIsAuthModal] = useState(false);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [isUserModal, setIsUserModal] = useState(false);
+
   const {
     userData: { imageId },
     isLoggedIn,
@@ -21,19 +16,17 @@ function LoginButton() {
 
   const openAuthModal = () => setIsAuthModal(true);
 
-  const logOutUser = () => {
-    dispatch(logout());
-    navigate(mainPage);
-  };
+  const openUserModal = () => setIsUserModal(true);
 
   return (
     <>
       <AuthModal isModalOpen={isAuthModal} setIsModalOpen={setIsAuthModal} />
+      <UserModal isModalOpen={isUserModal} setIsModalOpen={setIsUserModal} />
       {isLoggedIn ? (
         <button
           className="user-image-button"
           type="button"
-          onClick={logOutUser}
+          onClick={openUserModal}
         >
           <img alt="user-profile" src={getUserImageSrc(imageId)} />
         </button>
