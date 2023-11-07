@@ -5,6 +5,7 @@ import {
   checkIfUserExist,
   getTopPointsUsersFromDB,
   insertUser,
+  updateUserImage,
 } from '../db/database';
 import serverResponse from '../utils/serverResponse';
 import {
@@ -13,6 +14,8 @@ import {
 } from '../utils/data/functions';
 import CustomError from '../errors/CustomError';
 import { decodeLoginToken, generateLoginToken } from '../utils/jwt';
+import { imageIdValidation } from '../utils/validation/user/functions';
+
 const USER_ALREADY_LOGGED_MESSAGE = 'user is already logged in';
 const BAD_LOGIN_MESSAGE = 'unauthorized';
 const USER_FOUND_MESSAGE = 'user exists';
@@ -82,11 +85,25 @@ export const getTopPointsUsers: RequestHandler = async (req, res, next) => {
       res.status(200).json(serverResponse('match history', []));
       return;
     }
-    const formatedTopUsers = topUsers.map(({ username, image_id, points }) => {
-      return { username, imageId: image_id, points };
-    });
+    const formatedTopUsers = topUsers.map(({ username, image_id, points }) =>
+    ({ username, imageId: image_id, points }));
+
     res.status(200).json(serverResponse('top points users', formatedTopUsers));
   } catch {
     next(new CustomError(500, 'error fetching the top points users'));
+  }
+};
+export const changeUserProfileImage: RequestHandler = async (req, res, next) => {
+  const { username, imageId } = req.body;
+ const isImageIdValid = imageIdValidation(imageId)
+ if (!isImageIdValid) {
+  next(new CustomError(400, 'bad imageId'));
+  return
+ }
+  try {
+    await updateUserImage(username, imageId)
+    res.status(200).json(serverResponse('imageId changed'));
+  } catch {
+    next(new CustomError(500, 'change the image in the database failed'));
   }
 };

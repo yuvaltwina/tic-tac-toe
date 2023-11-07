@@ -5,8 +5,7 @@ import userReducer from './user';
 
 const store = configureStore({ reducer: { user: userReducer } });
 
-function StoreProvider({ children }: { children: ReactNode }) {
-  return <Provider store={store}>{children}</Provider>;
+function StoreProvider({ children }: { children: ReactNode }) { return <Provider store={store}>{children}</Provider>;
 }
 
 export default StoreProvider;

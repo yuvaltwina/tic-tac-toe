@@ -22,6 +22,7 @@ function MainPage() {
     },
     { name: 'Play online', route: online, disable: !isLoggedIn },
   ];
+
   return (
     <div className="main-page">
       <SiteTitle />

@@ -13,6 +13,14 @@ export const createUser = async ({ username, password }: UserFormDetails) => {
   return serverResponse;
 };
 
+export const changeUserProfileImage = async (imageId:number) => {
+  const serverResponse = await axiosInstance.post('/user/changeUserProfileImage', {
+    imageId,
+  });
+
+  return serverResponse?.data;
+};
+
 export const checkLoginDetails = async ({
   username,
   password,
