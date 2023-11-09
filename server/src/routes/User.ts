@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  changeUserProfileImage,
   checkUserCookie,
   createUser,
   getTopPointsUsers,
@@ -15,9 +16,10 @@ const router = express.Router();
 router.post('/register', newUserValidation, errorWrapper(createUser));
 router.post('/login', errorWrapper(login));
 router.post('/checkUserCookie', errorWrapper(checkUserCookie));
-
 router.get('/getTopPointsUsers', errorWrapper(getTopPointsUsers));
 
 router.use(userCookieValidtion);
+
+router.post('/changeUserProfileImage', errorWrapper(changeUserProfileImage));
 
 export default router;

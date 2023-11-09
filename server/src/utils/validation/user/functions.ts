@@ -3,6 +3,7 @@ import { type RequestHandler } from 'express';
 import CustomError from '../../../errors/CustomError';
 import userValidationScheme from './schema';
 import { decodeLoginToken } from '../../jwt';
+import { type ImageId } from '../../types/types';
 
 export const newUserValidation: RequestHandler = (req, res, next) => {
   const { username, password } = req.body;
@@ -21,14 +22,25 @@ export const newUserValidation: RequestHandler = (req, res, next) => {
 export const userCookieValidtion: RequestHandler = (req, res, next) => {
   const token = req.headers?.authorization?.split(' ')[1];
   if (!token) {
-    return next(new CustomError(401, 'token missing'));
+    next(new CustomError(401, 'token missing')); return;
   }
   const username = decodeLoginToken(token);
   if (!username) {
-    return next(new CustomError(401, 'unauthorized'));
+    next(new CustomError(401, 'unauthorized'));
+    return;
   }
   req.body.username = username;
   next();
-  return;
 };
 export default newUserValidation;
+
+export const imageIdValidation = (imageId: ImageId) => {
+  const { imageIdValidation } = userValidationScheme;
+
+  const { error } = imageIdValidation.validate(imageId);
+  if (error) {
+   return false
+  }
+
+return true
+}
