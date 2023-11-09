@@ -1,9 +1,11 @@
+@import 'styles';
+
 .connect-match {
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  gap: 1rem;
+  gap: 3rem;
 }
 .connect-match form {
   display: flex;
@@ -11,4 +13,62 @@
   flex-direction: column;
   justify-content: center;
   gap: 1rem;
+}
+.join-room-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 70rem;
+  position: relative;
+  border-radius: 3rem;
+  background: linear-gradient(
+    90deg,
+    rgba(21, 0, 103, 0.4) -6.63%,
+    rgba(255, 0, 184, 0.4) 95.42%
+  );
+  backdrop-filter: blur(32.5px);
+  aspect-ratio: 7/1;
+  h1 {
+    font-size: clamp(0.5rem, 3.5vw, 2.5rem);
+  }
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 90%;
+  }
+}
+.join-room-buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  font-weight: 800;
+  width: 100%;
+  max-width: 30rem;
+  button {
+    padding: 1.5rem 0.5rem;
+    height: 100%;
+  }
+}
+.join-game-form {
+  width: 100%;
+  .join-game-textfield {
+    width: 100%;
+    max-width: 20rem;
+  }
+}
+@media (max-width: #{$phone-width}) {
+  .connect-match {
+    gap: 2rem;
+  }
+  .join-room-buttons-container {
+    gap: 1rem;
+    button {
+      font-size: small;
+      padding: 0.5rem;
+    }
+  }
 }

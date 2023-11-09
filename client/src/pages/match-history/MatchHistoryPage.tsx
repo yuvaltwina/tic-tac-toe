@@ -17,7 +17,6 @@ function MatchHistoryPage() {
     userData: { username },
   } = useUserSelector();
   const { data: { payload } = { payload: null } } = data || {};
-  console.log(payload);
 
   return (
     <div className="match-history-container">
@@ -37,7 +36,7 @@ function MatchHistoryPage() {
 
           {isError && <h1>Failed load brackets</h1>}
 
-          {payload?.length ? (
+          {payload && payload?.length ? (
             payload?.map(
               ({
                 scores,

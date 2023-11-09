@@ -6,7 +6,6 @@ import OwonSvg from '../../components/tic-tac-toe-board/components/winner-messag
 import TieSvg from '../../components/tic-tac-toe-board/components/winner-message/TieSvg';
 import XwonSvg from '../../components/tic-tac-toe-board/components/winner-message/XwonSvg';
 import checkWinner from '../../components/tic-tac-toe-board/functions/checkWinner';
-import computerBestIndex from '../../components/tic-tac-toe-board/functions/computerTurn';
 import {
   BoardValues,
   BoardValuesEnum,
@@ -16,6 +15,8 @@ import { GameOver } from '../../types/types';
 import BoardScore from './components/BoardScore';
 import OfflineModeButtons from './components/OfflineModeButtons';
 import './ComputerMatch.scss';
+import findBestMove from '../../components/tic-tac-toe-board/functions/findBestMove';
+import randomMove from '../../components/tic-tac-toe-board/functions/randomMove';
 
 const { XSign, OSign, emptySign } = BoardValuesEnum;
 
@@ -138,6 +139,7 @@ function ComputerMatch() {
       turn: false,
     }));
     resetScores();
+    setXPlaying(true);
   };
 
   useEffect(() => {
@@ -148,8 +150,9 @@ function ComputerMatch() {
       !gameOver.isTie;
 
     if (isComputerTurnValid) {
-      const randomCell = computerBestIndex(board)!;
-      handleCellClick(randomCell);
+      const bestMove = findBestMove(board);
+
+      handleCellClick(bestMove);
     }
   }, [
     board,

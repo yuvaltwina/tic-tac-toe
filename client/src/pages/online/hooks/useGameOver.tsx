@@ -29,7 +29,6 @@ function useGameOver(setRematchButton: any) {
 
   useEffect(() => {
     socket?.on('listen-game-rematch', () => {
-      console.log('rematch');
       setIsWon(false);
       setIsModalOpen(false);
       setRematchButton({

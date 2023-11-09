@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import './JoinRoom.scss';
 import useOnlineGameContext from '../../../context/useOnlineGameContext';
 import SiteTitle from '../../../../../components/Site-title/SiteTitle';
+import MainButton from '../../../../../components/Main-button/MainButton';
 
 const initialValues = { gameId: '' };
 
@@ -38,12 +39,16 @@ function JoinRoom({ setShowCreateRoom }: any) {
   return (
     <div className="connect-match">
       <SiteTitle />
-      <h1>Play XO online with your friends</h1>
-      <form onSubmit={handleSubmit}>
+      <div className="join-room-header">
+        <h1>Play XO online with your friends</h1>
+        <img src="private-room/play-xo.svg" alt="play-xo" />
+      </div>
+      <form onSubmit={handleSubmit} id="join-game" className="join-game-form">
         <TextField
+          className="join-game-textfield"
           type="text"
           name="gameId"
-          placeholder="Insert your gameId"
+          placeholder="Game Id"
           onBlur={handleBlur}
           onChange={handleChange}
           value={values.gameId}
@@ -51,12 +56,17 @@ function JoinRoom({ setShowCreateRoom }: any) {
           error={touched.gameId && Boolean(errors.gameId)}
           helperText={touched.gameId && errors.gameId}
         />
-        <button type="submit">Join</button>
       </form>
-      <span>OR</span>
-      <button disabled={isSubmitting} type="button" onClick={createGame}>
-        Create New Game
-      </button>
+
+      <div className="join-room-buttons-container">
+        <MainButton form="join-game" disabled={isSubmitting} type="submit">
+          Join
+        </MainButton>
+        <span>OR</span>
+        <MainButton disabled={isSubmitting} type="button" onClick={createGame}>
+          Create New Game
+        </MainButton>
+      </div>
     </div>
   );
 }

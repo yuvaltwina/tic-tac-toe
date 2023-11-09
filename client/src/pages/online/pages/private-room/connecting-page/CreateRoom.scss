@@ -25,16 +25,33 @@
   word-break: break-all;
   font-size: 1.5rem;
 }
+.link-page-game-id-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  p {
+    font-weight: 800;
+    font-size: x-large;
+  }
+}
 
-.line-page-game-id {
+.link-page-game-id {
+  cursor: pointer;
+  font-size: x-large;
   border-radius: 4rem;
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem 2rem;
   border: 2px solid #fff;
   background: var(
     --Gradient1,
     linear-gradient(90deg, #150067 -6.63%, #ff00b8 95.42%)
   );
   box-shadow: 0px 0px 50px 0px rgba(255, 0, 184, 0.6);
+}
+
+.link-page-close-room {
+  button {
+    padding: 1rem;
+  }
 }
 @media (max-width: #{$tablet-width}) {
   .link-page {
@@ -46,5 +63,13 @@
   }
   .link-container {
     font-size: 0.8rem;
+  }
+  .link-page-game-id {
+    font-size: 1.2rem;
+  }
+}
+@media (max-width: #{$phone-width}) {
+  .link-page-game-id {
+    font-size: 1rem;
   }
 }

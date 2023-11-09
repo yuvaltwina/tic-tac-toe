@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
+import { Tooltip } from '@mui/material';
 import SiteTitle from '../../../../../components/Site-title/SiteTitle';
 import useOnlineGameContext from '../../../context/useOnlineGameContext';
 import useRoomCreated from './hooks/useRoomCreated';
 import './CreateRoom.scss';
+import MainButton from '../../../../../components/Main-button/MainButton';
 
 function CreateRoom({ setShowCreateRoom }: any) {
   const { socket } = useOnlineGameContext();
   const { newGameId } = useRoomCreated();
-  const [copySuccess, setCopySuccess] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(newGameId);
-    setCopySuccess(true);
+    setCopied(true);
+  };
+
+  const onToolTipMouseOut = () => {
+    setTimeout(() => {
+      setCopied(false);
+    }, 100);
   };
 
   const closeRoom = () => {
@@ -23,22 +31,23 @@ function CreateRoom({ setShowCreateRoom }: any) {
     <div className="link-page">
       <SiteTitle />
       <h1> Waiting for other player to join...</h1>
-      <div>
-        <p>Your game ID is</p>
-        <div>
-          <div className="line-page-game-id">{newGameId}</div>
-          <button type="button" onClick={copyToClipboard}>
-            {copySuccess ? 'Copied!' : 'Copy'}
-          </button>
-        </div>
+      <div className="link-page-game-id-container">
+        <p>Your game ID</p>
+
+        <Tooltip
+          title={copied ? 'copied!' : 'copy'}
+          onClick={copyToClipboard}
+          arrow
+          onMouseOut={onToolTipMouseOut}
+        >
+          <div className="link-page-game-id">{newGameId}</div>
+        </Tooltip>
       </div>
-      <div>
-        <p>Close room</p>
-        <div className="waiting-player-id">
-          <button type="button" onClick={closeRoom}>
-            close
-          </button>
-        </div>
+
+      <div className="link-page-close-room">
+        <MainButton type="button" onClick={closeRoom}>
+          Close room
+        </MainButton>
       </div>
     </div>
   );

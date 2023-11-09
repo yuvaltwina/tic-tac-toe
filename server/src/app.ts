@@ -22,16 +22,16 @@ app.use(
     origin: WEBSITE_URL,
     credentials: true,
   })
-  );
-  
-  app.use(cookieParser());
-  app.use(express.json({ limit: '10mb' }));
-  app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
-  app.use('/', MainRouter);
-  
-  setupSocket(server);
-  app.use(notFound);
-  app.use(errorHandler);
+);
+
+app.use(cookieParser());
+app.use(express.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
+app.use('/', MainRouter);
+
+setupSocket(server);
+app.use(notFound);
+app.use(errorHandler);
 const start = async () => {
   try {
     await checkConnection();

@@ -1,0 +1,47 @@
+.avatars-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.avatars-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  max-width: 30rem;
+  width: 100%;
+  background-color: #333;
+  border-radius: 2rem;
+  padding: 2rem;
+}
+.close-button {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.close-icon {
+  height: 2rem;
+  width: 2rem;
+  cursor: pointer;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  row-gap: 2rem;
+  width: 100%;
+}
+
+.grid-item {
+  cursor: pointer;
+}
+
+.grid-item img {
+  width: 100%;
+  height: 100%;
+}
