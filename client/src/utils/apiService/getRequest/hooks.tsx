@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMatchHistory, getTopPointsUsers, getUserInfo } from './axiosGet';
+import { getMatchHistory, getTopPointsUsers, getUserDetails } from './axiosGet';
 
 export function useGetMatchHistory() {
   return useQuery(['matchHistory'], getMatchHistory);
@@ -10,5 +10,5 @@ export function useGetTopPointsUsers() {
 }
 
 export function useGetCurrentUserInfo(isEnabled: boolean) {
-  return useQuery(['userInfo'], getUserInfo, { enabled: isEnabled });
+  return useQuery(['userDetails'], getUserDetails, { enabled: isEnabled });
 }

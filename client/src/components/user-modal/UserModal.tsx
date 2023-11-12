@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router';
 import { routesData } from '../../utils/data';
 import { logout } from '../../redux/user';
 import './UserModal.scss';
-import { useGetCurrentUserInfo } from '../../utils/apiService/getRequest/hooks';
 import getUserImageSrc from '../../utils/getUserImageSrc';
 import UserAvatars from './components/UserAvatars';
+import { useGetCurrentUserInfo } from '../../utils/apiService/getRequest/hooks';
 
 interface UserModalProps {
   isModalOpen: boolean;

@@ -4,6 +4,7 @@ import {
   checkUserCookie,
   createUser,
   getTopPointsUsers,
+  getUserDetails,
   login,
 } from '../controllers/user';
 import {
@@ -19,6 +20,8 @@ router.post('/checkUserCookie', errorWrapper(checkUserCookie));
 router.get('/getTopPointsUsers', errorWrapper(getTopPointsUsers));
 
 router.use(userCookieValidtion);
+
+router.get('/getUserDetails', errorWrapper(getUserDetails));
 
 router.post('/changeUserProfileImage', errorWrapper(changeUserProfileImage));
 

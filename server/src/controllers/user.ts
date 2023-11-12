@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import {
   checkIfUserExist,
   getTopPointsUsersFromDB,
+  getUserDetailsFromDB,
   insertUser,
   updateUserImage,
 } from '../db/database';
@@ -85,25 +86,44 @@ export const getTopPointsUsers: RequestHandler = async (req, res, next) => {
       res.status(200).json(serverResponse('match history', []));
       return;
     }
-    const formatedTopUsers = topUsers.map(({ username, image_id, points }) =>
-    ({ username, imageId: image_id, points }));
+    const formatedTopUsers = topUsers.map(({ username, image_id, points }) => ({
+      username,
+      imageId: image_id,
+      points,
+    }));
 
     res.status(200).json(serverResponse('top points users', formatedTopUsers));
   } catch {
     next(new CustomError(500, 'error fetching the top points users'));
   }
 };
-export const changeUserProfileImage: RequestHandler = async (req, res, next) => {
+export const changeUserProfileImage: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
   const { username, imageId } = req.body;
- const isImageIdValid = imageIdValidation(imageId)
- if (!isImageIdValid) {
-  next(new CustomError(400, 'bad imageId'));
-  return
- }
+  const isImageIdValid = imageIdValidation(imageId);
+  if (!isImageIdValid) {
+    next(new CustomError(400, 'bad imageId'));
+    return;
+  }
   try {
-    await updateUserImage(username, imageId)
+    await updateUserImage(username, imageId);
     res.status(200).json(serverResponse('imageId changed'));
   } catch {
     next(new CustomError(500, 'change the image in the database failed'));
   }
+};
+
+export const getUserDetails: RequestHandler = async (req, res, next) => {
+  const { username } = req.body;
+  const userDetails = await getUserDetailsFromDB(username);
+  if (!userDetails) {
+    next(new CustomError(500, 'couldnt find the user in the db'));
+    return;
+  }
+  const { image_id, points } = userDetails;
+  const formatedUserDetails = { username, imageId: image_id, points };
+  res.status(200).json(serverResponse('user details', formatedUserDetails));
 };
