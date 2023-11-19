@@ -9,6 +9,7 @@ export function useGetTopPointsUsers() {
   return useQuery(['topPointsUsers'], getTopPointsUsers);
 }
 
-export function useGetCurrentUserInfo(isEnabled: boolean) {
-  return useQuery(['userDetails'], getUserDetails, { enabled: isEnabled });
+export function useGetCurrentUserInfo() {
+  return useQuery(['userDetails'], getUserDetails);
 }
+// const { data } = useGetCurrentUserInfo(isModalOpen);

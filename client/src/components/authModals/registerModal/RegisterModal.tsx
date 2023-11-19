@@ -8,8 +8,9 @@ import ErrorHandler from '../../../utils/ErrorHandler';
 import SubmitButton from '../components/submitButton/SubmitButton';
 import useRegisterMutation from '../../../utils/apiService/postRequest/useRegisterMutation';
 
+const onlyLowerCaseAndNumbersRegex = /[^a-z0-9]/g;
 const CREATED_USER_TEXT = 'User Created Successesfully';
-const USERNAME_EXSIT_ERROR_TEXT = 'Username is already taken';
+const USERNAME_EXISTS_ERROR_TEXT = 'Username is already taken';
 type RegisterModalProps = {
   closeModal: () => void;
 };
@@ -58,8 +59,8 @@ function RegisterModal({ closeModal }: RegisterModalProps) {
 
   const onError = (error: unknown, loadingToastId: string) => {
     const errorMessage = ErrorHandler(error);
-    if (errorMessage.startsWith('Duplicate')) {
-      toast.error(USERNAME_EXSIT_ERROR_TEXT, {
+    if (errorMessage.includes('Duplicate')) {
+      toast.error(USERNAME_EXISTS_ERROR_TEXT, {
         id: loadingToastId,
       });
     } else {
@@ -110,7 +111,11 @@ function RegisterModal({ closeModal }: RegisterModalProps) {
           value: values[id],
           onChange: (e) => {
             if (id === 'username') {
-              e.target.value = e.target.value.toLowerCase();
+              const sanitizedValue = e.target.value.replace(
+                onlyLowerCaseAndNumbersRegex,
+                ''
+              );
+              e.target.value = sanitizedValue;
             }
             handleChange(e);
           },

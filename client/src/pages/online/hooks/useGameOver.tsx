@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import useOnlineGameContext from '../context/useOnlineGameContext';
+import { useQueryClient } from '@tanstack/react-query';
 
 function useGameOver(setRematchButton: any) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [isWon, setIsWon] = useState(false);
   const { socket } = useOnlineGameContext();
-
+  const queryClient = useQueryClient();
   useEffect(() => {
     socket?.on('listen-game-over', ({ winner, isTie }) => {
       if (winner) {
@@ -19,6 +20,7 @@ function useGameOver(setRematchButton: any) {
       } else if (isTie) {
         setModalMessage('Its A Tie!');
       }
+      queryClient.invalidateQueries({ queryKey: ['matchHistory'] });
       setIsModalOpen(true);
     });
 

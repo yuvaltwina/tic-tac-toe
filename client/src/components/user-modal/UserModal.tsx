@@ -7,7 +7,6 @@ import { logout } from '../../redux/user';
 import './UserModal.scss';
 import getUserImageSrc from '../../utils/getUserImageSrc';
 import UserAvatars from './components/UserAvatars';
-import { useGetCurrentUserInfo } from '../../utils/apiService/getRequest/hooks';
 
 interface UserModalProps {
   isModalOpen: boolean;
@@ -15,7 +14,6 @@ interface UserModalProps {
 }
 const { mainPage, matchHistory } = routesData;
 function UserModal({ isModalOpen, setIsModalOpen }: UserModalProps) {
-  // const { data } = useGetCurrentUserInfo(isModalOpen);
   const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();

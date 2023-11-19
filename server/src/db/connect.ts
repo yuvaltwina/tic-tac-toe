@@ -13,13 +13,12 @@ const pool = mysql
     user: MYSQL_USER,
     password: MYSQL_PASSWORD,
     database: MYSQL_DATABASE,
+    ssl: { rejectUnauthorized: true },
   })
   .promise();
-// למה צריך ליצור את הטבלאות כל פעם מחדש
-// איפה כל התוכן של הטבלאות נשמר
+
 async function createTables() {
   try {
-    // Create the 'users' table
     await pool.query(`
         CREATE TABLE IF NOT EXISTS users (
           user_id INT NOT NULL AUTO_INCREMENT,
@@ -40,9 +39,7 @@ async function createTables() {
           game_canceled BOOLEAN NOT NULL,
           game_winner VARCHAR(255) ,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          PRIMARY KEY (match_id),
-          FOREIGN KEY (player1_username) REFERENCES users(username),
-          FOREIGN KEY (player2_username) REFERENCES users(username)
+          PRIMARY KEY (match_id)
         )
       `);
   } catch (error: any) {

@@ -7,6 +7,7 @@ import {
   setSessionStorageItem,
 } from '../utils/sessionStorageFn';
 import { UserSliceState } from './types/slices';
+import { useGetCurrentUserInfo } from '../utils/apiService/getRequest/hooks';
 
 type ReduxLoginAction = {
   payload: { loginToken: string };
@@ -38,6 +39,18 @@ const getInitialUserData = (): UserSliceState['userData'] => {
     }
   }
   return userDataInitialValues;
+};
+const getInitialUserData2 = (): UserSliceState['userData'] => {
+  const { data, isError } = useGetCurrentUserInfo();
+  if (isError) {
+    return userDataInitialValues;
+  }
+  const userData = data?.data;
+  if (!userData) {
+    return userDataInitialValues;
+  }
+  const { imageId, username, points } = userData;
+  return { ...userData, userId: 0 };
 };
 
 const initialState = {

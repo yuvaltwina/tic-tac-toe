@@ -16,6 +16,6 @@ export type TGetMatchHistory = {
 };
 export type TGetUserInfo = {
   username: string;
-  profileImage: number;
-  score: number;
+  imageId: number;
+  points: number;
 };
