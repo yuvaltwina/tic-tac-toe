@@ -4,6 +4,6 @@ export type UserSliceState = {
     points: number;
     userId: number;
     username: string;
+    isLoggedIn: boolean;
   };
-  isLoggedIn: boolean;
 };

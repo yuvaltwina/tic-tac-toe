@@ -7,7 +7,6 @@ import {
   setSessionStorageItem,
 } from '../utils/sessionStorageFn';
 import { UserSliceState } from './types/slices';
-import { useGetCurrentUserInfo } from '../utils/apiService/getRequest/hooks';
 
 type ReduxLoginAction = {
   payload: { loginToken: string };
@@ -17,6 +16,7 @@ const userDataInitialValues: UserSliceState['userData'] = {
   points: 0,
   userId: 0,
   username: '',
+  isLoggedIn: false,
 };
 
 const decodeToken = (token: string): UserSliceState['userData'] => {
@@ -40,31 +40,17 @@ const getInitialUserData = (): UserSliceState['userData'] => {
   }
   return userDataInitialValues;
 };
-const getInitialUserData2 = (): UserSliceState['userData'] => {
-  const { data, isError } = useGetCurrentUserInfo();
-  if (isError) {
-    return userDataInitialValues;
-  }
-  const userData = data?.data;
-  if (!userData) {
-    return userDataInitialValues;
-  }
-  const { imageId, username, points } = userData;
-  return { ...userData, userId: 0 };
-};
 
 const initialState = {
-  userData: getInitialUserData(),
-  isLoggedIn: !!getInitialUserData().userId,
+  userData: {
+    ...userDataInitialValues,
+  },
 };
 
 const loginHandler = (state: UserSliceState, action: ReduxLoginAction) => {
-  const { loginToken } = action.payload;
-  state.isLoggedIn = true;
-
+  const { username } = action.payload;
   try {
     const userData = decodeToken(loginToken);
-
     state.userData = userData;
     setSessionStorageItem('login', loginToken);
   } catch (error) {
