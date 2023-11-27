@@ -1,16 +1,17 @@
 import { useMutation } from '@tanstack/react-query';
 import { checkLoginDetails } from './axiosPost';
+import { UserSliceState } from '../../../redux/types/slices';
 
 function useLoginMutation(
-  onSuccess: (resetForm: () => void, loginToken: string) => void,
+  onSuccess: (resetForm: () => void, loginToken: string, userData:UserSliceState['userData']) => void,
   onError: (error: unknown) => void
 ) {
   const loginMutation = useMutation(checkLoginDetails, {
     onError,
-    onSuccess: (data, variables) => {
+    onSuccess: (data:any, variables) => {
       const { resetForm } = variables;
-      const { loginToken } = data;
-      onSuccess(resetForm, loginToken);
+      const { loginToken, userData } = data;
+      onSuccess(resetForm, loginToken, userData);
     },
   });
   return loginMutation;

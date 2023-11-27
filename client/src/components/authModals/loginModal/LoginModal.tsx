@@ -12,6 +12,7 @@ import ErrorHandler from '../../../utils/ErrorHandler';
 import './LoginModal.scss';
 import SubmitButton from '../components/submitButton/SubmitButton';
 import useLoginMutation from '../../../utils/apiService/postRequest/useLoginMutation';
+import { UserSliceState } from '../../../redux/types/slices';
 
 type LoginModalProps = {
   closeModal: () => void;
@@ -52,9 +53,9 @@ function LoginModal({ closeModal }: LoginModalProps) {
   const dispatch = useDispatch();
   const iconClickHandler = () => setIsPasswordVisible(!isPasswordVisible);
 
-  const onSuccess = (resetForm: () => void, loginToken: string) => {
+  const onSuccess = (resetForm: () => void, loginToken: string, userData:UserSliceState['userData']) => {
     resetForm();
-    dispatch(login({ loginToken }));
+    dispatch(login({ loginToken, userData: { ...userData, isLoggedIn: true } }));
     closeModal();
   };
 

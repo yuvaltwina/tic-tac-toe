@@ -15,7 +15,10 @@ export type TGetMatchHistory = {
   }[];
 };
 export type TGetUserInfo = {
+  message:string,
+  payload:{
   username: string;
   imageId: number;
   points: number;
+  userId:number; }
 };
