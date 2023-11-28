@@ -1,16 +1,17 @@
 .winner-svg {
-  position: absolute;
-  width: 80%;
-  height: auto;
-  top: 50%;
-  left: 50%;
-  opacity: 0;
-  transform: translate(-50%, -50%);
-  animation: fadeIn 1s ease-in-out 2s forwards;
-  animation-delay: 0.3s;
-}
-@keyframes fadeIn {
-  to {
-    opacity: 1; 
+    position: absolute;
+    width: 80%;
+    height: auto;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    animation: fadeIn 1s ease-in-out 2s forwards;
+    animation-delay: 0.3s;
   }
-}
+  @keyframes fadeIn {
+    to {
+      opacity: 1; 
+    }
+  }
+  
