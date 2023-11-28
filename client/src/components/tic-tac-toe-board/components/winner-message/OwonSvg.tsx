@@ -1,5 +1,6 @@
 import React from 'react';
-import './WinnerStyle.scss'
+import './WinnerStyle.scss';
+
 function OwonSvg() {
   return (
     <svg
