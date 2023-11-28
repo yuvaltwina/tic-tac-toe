@@ -8,7 +8,7 @@ import MainButton from '../../components/main-button/MainButton';
 function MainPage() {
   const { linkPage, online, computer } = routesData;
   const navigate = useNavigate();
-  const { userData: isLoggedIn } = useUserSelector();
+  const { userData: { isLoggedIn } } = useUserSelector();
   const buttonsArray = [
     {
       name: 'Play against computer',
