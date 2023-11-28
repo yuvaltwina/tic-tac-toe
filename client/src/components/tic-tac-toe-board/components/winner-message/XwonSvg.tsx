@@ -2,6 +2,7 @@ import React from 'react';
 import './WinnerStyle.scss';
 
 function XwonSvg() {
+  console.log(2);
   return (
     <svg
       className="winner-svg"
