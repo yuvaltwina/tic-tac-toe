@@ -8,7 +8,6 @@ import InputField from '../components/inputField/InputField';
 import { loginValidationSchema } from '../../../utils/validation/userValidation';
 import { login } from '../../../redux/user';
 import ErrorHandler from '../../../utils/ErrorHandler';
-
 import './LoginModal.scss';
 import SubmitButton from '../components/submitButton/SubmitButton';
 import useLoginMutation from '../../../utils/apiService/postRequest/useLoginMutation';
@@ -66,9 +65,7 @@ function LoginModal({ closeModal }: LoginModalProps) {
     const errorMessage = ErrorHandler(error);
     if (errorMessage === 'unauthorized') {
       setIsAuthorized(false);
-      toast.error('', {
-        id: loadingToastId,
-      });
+     toast.dismiss(loadingToastId);
     } else {
       toast.error(errorMessage, {
         id: loadingToastId,
