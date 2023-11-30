@@ -36,7 +36,7 @@ function MatchHistoryPage() {
 
           {isError && <h1>Failed load brackets</h1>}
 
-          {payload && payload?.length ? (
+          {payload &&
             payload?.map(
               ({
                 scores,
@@ -110,10 +110,8 @@ function MatchHistoryPage() {
                   </div>
                 );
               }
-            )
-          ) : (
-            <h1>No history found</h1>
-          )}
+            )}
+          {payload?.length === 0 && <h1>No history found</h1>}
         </div>
       </div>
     </div>

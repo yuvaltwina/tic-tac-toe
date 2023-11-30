@@ -1,5 +1,6 @@
 import React from 'react';
 import { toast } from 'react-hot-toast';
+import { useQueryClient } from '@tanstack/react-query';
 import { IoMdClose } from 'react-icons/io';
 import Modal from '@mui/material/Modal';
 import './UserAvatars.scss';
@@ -25,16 +26,20 @@ const ChangeImageMessages = {
 interface UserAvatarsProps {
   isAvatarModalOpen: boolean;
   setIsAvatarModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  currentAvatarId: number;
 }
 function UserAvatars({
   setIsAvatarModalOpen,
   isAvatarModalOpen,
+  currentAvatarId,
 }: UserAvatarsProps) {
   const { successMessage, errorMessage, loadingMessage } = ChangeImageMessages;
+  const queryClient = useQueryClient();
 
   const onSuccess = () => {
     toast.success(successMessage, { id: TOAST_ID });
     setIsAvatarModalOpen(false);
+    queryClient.invalidateQueries({ queryKey: ['userDetails'] });
   };
 
   const onError = () => {
@@ -67,20 +72,25 @@ function UserAvatars({
           <IoMdClose className="close-icon" />
         </div>
         <div className="grid-container">
-          {images.map(({ imageSrc, imageId }) => (
-            <div
-              aria-hidden="true"
-              key={imageId}
-              onClick={() => {
-                ChangeUserAvatar(imageId);
-              }}
-              className="grid-item"
-            >
-              <div className="image-container">
-                <img src={imageSrc} alt="avatar" />
-              </div>
-            </div>
-          ))}
+          {images.map(({ imageSrc, imageId }) => {
+            const disableAvatar = currentAvatarId === imageId;
+
+            return (
+              <button
+                type="button"
+                key={imageId}
+                disabled={disableAvatar}
+                onClick={() => {
+                  ChangeUserAvatar(imageId);
+                }}
+                className={`grid-item ${disableAvatar && 'disabled-avatar'}`}
+              >
+                <div className="image-container">
+                  <img src={imageSrc} alt="avatar" />
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
     </Modal>

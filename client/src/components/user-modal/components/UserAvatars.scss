@@ -39,6 +39,13 @@
 
 .grid-item {
   cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+
+.disabled-avatar {
+  cursor: default;
+  opacity: 0.5;
 }
 
 .grid-item img {

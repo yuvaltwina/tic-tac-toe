@@ -29,7 +29,9 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+
   img {
+    cursor: pointer;
     width: 100%;
     max-width: 10rem;
   }
