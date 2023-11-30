@@ -8,7 +8,7 @@ function MatchHistoryFallback() {
       {new Array(7).fill(null).map((_data, index) => (
         <div key={index} className="match-history-game">
           <Skeleton animation="wave" variant="text" width="100%" />
-           </div>
+        </div>
       ))}
     </>
   );

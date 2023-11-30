@@ -10,8 +10,7 @@ function LoginButton() {
   const [isUserModal, setIsUserModal] = useState(false);
 
   const {
-    userData: { imageId },
-    isLoggedIn,
+    userData: { imageId, isLoggedIn },
   } = useUserSelector();
 
   const openAuthModal = () => setIsAuthModal(true);

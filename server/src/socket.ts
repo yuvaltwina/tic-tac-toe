@@ -1,9 +1,8 @@
+/* eslint-disable no-param-reassign */
 import type http from 'http';
 import { Server } from 'socket.io';
 import { v4 as uuidv4 } from 'uuid';
-import CustomError from './errors/CustomError';
 import { decodeLoginToken } from './utils/jwt';
-import { NOT_AUTHORIZED_MESSAGE } from './utils/data/consts';
 import { getUserDetailsFromDB, updateUserConnectedStatus } from './db/database';
 import type { OnlineGameProp, Scores } from './utils/types/types';
 import { saveMatchResults } from './utils/data/functions';
@@ -48,29 +47,29 @@ export default function setupSocket(server: ServerT) {
     const authorizationHeader = socket.handshake.headers?.authorization;
 
     if (!authorizationHeader) {
-      return next(new Error(errorMessages.badToken));
+      next(new Error(errorMessages.badToken)); return;
     }
     const token = authorizationHeader.split(' ')[1];
     const tokenUsername = decodeLoginToken(token);
 
     if (!tokenUsername) {
-      return next(new Error(errorMessages.badToken));
+      next(new Error(errorMessages.badToken)); return;
     }
     const user = await getUserDetailsFromDB(tokenUsername);
 
     if (!user) {
-      return next(new Error(errorMessages.cantFindUser));
+      next(new Error(errorMessages.cantFindUser)); return;
     }
     const { user_id, image_id, username, points, is_connected_to_socket } =
       user;
 
     if (is_connected_to_socket) {
-      return next(new Error(errorMessages.doubleLogin));
+      next(new Error(errorMessages.doubleLogin)); return;
     }
     try {
       await updateUserConnectedStatus(username, true);
     } catch {
-      return next(new Error(errorMessages.cantUpdateConnectedStatus));
+      next(new Error(errorMessages.cantUpdateConnectedStatus)); return;
     }
     socket.data.playerDetails = {
       userId: user_id,

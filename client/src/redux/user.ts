@@ -3,68 +3,30 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
   deleteSessionStorageItem,
-  getSessionStorageItem,
   setSessionStorageItem,
 } from '../utils/sessionStorageFn';
 import { UserSliceState } from './types/slices';
-import { useGetCurrentUserInfo } from '../utils/apiService/getRequest/hooks';
 
 type ReduxLoginAction = {
-  payload: { loginToken: string };
+  payload: { loginToken: string, userData: UserSliceState['userData'] };
 };
 const userDataInitialValues: UserSliceState['userData'] = {
   imageId: 0,
   points: 0,
   userId: 0,
   username: '',
-};
-
-const decodeToken = (token: string): UserSliceState['userData'] => {
-  const splitToken = token.split('.')[1];
-  const decodedToken = window.atob(splitToken);
-  const tokenDecoded = JSON.parse(decodedToken);
-  return tokenDecoded;
-};
-
-const getInitialUserData = (): UserSliceState['userData'] => {
-  const loginToken = getSessionStorageItem('login');
-  if (loginToken) {
-    try {
-      const userData = decodeToken(loginToken);
-      if (userData) {
-        return userData;
-      }
-    } catch (error) {
-      deleteSessionStorageItem('login');
-    }
-  }
-  return userDataInitialValues;
-};
-const getInitialUserData2 = (): UserSliceState['userData'] => {
-  const { data, isError } = useGetCurrentUserInfo();
-  if (isError) {
-    return userDataInitialValues;
-  }
-  const userData = data?.data;
-  if (!userData) {
-    return userDataInitialValues;
-  }
-  const { imageId, username, points } = userData;
-  return { ...userData, userId: 0 };
+  isLoggedIn: false,
 };
 
 const initialState = {
-  userData: getInitialUserData(),
-  isLoggedIn: !!getInitialUserData().userId,
+  userData: {
+    ...userDataInitialValues,
+  },
 };
 
 const loginHandler = (state: UserSliceState, action: ReduxLoginAction) => {
-  const { loginToken } = action.payload;
-  state.isLoggedIn = true;
-
+  const { userData, loginToken } = action.payload;
   try {
-    const userData = decodeToken(loginToken);
-
     state.userData = userData;
     setSessionStorageItem('login', loginToken);
   } catch (error) {
@@ -73,7 +35,6 @@ const loginHandler = (state: UserSliceState, action: ReduxLoginAction) => {
 };
 
 const logoutHandler = (state: UserSliceState) => {
-  state.isLoggedIn = false;
   state.userData = userDataInitialValues;
   deleteSessionStorageItem('login');
 };

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMatchHistory, getTopPointsUsers, getUserDetails } from './axiosGet';
+import { getMatchHistory, getTopPointsUsers } from './axiosGet';
 
 export function useGetMatchHistory() {
   return useQuery(['matchHistory'], getMatchHistory);

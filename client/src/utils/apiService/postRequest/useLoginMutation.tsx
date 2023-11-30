@@ -1,16 +1,28 @@
 import { useMutation } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import { checkLoginDetails } from './axiosPost';
+import { UserSliceState } from '../../../redux/types/slices';
+
+const LOADING_TEXT = 'Logging in';
 
 function useLoginMutation(
-  onSuccess: (resetForm: () => void, loginToken: string) => void,
-  onError: (error: unknown) => void
+  onSuccess: (resetForm: () => void, loginToken: string, userData:UserSliceState['userData'], loadingToastId:string) => void,
+  onError: (error: unknown, loadingToastId:string) => void
 ) {
   const loginMutation = useMutation(checkLoginDetails, {
-    onError,
-    onSuccess: (data, variables) => {
+    onError: (error, variabels, context) => {
+      const loadingToastId = context as string;
+      onError(error, loadingToastId);
+    },
+    onSuccess: (data:any, variables, context) => {
       const { resetForm } = variables;
-      const { loginToken } = data;
-      onSuccess(resetForm, loginToken);
+      const { loginToken, userData } = data;
+      const loadingToastId = context as string;
+      onSuccess(resetForm, loginToken, userData, loadingToastId);
+    },
+onMutate: () => {
+      const loadingToastId = toast.loading(LOADING_TEXT);
+      return loadingToastId;
     },
   });
   return loginMutation;

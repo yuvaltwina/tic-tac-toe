@@ -8,10 +8,10 @@ import InputField from '../components/inputField/InputField';
 import { loginValidationSchema } from '../../../utils/validation/userValidation';
 import { login } from '../../../redux/user';
 import ErrorHandler from '../../../utils/ErrorHandler';
-
 import './LoginModal.scss';
 import SubmitButton from '../components/submitButton/SubmitButton';
 import useLoginMutation from '../../../utils/apiService/postRequest/useLoginMutation';
+import { UserSliceState } from '../../../redux/types/slices';
 
 type LoginModalProps = {
   closeModal: () => void;
@@ -25,7 +25,7 @@ type TextFieldArray = {
   type: string;
   label: string;
 }[];
-
+const successLoginMessage = 'Logged In Successfully';
 const initialValues = {
   username: '',
   password: '',
@@ -52,19 +52,25 @@ function LoginModal({ closeModal }: LoginModalProps) {
   const dispatch = useDispatch();
   const iconClickHandler = () => setIsPasswordVisible(!isPasswordVisible);
 
-  const onSuccess = (resetForm: () => void, loginToken: string) => {
+  const onSuccess = (resetForm: () => void, loginToken: string, userData:UserSliceState['userData'], loadingToastId:string) => {
     resetForm();
-    dispatch(login({ loginToken }));
+    dispatch(login({ loginToken, userData: { ...userData, isLoggedIn: true } }));
+    toast.success(successLoginMessage, {
+      id: loadingToastId,
+    });
     closeModal();
   };
 
-  const onError = (error: unknown) => {
+  const onError = (error: unknown, loadingToastId:string) => {
     const errorMessage = ErrorHandler(error);
     if (errorMessage === 'unauthorized') {
       setIsAuthorized(false);
+     toast.dismiss(loadingToastId);
     } else {
-      toast.error(errorMessage);
-    }
+      toast.error(errorMessage, {
+        id: loadingToastId,
+      });
+}
   };
   const loginMutation = useLoginMutation(onSuccess, onError);
 

@@ -22,5 +22,5 @@ export const getUserDetails = async () => {
     '/user/getUserDetails'
   );
 
-  return serverResponse;
+  return serverResponse.data.payload;
 };

@@ -51,17 +51,18 @@ export const login: RequestHandler = async (req, res, next) => {
   }
 
   const { user_id, username: existUserName, points, image_id } = existingUser;
-  const loginTokenData = {
+  const userData = {
     userId: user_id,
-    username: existUserName,
-    points,
-    imageId: image_id,
-  };
+     username: existUserName,
+     points,
+     imageId: image_id,
+   }
+  const loginTokenData = { ...userData };
 
   const loginToken = generateLoginToken(loginTokenData);
   res.status(200).json(
     serverResponse(USER_FOUND_MESSAGE, {
-      loginToken,
+      loginToken, userData
     })
   );
 };
