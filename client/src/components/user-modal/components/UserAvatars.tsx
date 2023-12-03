@@ -1,10 +1,13 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { IoMdClose } from 'react-icons/io';
 import Modal from '@mui/material/Modal';
 import './UserAvatars.scss';
 import useImageIdMutation from '../../../utils/apiService/postRequest/useImageIdMutation';
+
+import { updateData } from '../../../redux/user';
 
 const images = [
   { imageSrc: '/avatars/1.png', imageId: 1 },
@@ -35,10 +38,12 @@ function UserAvatars({
 }: UserAvatarsProps) {
   const { successMessage, errorMessage, loadingMessage } = ChangeImageMessages;
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
 
-  const onSuccess = () => {
+  const onSuccess = (_props: any, imageId: number) => {
     toast.success(successMessage, { id: TOAST_ID });
     setIsAvatarModalOpen(false);
+    dispatch(updateData({ imageId }));
     queryClient.invalidateQueries({ queryKey: ['userDetails'] });
   };
 

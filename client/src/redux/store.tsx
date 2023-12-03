@@ -15,9 +15,10 @@ const getUserInfoMiddleware = async (dispatch: any) => {
   try {
     const userData = await getUserDetails();
     const userDataWithIsLogged = { ...userData, isLoggedIn: true };
-    console.log(userData);
     dispatch(login({ userData: userDataWithIsLogged, loginToken: userToken }));
-  } catch (error) { console.log(error); }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 store.dispatch(getUserInfoMiddleware);

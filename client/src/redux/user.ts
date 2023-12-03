@@ -8,8 +8,13 @@ import {
 import { UserSliceState } from './types/slices';
 
 type ReduxLoginAction = {
-  payload: { loginToken: string, userData: UserSliceState['userData'] };
+  payload: { loginToken: string; userData: UserSliceState['userData'] };
 };
+
+type ReduxUpdateUserData = {
+  payload: Partial<UserSliceState['userData']>;
+};
+
 const userDataInitialValues: UserSliceState['userData'] = {
   imageId: 0,
   points: 0,
@@ -39,14 +44,20 @@ const logoutHandler = (state: UserSliceState) => {
   deleteSessionStorageItem('login');
 };
 
+const updateUserData = (state: UserSliceState, action: ReduxUpdateUserData) => {
+  const userData = action.payload;
+  state.userData = { ...state.userData, ...userData };
+};
+
 const counterSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     login: loginHandler,
     logout: logoutHandler,
+    updateData: updateUserData,
   },
 });
 
-export const { login, logout } = counterSlice.actions;
+export const { login, logout, updateData } = counterSlice.actions;
 export default counterSlice.reducer;

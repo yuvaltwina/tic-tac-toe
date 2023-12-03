@@ -2,12 +2,12 @@ import { useMutation } from '@tanstack/react-query';
 import { changeUserProfileImage } from './axiosPost';
 
 function useImageIdMutation(
-  onSuccess: (imageId:number) => void,
+  onSuccess: (_props: any, imageId: number) => void,
   onError: (error: unknown) => void
 ) {
   const imageIdMutation = useMutation(changeUserProfileImage, {
     onError,
-    onSuccess
+    onSuccess,
   });
   return imageIdMutation;
 }

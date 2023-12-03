@@ -20,7 +20,9 @@ function UserModal({ isModalOpen, setIsModalOpen }: UserModalProps) {
   const dispatch = useDispatch();
   const { data, isLoading } = useGetCurrentUserInfo(isModalOpen);
   const {
-    data: { payload: { imageId, username, points } } = {
+    imageId,
+    username,
+    points = {
       payload: { imageId: 1, username: '', points: 0 },
     },
   } = data || {};
