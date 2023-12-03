@@ -13,7 +13,7 @@
 }
 .bracket-button img {
   height: 100%;
-  width: 100%;
+  aspect-ratio: 1/1;
 }
 
 @media (max-width: #{$phone-width}) {
