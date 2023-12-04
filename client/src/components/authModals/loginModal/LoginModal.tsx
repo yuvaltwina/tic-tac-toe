@@ -91,11 +91,14 @@ function LoginModal({ closeModal }: LoginModalProps) {
     errors,
     handleSubmit,
     isSubmitting,
+    setSubmitting
   } = useFormik({
     initialValues,
     validationSchema: loginValidationSchema,
     onSubmit: async (values, { resetForm }) => {
+      setSubmitting(true);
       await submitHandler(values, resetForm);
+      setSubmitting(false);
     },
   });
 
