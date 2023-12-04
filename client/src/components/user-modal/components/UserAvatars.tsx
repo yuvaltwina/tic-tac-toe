@@ -29,7 +29,7 @@ const ChangeImageMessages = {
 interface UserAvatarsProps {
   isAvatarModalOpen: boolean;
   setIsAvatarModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  currentAvatarId: number;
+  currentAvatarId: number | undefined;
 }
 function UserAvatars({
   setIsAvatarModalOpen,
