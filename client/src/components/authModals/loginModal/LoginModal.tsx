@@ -80,7 +80,8 @@ function LoginModal({ closeModal }: LoginModalProps) {
   ) => {
     const { username, password } = values;
     setIsAuthorized(true);
-    loginMutation.mutate({ resetForm, username, password });
+    await loginMutation.mutate({ resetForm, username, password });
+    console.log(3);
   };
 
   const {
