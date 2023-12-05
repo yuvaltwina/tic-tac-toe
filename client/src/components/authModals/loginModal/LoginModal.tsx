@@ -80,7 +80,8 @@ function LoginModal({ closeModal }: LoginModalProps) {
   ) => {
     const { username, password } = values;
     setIsAuthorized(true);
-    loginMutation.mutate({ resetForm, username, password });
+    await loginMutation.mutate({ resetForm, username, password });
+    console.log(3);
   };
 
   const {
@@ -91,11 +92,14 @@ function LoginModal({ closeModal }: LoginModalProps) {
     errors,
     handleSubmit,
     isSubmitting,
+    setSubmitting
   } = useFormik({
     initialValues,
     validationSchema: loginValidationSchema,
     onSubmit: async (values, { resetForm }) => {
+      setSubmitting(true);
       await submitHandler(values, resetForm);
+      setSubmitting(false);
     },
   });
 
