@@ -19,13 +19,12 @@ function UserModal({ isModalOpen, setIsModalOpen }: UserModalProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { data, isLoading } = useGetCurrentUserInfo(isModalOpen);
-  const {
-    imageId,
-    username,
-    points = {
-      payload: { imageId: 1, username: '', points: 0 },
-    },
-  } = data || {};
+  const { imageId, username, points } = data || {
+    imageId: 1,
+    username: '',
+    points: 0,
+  };
+  console.log(data);
 
   const closeModal = () => {
     setIsModalOpen(false);

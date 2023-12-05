@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import './JoinRoom.scss';
 import useOnlineGameContext from '../../../context/useOnlineGameContext';
 import SiteTitle from '../../../../../components/Site-title/SiteTitle';
-import MainButton from '../../../../../components/main-button/MainButton';
+import MainButton from '../../../../../components/Main-button/MainButton';
 
 const initialValues = { gameId: '' };
 

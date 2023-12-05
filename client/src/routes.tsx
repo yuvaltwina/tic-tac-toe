@@ -1,9 +1,9 @@
 import React from 'react';
 import { RouteObject } from 'react-router-dom';
 import RootLayout from './layout/RootLayout';
-import ErrorPage from './pages/Error/ErrorPage';
-import MainPage from './pages/Main/MainPage';
-import NotFound from './pages/Not-found/NotFound';
+import ErrorPage from './pages/error/ErrorPage';
+import MainPage from './pages/main/MainPage';
+import NotFound from './pages/not-found/NotFound';
 import { routesData } from './utils/data';
 import ComputerMatch from './pages/offline/ComputerMatch';
 import PrivateRoom from './pages/online/pages/private-room';

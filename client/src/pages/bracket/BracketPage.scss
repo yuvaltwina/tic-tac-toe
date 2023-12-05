@@ -10,6 +10,7 @@
 }
 
 .bracket-data-container {
+  position: relative;
   width: 100%;
   max-width: 1000px;
   place-items: center;
@@ -93,6 +94,9 @@
 }
 
 @media (max-width: #{$tablet-width}) {
+  .bracket-container {
+    gap: 3rem;
+  }
   .bracket-data-container {
     padding: 1rem;
   }
