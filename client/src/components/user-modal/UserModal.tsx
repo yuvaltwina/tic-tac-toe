@@ -24,7 +24,6 @@ function UserModal({ isModalOpen, setIsModalOpen }: UserModalProps) {
     username: '',
     points: 0,
   };
-  console.log(data);
 
   const closeModal = () => {
     setIsModalOpen(false);
