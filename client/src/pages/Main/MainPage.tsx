@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import MainButton from '../../components/Main-button/MainButton';
+import MainButton from '../../components/main-button/MainButton';
 import SiteTitle from '../../components/Site-title/SiteTitle';
 import { useUserSelector } from '../../redux/selectors';
 import { routesData } from '../../utils/data';

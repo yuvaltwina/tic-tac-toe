@@ -38,8 +38,7 @@ export default function ConfettiAnimation() {
   };
 
   useEffect(() => {
-    let animationInterval: number | undefined;
-
+    let animationInterval: any;
     const startAnimation = () => {
       animationInterval = setInterval(() => {
         if (refAnimationInstance.current) {

@@ -4,7 +4,7 @@ import SiteTitle from '../../../../../components/Site-title/SiteTitle';
 import useOnlineGameContext from '../../../context/useOnlineGameContext';
 import useRoomCreated from './hooks/useRoomCreated';
 import './CreateRoom.scss';
-import MainButton from '../../../../../components/Main-button/MainButton';
+import MainButton from '../../../../../components/main-button/MainButton';
 
 function CreateRoom({ setShowCreateRoom }: any) {
   const { socket } = useOnlineGameContext();
