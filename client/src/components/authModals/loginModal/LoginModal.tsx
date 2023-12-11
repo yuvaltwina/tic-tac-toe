@@ -12,6 +12,7 @@ import './LoginModal.scss';
 import SubmitButton from '../components/submitButton/SubmitButton';
 import useLoginMutation from '../../../utils/apiService/postRequest/useLoginMutation';
 import { UserSliceState } from '../../../redux/types/slices';
+import { refresh } from '../../../utils/data';
 
 type LoginModalProps = {
   closeModal: () => void;
@@ -66,6 +67,7 @@ function LoginModal({ closeModal }: LoginModalProps) {
       id: loadingToastId,
     });
     closeModal();
+    refresh();
   };
 
   const onError = (error: unknown, loadingToastId: string) => {
@@ -90,21 +92,14 @@ function LoginModal({ closeModal }: LoginModalProps) {
     await mutate({ resetForm, username, password });
   };
 
-  const {
-    handleBlur,
-    handleChange,
-    touched,
-    values,
-    errors,
-    handleSubmit,
-    isSubmitting,
-  } = useFormik({
-    initialValues,
-    validationSchema: loginValidationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      await submitHandler(values, resetForm);
-    },
-  });
+  const { handleBlur, handleChange, touched, values, errors, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema: loginValidationSchema,
+      onSubmit: async (values, { resetForm }) => {
+        await submitHandler(values, resetForm);
+      },
+    });
 
   const displayEyeIcon = isPasswordVisible ? (
     <AiOutlineEye
