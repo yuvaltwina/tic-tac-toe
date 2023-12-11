@@ -72,31 +72,24 @@ function RegisterModal({ closeModal }: RegisterModalProps) {
     }
   };
 
-  const registerMutation = useRegisterMutation(onSuccess, onError);
+  const { isLoading, mutate } = useRegisterMutation(onSuccess, onError);
 
   const submitHandler = async (
     values: InitialValues,
     resetForm: () => void
   ) => {
     const { username, password } = values;
-    registerMutation.mutate({ resetForm, username, password });
+    mutate({ resetForm, username, password });
   };
 
-  const {
-    handleBlur,
-    handleChange,
-    touched,
-    values,
-    errors,
-    handleSubmit,
-    isSubmitting,
-  } = useFormik({
-    initialValues,
-    validationSchema: registerValidationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      await submitHandler(values, resetForm);
-    },
-  });
+  const { handleBlur, handleChange, touched, values, errors, handleSubmit } =
+    useFormik({
+      initialValues,
+      validationSchema: registerValidationSchema,
+      onSubmit: async (values, { resetForm }) => {
+        await submitHandler(values, resetForm);
+      },
+    });
 
   const displayInputFields = textFieldArray.map(
     ({ id, type, placeHolder, label }) => (
@@ -131,7 +124,7 @@ function RegisterModal({ closeModal }: RegisterModalProps) {
     <div className="register-modal">
       <form onSubmit={handleSubmit} className="register-form">
         {displayInputFields}
-        <SubmitButton isSubmitting={isSubmitting} />
+        <SubmitButton isSubmitting={isLoading} />
       </form>
     </div>
   );

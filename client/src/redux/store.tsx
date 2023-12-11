@@ -6,7 +6,7 @@ import { getSessionStorageItem } from '../utils/sessionStorageFn';
 import { getUserDetails } from '../utils/apiService/getRequest/axiosGet';
 
 const store = configureStore({ reducer: { user: userReducer } });
-/// ///////////////////////////////////////////////////////////////////////
+
 const getUserInfoMiddleware = async (dispatch: any) => {
   const userToken = getSessionStorageItem('login');
   if (!userToken) {
@@ -22,7 +22,7 @@ const getUserInfoMiddleware = async (dispatch: any) => {
 };
 
 store.dispatch(getUserInfoMiddleware);
-/// ///////////////////////////////////////////////////////////////////////
+
 function StoreProvider({ children }: { children: ReactNode }) {
   return <Provider store={store}>{children}</Provider>;
 }

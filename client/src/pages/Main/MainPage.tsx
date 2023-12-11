@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import MainButton from '../../components/main-button/MainButton';
 import SiteTitle from '../../components/Site-title/SiteTitle';
 import { useUserSelector } from '../../redux/selectors';
-import { routesData } from '../../utils/data';
+import { refresh, routesData } from '../../utils/data';
 import './MainPage.scss';
 
 function MainPage() {
@@ -11,6 +11,7 @@ function MainPage() {
   const {
     userData: { isLoggedIn },
   } = useUserSelector();
+
   const buttonsArray = [
     {
       name: 'Play against computer',
@@ -24,6 +25,7 @@ function MainPage() {
     },
     { name: 'Play online', route: online, disable: !isLoggedIn },
   ];
+
   return (
     <div className="main-page">
       <SiteTitle />

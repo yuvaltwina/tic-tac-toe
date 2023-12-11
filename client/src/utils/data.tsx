@@ -30,3 +30,7 @@ export function getData(status: boolean, data: any) {
     }, 1000);
   });
 }
+
+export const refresh = () => {
+  window.location.reload();
+};

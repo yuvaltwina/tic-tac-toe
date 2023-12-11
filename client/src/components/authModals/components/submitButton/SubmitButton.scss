@@ -1,5 +1,8 @@
 $border-radius: 10px;
 .modal-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 220px;
   height: 50px;
   border: none;

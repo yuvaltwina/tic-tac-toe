@@ -52,27 +52,34 @@ function LoginModal({ closeModal }: LoginModalProps) {
   const dispatch = useDispatch();
   const iconClickHandler = () => setIsPasswordVisible(!isPasswordVisible);
 
-  const onSuccess = (resetForm: () => void, loginToken: string, userData:UserSliceState['userData'], loadingToastId:string) => {
+  const onSuccess = (
+    resetForm: () => void,
+    loginToken: string,
+    userData: UserSliceState['userData'],
+    loadingToastId: string
+  ) => {
     resetForm();
-    dispatch(login({ loginToken, userData: { ...userData, isLoggedIn: true } }));
+    dispatch(
+      login({ loginToken, userData: { ...userData, isLoggedIn: true } })
+    );
     toast.success(successLoginMessage, {
       id: loadingToastId,
     });
     closeModal();
   };
 
-  const onError = (error: unknown, loadingToastId:string) => {
+  const onError = (error: unknown, loadingToastId: string) => {
     const errorMessage = ErrorHandler(error);
     if (errorMessage === 'unauthorized') {
       setIsAuthorized(false);
-     toast.dismiss(loadingToastId);
+      toast.dismiss(loadingToastId);
     } else {
       toast.error(errorMessage, {
         id: loadingToastId,
       });
-}
+    }
   };
-  const loginMutation = useLoginMutation(onSuccess, onError);
+  const { isLoading, mutate } = useLoginMutation(onSuccess, onError);
 
   const submitHandler = async (
     values: InitialValues,
@@ -80,8 +87,7 @@ function LoginModal({ closeModal }: LoginModalProps) {
   ) => {
     const { username, password } = values;
     setIsAuthorized(true);
-    await loginMutation.mutate({ resetForm, username, password });
-    console.log(3);
+    await mutate({ resetForm, username, password });
   };
 
   const {
@@ -92,14 +98,11 @@ function LoginModal({ closeModal }: LoginModalProps) {
     errors,
     handleSubmit,
     isSubmitting,
-    setSubmitting
   } = useFormik({
     initialValues,
     validationSchema: loginValidationSchema,
     onSubmit: async (values, { resetForm }) => {
-      setSubmitting(true);
       await submitHandler(values, resetForm);
-      setSubmitting(false);
     },
   });
 
@@ -161,7 +164,7 @@ function LoginModal({ closeModal }: LoginModalProps) {
       <form onSubmit={handleSubmit} className="login-form">
         {displayInputFields}
         {displayUnauthorizedError}
-        <SubmitButton isSubmitting={isSubmitting} />
+        <SubmitButton isSubmitting={isLoading} />
       </form>
     </div>
   );
