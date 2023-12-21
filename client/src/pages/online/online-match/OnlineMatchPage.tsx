@@ -107,13 +107,14 @@ function OnlineMatchPage() {
       <EndGameModal />
       <GameCanceled />
       <div className="online-match-container">
-        <p>X: {scores.xScore}</p>
+        {/* <p>X: {scores.xScore}</p>
         <p>tie: {scores.tie}</p>
-        <p>O: {scores.oScore}</p>
+        <p>O: {scores.oScore}</p> */}
         <div className="online-match-board-container">
           <PlayerGameProfile
             {...{
-              isPlaying: canPlay === opponentPlayer.socketId && !gameOver.isOver,
+              isPlaying:
+                canPlay === opponentPlayer.socketId && !gameOver.isOver,
               playerScore: 0,
               playerName: opponentPlayer.name,
               playerImage: opponentPlayer.imageId,
@@ -121,13 +122,17 @@ function OnlineMatchPage() {
               gameLive: !gameOver.isOver,
             }}
           />
-          <Board
-            board={board}
-            onClick={handleCellClick}
-            gameOver={gameOver}
-            isCellsActive={canPlay === socket?.id}
-            inactiveMessage={boardInactiveMessage}
-          />
+
+          <div className="board-container">
+            <Board
+              board={board}
+              onClick={handleCellClick}
+              gameOver={gameOver}
+              isCellsActive={canPlay === socket?.id}
+              inactiveMessage={boardInactiveMessage}
+            />{' '}
+          </div>
+
           <PlayerGameProfile
             {...{
               isPlaying: canPlay === currentPlayer.socketId && !gameOver.isOver,

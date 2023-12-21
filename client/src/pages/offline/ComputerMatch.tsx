@@ -184,13 +184,16 @@ function ComputerMatch() {
     <div className="computer-match-container">
       <div className="computer-match-board-container">
         <BoardScore {...scores} isComputerMode={computerMode.active} />
-        <Board
-          board={board}
-          onClick={handleCellClick}
-          gameOver={gameOver}
-          isCellsActive={!computerMode.turn}
-          inactiveMessage={boardInactiveMessage()}
-        />
+        <div className="board-container">
+          {' '}
+          <Board
+            board={board}
+            onClick={handleCellClick}
+            gameOver={gameOver}
+            isCellsActive={!computerMode.turn}
+            inactiveMessage={boardInactiveMessage()}
+          />
+        </div>
         <div>
           <OfflineModeButtons
             resetFunction={resetBoard}
