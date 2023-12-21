@@ -150,9 +150,15 @@ function ComputerMatch() {
       !gameOver.isTie;
 
     if (isComputerTurnValid) {
-      const bestMove = findBestMove(board);
-
-      handleCellClick(bestMove);
+      let computerMove;
+      const randomNumber = Math.floor(Math.random() * 10);
+      const isPlayBestMove = randomNumber > 1;
+      if (isPlayBestMove) {
+        computerMove = findBestMove(board);
+      } else {
+        computerMove = randomMove(board);
+      }
+      handleCellClick(computerMove);
     }
   }, [
     board,

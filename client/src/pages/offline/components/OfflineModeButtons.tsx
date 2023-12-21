@@ -25,7 +25,7 @@ function OfflineModeButtons({
         type="button"
         onClick={switchModeFunction}
       >
-        {isComputerModeActive ? '1P' : '2P'}
+        {isComputerModeActive ? 'COM' : '2P'}
       </button>
     </div>
   );
