@@ -31,7 +31,7 @@ function PlayerGameProfile({
       {gameLive && (
         <TurnTimer
           shouldRun={isPlaying}
-          timerDuration={5}
+          timerDuration={60}
           onTimerEnd={timerFunction}
         />
       )}

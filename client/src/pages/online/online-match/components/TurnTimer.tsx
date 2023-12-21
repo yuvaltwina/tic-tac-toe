@@ -32,7 +32,7 @@ function TurnTimer({
 
   return (
     <div className="turn-timer">
-      <span>{timeLeft}0s</span>
+      <span>{timeLeft}s</span>
     </div>
   );
 }
