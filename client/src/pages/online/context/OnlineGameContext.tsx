@@ -86,7 +86,7 @@ function OnlineGameProvider({ children }: OnlineGameProviderProps) {
   const [gameConversationState, setGameConversationState] = useState<{
     conversation: Conversation[];
     newMessages: number;
-  }>({ conversation: [], newMessages: 0 });
+  }>({ conversation: [], newMessages: 1 });
 
   const socket = useMemo(() => socketState, [socketState]);
   const board = useMemo(() => boardState, [boardState]);
