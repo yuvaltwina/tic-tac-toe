@@ -35,7 +35,7 @@ function LoginButton() {
           className="login-button-container"
           onClick={openAuthModal}
         >
-          login
+          Login
         </button>
       )}
     </>

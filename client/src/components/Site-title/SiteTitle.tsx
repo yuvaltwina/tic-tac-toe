@@ -9,7 +9,7 @@ function SiteTitle({ children }: SiteTitleProps) {
   return (
     <div className="site-title">
       <h2>
-        TIK&nbsp;
+        TIC&nbsp;
         <span>TAC</span>
         &nbsp;TOE
       </h2>

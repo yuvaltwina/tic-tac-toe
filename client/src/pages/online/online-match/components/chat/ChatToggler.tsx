@@ -13,9 +13,8 @@ function ChatToggler() {
 
   const toggleOpenChat = () => {
     setOpenChat((prev) => {
-      if (prev) {
         addNewMessage(true);
-      }
+
       return !prev;
     });
   };

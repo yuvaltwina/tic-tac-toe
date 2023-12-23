@@ -59,8 +59,6 @@ function RegisterModal({ closeModal }: RegisterModalProps) {
 
   const onError = (error: unknown, loadingToastId: string) => {
     const errorMessage = ErrorHandler(error);
-    console.log(error);
-
     if (errorMessage.includes('Duplicate')) {
       toast.error(USERNAME_EXISTS_ERROR_TEXT, {
         id: loadingToastId,
