@@ -143,23 +143,26 @@ function ComputerMatch() {
   };
 
   useEffect(() => {
-    const isComputerTurnValid =
-      computerMode.active &&
-      computerMode.turn &&
-      !gameOver.isOver &&
-      !gameOver.isTie;
+    const computerTurnTimer = setTimeout(() => {
+      const isComputerTurnValid =
+        computerMode.active &&
+        computerMode.turn &&
+        !gameOver.isOver &&
+        !gameOver.isTie;
 
-    if (isComputerTurnValid) {
-      let computerMove;
+      if (!isComputerTurnValid) {
+        return;
+      }
+
       const randomNumber = Math.floor(Math.random() * 10);
       const isPlayBestMove = randomNumber > 1;
       if (isPlayBestMove) {
-        computerMove = findBestMove(board);
+        handleCellClick(findBestMove(board));
       } else {
-        computerMove = randomMove(board);
+        handleCellClick(randomMove(board));
       }
-      handleCellClick(computerMove);
-    }
+    }, 400);
+    return () => clearTimeout(computerTurnTimer);
   }, [
     board,
     computerMode,
