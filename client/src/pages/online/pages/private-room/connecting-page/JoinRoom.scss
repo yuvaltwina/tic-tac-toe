@@ -58,8 +58,22 @@
   .join-game-textfield {
     width: 100%;
     max-width: 20rem;
+    border: 2px solid white;
+    background: linear-gradient(90deg, $primary-color, $secondary-color);
+    color: white;
+    padding: 18px;
+    border-radius: 10px;
+    font-size: 15px;
+
+    &::placeholder {
+      color: white;
+      font-weight: 500;
+      font-size: 15px;
+      text-align: center;
+    }
   }
 }
+
 @media (max-width: #{$phone-width}) {
   .connect-match {
     gap: 2rem;

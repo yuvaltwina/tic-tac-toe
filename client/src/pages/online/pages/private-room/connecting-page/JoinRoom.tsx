@@ -1,5 +1,4 @@
 import React from 'react';
-import { TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import './JoinRoom.scss';
 import useOnlineGameContext from '../../../context/useOnlineGameContext';
@@ -16,20 +15,13 @@ function JoinRoom({ setShowCreateRoom }: any) {
     socket?.emit('join-game', { gameId });
   };
 
-  const {
-    handleBlur,
-    handleChange,
-    touched,
-    values,
-    errors,
-    handleSubmit,
-    isSubmitting,
-  } = useFormik({
-    initialValues,
-    onSubmit: async (values) => {
-      submitHandler(values);
-    },
-  });
+  const { handleBlur, handleChange, values, handleSubmit, isSubmitting } =
+    useFormik({
+      initialValues,
+      onSubmit: async (values) => {
+        submitHandler(values);
+      },
+    });
 
   const createGame = () => {
     socket?.emit('create-game');
@@ -44,17 +36,17 @@ function JoinRoom({ setShowCreateRoom }: any) {
         <img src="private-room/play-xo.svg" alt="play-xo" />
       </div>
       <form onSubmit={handleSubmit} id="join-game" className="join-game-form">
-        <TextField
+        <input
           className="join-game-textfield"
+          id="gameIdInput"
           type="text"
           name="gameId"
-          placeholder="Game Id"
+          placeholder="Enter Your Game Id"
           onBlur={handleBlur}
           onChange={handleChange}
           value={values.gameId}
           required
-          error={touched.gameId && Boolean(errors.gameId)}
-          helperText={touched.gameId && errors.gameId}
+          autoComplete="off"
         />
       </form>
 
