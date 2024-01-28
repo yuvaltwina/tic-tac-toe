@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import MainButton from '../../components/main-button/MainButton';
 import SiteTitle from '../../components/Site-title/SiteTitle';
 import { useUserSelector } from '../../redux/selectors';
-import { refresh, routesData } from '../../utils/data';
+import { routesData } from '../../utils/data';
 import './MainPage.scss';
 
 function MainPage() {

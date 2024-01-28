@@ -25,6 +25,8 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  text-transform: capitalize;
+  font-size: large;
 }
 
 .online-inactive-board-main {
@@ -33,6 +35,7 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
+
   button {
     background-image: linear-gradient(
       92.88deg,
@@ -64,4 +67,10 @@
   max-height: 50vh;
   width: 100%;
   max-width: 50vh;
+}
+
+@media (max-width: #{$phone-width}) {
+  .online-inactive-board {
+    font-size: small;
+  }
 }

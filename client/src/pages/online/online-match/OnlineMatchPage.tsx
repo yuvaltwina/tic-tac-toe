@@ -130,7 +130,7 @@ function OnlineMatchPage() {
               gameOver={gameOver}
               isCellsActive={canPlay === socket?.id}
               inactiveMessage={boardInactiveMessage}
-            />{' '}
+            />
           </div>
 
           <PlayerGameProfile
