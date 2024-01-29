@@ -19,24 +19,34 @@
   box-shadow: 0px 0px 50px 0px #d58fffb2;
   border: 2px solid #b234ff;
   gap: 1rem;
-  padding: 3.5rem 1rem;
+  padding: 2.5rem 1rem;
   width: 100%;
   max-width: 50rem;
-  height: 20rem;
+  // height: 20rem;
 }
 .user-modal-profile {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-
+  font-size: 17px;
   img {
     cursor: pointer;
-    width: 100%;
+    width: 95%;
     max-width: 10rem;
   }
 }
-
+.user-modal-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 30px;
+  user-select: none;
+  & img {
+    cursor: auto;
+    width: 50px;
+  }
+}
 .user-profile-buttons {
   display: flex;
   justify-content: center;

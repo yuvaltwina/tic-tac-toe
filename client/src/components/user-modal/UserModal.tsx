@@ -59,7 +59,10 @@ function UserModal({ isModalOpen, setIsModalOpen }: UserModalProps) {
                   src={getUserImageSrc(imageId)}
                 />
                 <h1>{username}</h1>
-                <span>current score:{points}</span>
+                <div className="user-modal-score">
+                  <img src="./scoreIcon.png" alt="score" />
+                  {points}
+                </div>
               </div>
               <div className="user-profile-buttons">
                 <button type="button" onClick={logOutUser}>
